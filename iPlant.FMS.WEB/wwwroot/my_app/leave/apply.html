@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>iPlantApp</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta id="scale" name="viewport"
+	content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link type="text/css" rel="stylesheet"
+	href="../static/css/leave/apply.css">
+
+<link type="text/css" rel="stylesheet"
+	href="../static/utils/css/base.css">
+<link type="text/css" rel="stylesheet"
+	href="../static/utils/css/appTool.css">
+</head>
+<body>
+	<div class="m-menu m-blue-menu">
+		<div class="m-left-area">
+			<a class="m-btn" href="list.html"><svg width="19px" height="31px"
+					viewBox="0 0 19 31" version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:xlink="http://www.w3.org/1999/xlink">
+			    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+			        <g transform="translate(-914.000000, -1368.000000)">
+			            <g transform="translate(916.000000, 1370.000000)"
+						stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+			                <path
+						d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+			                <path
+						d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+			            </g>
+			        </g>
+			    </g>
+			</svg>返回</a>
+		</div>
+		<div class="m-title">
+			<span>请假</span>
+		</div>
+		<div class="m-right-area">
+			<a class="m-btn" href="javascript:;"></a>
+		</div>
+	</div>
+
+	<div class="m-card" style="padding-bottom: 13.67vw">
+		<div class="m-c-panel">
+			<div class="m-c-body call-create-ring clearfix select_n"
+				id="leave_type" style="padding:2.5vw 2vw 2.5vw 2vw">
+				<span style="font-size: 3.7vw;">请假类型</span>
+				<div class="w-option" style="width: 78%;float: right;">
+					<div class="w-option-content"
+						style="float: right;padding-top: 1.1vw;font-size: 3.7vw">请选择(必填)</div>
+					<div class="w-option-icon" style="vertical-align: middle;">
+						<svg width="15px" height="26px" viewBox="0 0 15 26" version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink">
+						    <g stroke="none" stroke-width="1" fill="none"
+								fill-rule="evenodd" stroke-linecap="square">
+						        <g transform="translate(-510.000000, -341.000000)"
+								stroke="#BDBDBD" stroke-width="2">
+						            <g
+								transform="translate(517.500000, 354.000000) rotate(-360.000000) translate(-517.500000, -354.000000) translate(510.000000, 341.000000)">
+						                <path
+								d="M13.6388889,13.7272727 L1.36111111,24.6363636"></path>
+						                <path
+								d="M2.80555556,1.54545455 L13.6388889,13.9090909"></path>
+						            </g>
+						        </g>
+						    </g>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="m-c-panel">
+			<div class="m-c-body call-create-ring clearfix select_n"
+				id="leave_approver" style="padding:2.5vw 2vw 2.5vw 2vw">
+				<span style="font-size: 3.7vw;">审批人员</span>
+				<div class="w-option" style="width: 78%;float: right;">
+					<div class="w-option-content"
+						style="float: right;padding-top: 1.1vw;font-size: 3.7vw">请选择(必填)</div>
+					<div class="w-option-icon" style="vertical-align: middle;">
+						<svg width="15px" height="26px" viewBox="0 0 15 26" version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink">
+						    <g stroke="none" stroke-width="1" fill="none"
+								fill-rule="evenodd" stroke-linecap="square">
+						        <g transform="translate(-510.000000, -341.000000)"
+								stroke="#BDBDBD" stroke-width="2">
+						            <g
+								transform="translate(517.500000, 354.000000) rotate(-360.000000) translate(-517.500000, -354.000000) translate(510.000000, 341.000000)">
+						                <path
+								d="M13.6388889,13.7272727 L1.36111111,24.6363636"></path>
+						                <path
+								d="M2.80555556,1.54545455 L13.6388889,13.9090909"></path>
+						            </g>
+						        </g>
+						    </g>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="m-c-panel" style="margin-top: 2vw">
+			<div class="m-c-body call-create-ring clearfix"
+				style="padding:2.5vw 2vw 2.5vw 2vw">
+				<span style="font-size: 3.7vw;">开始时间</span>
+				<div class="w-option" style="width: 77%;float: right;">
+					<div style="text-align: right;">
+						<input type="text" name="test_default" class="test_default_time"
+							id="start_time" placeholder="请选择（必填）"
+							style="text-align: right;font-size: 3.7vw" />
+					</div>
+					<div class="w-option-icon">
+						<svg width="15px" height="26px" viewBox="0 0 15 26" version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink">
+						    <g stroke="none" stroke-width="1" fill="none"
+								fill-rule="evenodd" stroke-linecap="square">
+						        <g transform="translate(-510.000000, -341.000000)"
+								stroke="#BDBDBD" stroke-width="2">
+						            <g
+								transform="translate(517.500000, 354.000000) rotate(-360.000000) translate(-517.500000, -354.000000) translate(510.000000, 341.000000)">
+						                <path
+								d="M13.6388889,13.7272727 L1.36111111,24.6363636"></path>
+						                <path
+								d="M2.80555556,1.54545455 L13.6388889,13.9090909"></path>
+						            </g>
+						        </g>
+						    </g>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="m-c-panel">
+			<div class="m-c-body call-create-ring clearfix"
+				style="padding:2.5vw 2vw 2.5vw 2vw">
+				<span style="font-size: 3.7vw;">结束时间</span>
+				<div class="w-option" style="width: 77%;float: right;">
+					<div style="float: right;">
+						<input type="text" name="test_default" class="test_default_time"
+							id="end_time" placeholder="请选择（必填）"
+							style="text-align: right;font-size: 3.7vw" />
+					</div>
+					<div class="w-option-icon">
+						<svg width="15px" height="26px" viewBox="0 0 15 26" version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							xmlns:xlink="http://www.w3.org/1999/xlink">
+						    <g stroke="none" stroke-width="1" fill="none"
+								fill-rule="evenodd" stroke-linecap="square">
+						        <g transform="translate(-510.000000, -341.000000)"
+								stroke="#BDBDBD" stroke-width="2">
+						            <g
+								transform="translate(517.500000, 354.000000) rotate(-360.000000) translate(-517.500000, -354.000000) translate(510.000000, 341.000000)">
+						                <path
+								d="M13.6388889,13.7272727 L1.36111111,24.6363636"></path>
+						                <path
+								d="M2.80555556,1.54545455 L13.6388889,13.9090909"></path>
+						            </g>
+						        </g>
+						    </g>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+
+ 
+
+		<div class="m-c-panel" style="margin-top: 2vw">
+			<div class="m-c-body m-c-input clearfix"
+				style="padding: 3.5vw 2.8vw 3.5vw 2vw;">
+				<div style="width: 20%;float: left;font-size: 3.7vw; ">请假事由</div>
+				<textarea rows="6" style="width: 80%;overflow: auto;"
+					id="leave_excuse" placeholder="请输入请假事由（必填）" id="desc"></textarea>
+
+
+			</div>
+		</div>
+	</div>
+
+	<div class="m-card">
+		<div class="multi-btn clearfix"
+			style="width:100%;height: 13.67vw;background-color: #F8F8FF; ">
+			<div class="btn" style="line-height: 8.67vw;height: 8.67vw">
+				<a href="javascript:;" class="btn btn-primary"
+					style="line-height: 8.67vw;height: 8.67vw" id="confirm">提交</a>
+			</div>
+		</div>
+	</div>
+	<div class="multi-box" id="typeList">
+		<div class="multi-select clearfix">
+			<div class="multi-bg">
+				<ul>
+
+				</ul>
+			</div>
+		</div>
+
+		<div class="multi-btn">
+			<a href="javascript:;" class="btn btn-primary" id="getType">确定</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="../static/utils/require.js"></script>
+	<script type="text/javascript" src="../static/js/leave/apply.js"></script>    
+</body>
+</html>

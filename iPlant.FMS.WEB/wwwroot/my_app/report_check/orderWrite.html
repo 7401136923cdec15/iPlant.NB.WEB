@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>点检任务</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta id="scale" name="viewport"
+	content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link type="text/css" rel="stylesheet"
+	href="../static/css/report_check/order.css">
+
+<link type="text/css" rel="stylesheet"
+	href="../static/utils/css/base.css">
+</head>
+<body>
+	<div class="m-menu m-blue-menu">
+		<div class="m-left-area">
+			<a class="m-btn" href="javascript:;" id="back"><svg width="19px"
+					height="31px" viewBox="0 0 19 31" version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					xmlns:xlink="http://www.w3.org/1999/xlink">
+			    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+			        <g transform="translate(-914.000000, -1368.000000)">
+			            <g transform="translate(916.000000, 1370.000000)"
+						stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+			                <path
+						d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+			                <path
+						d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+			            </g>
+			        </g>
+			    </g>
+			</svg>返回</a>
+		</div>
+		<div class="m-title">
+			<a href="javascript:;" class="m-select"> <span>抽检核对</span>
+			</a>
+		</div>
+		<div class="m-right-area"></div>
+	</div>
+
+	<div class="m-card">
+		<div class="m-c-panel">
+			<div class="m-c-body">
+				<ul class="m-detail-list">
+					 <div class="femi-table-unload">-- 等待数据加载 --</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="m-card">
+		<div class="m-card">
+			<div class="multil-btn">
+				<div class="multi-flex " style="width: 100%">
+					<div class="multi-flex m-detail-titlel" style="width: 26%">
+						<label>报工数</label>
+					</div>
+					<div class="multi-flex  m-detail-titler" style="width: 74%">
+						<input type="number" min="0" id="FQTYcount" readonly="readonly" />
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="m-table content">
+		<div class="m-c-panel">
+			<div class="m-c-body handle-info clearfix nobd">
+				<ul class="list-group">
+					 <div class="femi-table-unload">-- 等待数据加载 --</div>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<div class="m-card">
+		<div class="multil-btn">
+			<div class="multi-flex ">
+				<div class="multi-flex m-detail-titlel" style="width: 40%">
+					<label>合格数:</label>
+				</div>
+				<div class="multi-flex  m-detail-titler" style="width: 60%">
+					<input type="number" min="0" id="count" readonly="readonly" />
+				</div>
+			</div>
+			<div class="multi-flex ">
+				<div class="multi-flex m-detail-titlel" style="width: 40%">
+					<label>不合格数:</label>
+				</div>
+				<div class="multi-flex  m-detail-titler" style="width: 60%">
+					<input type="number" min="0" id="noCount" readonly="readonly" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="m-table content">
+		<div class="m-c-panel">
+			<div class="m-c-body handle-info clearfix nobd">
+				<ul class="list-group ipt-group">
+					<li class="list-li ipt-li">
+						<div class="list-group-item">
+							<div class="list-group-item-cell item-static item-title"
+								style="width:40%">
+								<span>抽检</span>
+							</div>
+							<div class="list-group-item-cell item-static item-content"
+								style="width:50%">
+								<span>抽检总数:<span id="FQTYIPT">0</span></span>
+							</div>
+
+							<div class="list-group-item-cell item-icon" style="width:5%">
+								<i class="icon icon-arrow-right icon-arrow-expand"></i>
+							</div>
+						</div>
+						<div class="list-group ipt-group">
+
+							<div class="multil-btn">
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>合格数:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 id="countIPT" />
+									</div>
+								</div>
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>不合格数:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 id="noCountIPT" />
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</li>
+					<li class="list-li ipt-li">
+						<div class="list-group-item">
+							<div class="list-group-item-cell item-static item-title"
+								style="width:90%">
+								<span>入库类型</span>
+							</div>
+							<div class="list-group-item-cell item-icon" style="width:5%">
+								<i class="icon icon-arrow-right icon-arrow-expand"></i>
+							</div>
+						</div>
+						<div class="list-group ipt-group">
+							<div class="multil-btn">
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>合格数:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 id="countIPTGood"
+											readonly="readonly" />
+									</div>
+								</div>
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>报废数:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 class="ipt-input ipt-sc"
+											id="noCountIPTSc" />
+									</div>
+								</div>
+							</div>
+							<div class="multil-btn">
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>降级数:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 class="ipt-input ipt-d"
+											id="countIPTD" />
+									</div>
+								</div>
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>回用数:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 class="ipt-input ipt-r"
+											id="noCountIPTR" />
+									</div>
+								</div>
+							</div>
+							<div class="multil-btn">
+								<div class="multi-flex">
+									<div class="multi-flex m-detail-titlel" style="width: 40%">
+										<label>工序废:</label>
+									</div>
+									<div class="multi-flex m-detail-titler" style="width: 60%">
+										<input type="number" min=0 class="ipt-input ipt-g"
+											id="countIPTG" />
+									</div>
+								</div>
+								<div class="multi-flex"></div>
+							</div>
+							<div class="multil-btn">
+
+								<div class="multi-flex m-detail-titlel" style="width: 18%">
+									<label>备注:</label>
+								</div>
+								<div class="multi-flex m-detail-titler" style="width: 82%">
+									<input type="text" class="m-detail-titler" id="remarkIPT" />
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	<div class="m-card" style="padding-bottom: 2vw">
+		<div class="m-btn" style="padding: 0vw 2vw;">
+			<a href="javascript:;" class="btn btn-primary" id="confirm"
+				style="height: 8.67vw;line-height: 8.67vw;padding: 0">提交</a>
+		</div>
+	</div>
+	<script type="text/javascript" src="../static/utils/require.js"></script>
+	<script type="text/javascript"
+		src="../static/js/report_check/orderWrite.js"></script>
+</body>
+</html>

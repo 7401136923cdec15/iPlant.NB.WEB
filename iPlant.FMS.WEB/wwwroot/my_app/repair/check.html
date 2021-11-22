@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>填写维修结果</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta id="scale" name="viewport"
+	content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet"
+          href="../static/css/repair/check.css">
+<link type="text/css" rel="stylesheet"
+	href="../static/utils/css/base.css">
+</head>
+<body>
+    <div class="m-menu m-blue-menu">
+        <div class="m-left-area">
+            <a class="m-btn" href="list_cl.html">
+                <svg width="19px" height="31px" viewBox="0 0 19 31" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-914.000000, -1368.000000)">
+                            <g transform="translate(916.000000, 1370.000000)"
+                               stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+                                <path d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+                                <path d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>返回
+            </a>
+        </div>
+        <div class="m-title">
+            <a href="javascript:;" class="m-select">
+                <span>填写维修结果</span>
+            </a>
+        </div>
+        <div class="m-right-area" id="confirm">提交</div>
+    </div>
+    <div class="m-table">
+        <div class="femi-table-unload">-- 等待数据加载 --</div>
+    </div>
+
+    <div class="m-card content">
+        <div class="m-c-panel">
+            <div class="m-c-body handle-info clearfix nobd">
+                <ul class="list-group">
+
+                    <div class="femi-table-unload">-- 等待数据加载 --</div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-card zace-zxz">
+        <!--<div class="multi-btn-BY clearfix" style="width:100% ;background:white; margin-bottom:10vw">
+            <div class="multi-flex-BY "
+                 style="width:100%; height:8.67vw; line-height:8.67vw; padding: 0;overflow: hidden;">
+                <span style="width:30%; margin-left:5vw;">备注：</span><input type="text"
+                                                         style="height: 7.67vw;display:inline;width: 80%;margin: 0.5vw 0vw;border: 1px solid #c7c7c7;"
+                                                         min=0 id="count" />
+            </div>
+        </div>-->
+
+        <div class="m-c-panel">
+            <div class="m-c-head">维修项备注</div>
+            <div class="m-c-body m-c-input clearfix">
+                <textarea rows="3" placeholder="请填写备注内容（限制60字）" maxlength="60" id="count"></textarea>
+            </div>
+        </div>
+    </div>
+   
+    </div>
+	<script type="text/javascript" src="../static/utils/require.js"></script>
+    <script type="text/javascript" src="../static/js/repair/check.js"></script>
+</body>
+</html>

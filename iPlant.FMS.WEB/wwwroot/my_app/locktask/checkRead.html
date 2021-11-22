@@ -1,0 +1,87 @@
+﻿<html>
+<head>
+    <title>点检任务</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta id="scale" name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="../static/css/locktask/check.css">
+    <link type="text/css" rel="stylesheet" href="../static/utils/css/base.css">
+</head>
+<body>
+    <div class="m-menu m-blue-menu">
+        <div class="m-left-area">
+            <a class="m-btn" href="javascript:;" id="back">
+                <svg width="19px" height="31px" viewBox="0 0 19 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-914.000000, -1368.000000)">
+                            <g transform="translate(916.000000, 1370.000000)" stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+                                <path d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+                                <path d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>返回
+            </a>
+        </div>
+        <div class="m-title">
+            <a href="javascript:;" class="m-select">
+                <span>锁定单详情</span>
+            </a>
+        </div>
+        <div class="m-right-area"></div>
+    </div>
+
+    <div class="m-card">
+        <div class="m-c-panel" id="item1">
+            <div class="m-table" id="table1"></div>
+        </div>
+        <div class="m-c-panel" id="item2">
+            <div class="m-c-head">
+                锁定工步列表
+            </div>
+            <div class="m-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:35%;">名称</th>
+                            <th style="width:45%;">解锁时间</th>
+                            <th style="width:20%;">状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table3"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="m-c-panel">
+            <div class="m-c-head">锁定意见</div>
+            <div class="m-c-body m-c-input clearfix">
+                <textarea rows="4" placeholder="请填写不合格原因" id="desc" readonly="readonly"></textarea>
+            </div>
+        </div>
+
+        <div class="m-c-panel" id="item2">
+            <div class="m-c-head">
+                通知对象
+            </div>
+            <div class="m-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:30%;">名称</th>
+                            <th style="width:60%;">岗位</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table2"></tbody>
+                </table>
+            </div>
+        </div>
+        <!--<div class="m-c-btn">
+            <a href="javascript:;" class="btn btn-primary" id="confirm" style="width:48%">发起解锁</a>
+            <a href="javascript:;" class="btn btn-primary" id="confirm1" style="width:48%">撤销</a>
+        </div>-->
+    </div>
+    <script type="text/javascript" src="../static/utils/require.js"></script>
+    <script type="text/javascript" src="../static/js/locktask/checkRead.js"></script>
+</body>
+</html>

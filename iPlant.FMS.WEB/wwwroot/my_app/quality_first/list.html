@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>质量首检</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta id="scale" name="viewport"
+	content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet"
+          href="../static/css/quality_first/list.css">
+<link type="text/css" rel="stylesheet"
+	href="../static/utils/css/base.css">
+</head>
+<body>
+    <div class="m-menu m-blue-menu">
+        <div class="m-left-area">
+            <a class="m-btn" href="javascript:;" onclick="window.JSImpl.exit()">
+                <svg width="19px" height="31px" viewBox="0 0 19 31" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-914.000000, -1368.000000)">
+                            <g transform="translate(916.000000, 1370.000000)"
+                               stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+                                <path d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+                                <path d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>返回
+            </a>
+        </div>
+        <div class="m-title">
+            <div class="m-switch" id="typeList" data-type="3">
+                <a href="report.html" class="m-switch-btn active">未检</a>
+                <a href="javascript:;" class="m-switch-btn">已检</a>
+                <a href="report.html" class="m-switch-btn other">任务</a>
+            </div>
+        </div>
+        <div class="m-right-area" id="menu">
+            <svg t="1560751544085" class="icon" style="width:25%;height:25%;z-index:9999" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4099" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24">
+                <defs><style type="text/css"></style></defs>
+                <path d="M544 388.512V96a32 32 0 0 0-64 0v292.512c-55.104 14.272-96 63.904-96 123.488s40.896 109.216 96 123.488v291.616c0 18.176 14.336 32.896 32 32.896s32-14.72 32-32.928v-291.616c55.104-14.272 96-63.904 96-123.488s-40.896-109.184-96-123.456zM223.136 708.256C223.328 706.816 224 705.504 224 704V96a32 32 0 0 0-64 0v608c0 1.504 0.672 2.816 0.864 4.256A127.744 127.744 0 0 0 64 832a128 128 0 0 0 256 0 127.744 127.744 0 0 0-96.864-123.744zM192 896a64 64 0 1 1 0.032-128.032A64 64 0 0 1 192 896zM960 192a128 128 0 0 0-256 0 127.744 127.744 0 0 0 96.864 123.744c-0.192 1.44-0.864 2.752-0.864 4.256v608a32 32 0 0 0 64 0V320c0-1.504-0.672-2.816-0.864-4.256A127.744 127.744 0 0 0 960 192z m-128 64a64 64 0 1 1 0.032-128.032A64 64 0 0 1 832 256z" p-id="4100" fill="#ffffff"></path>
+            </svg>
+            <div class="frame" style="width:140%;height:360%;border:1px;position:absolute; margin-top:15%;margin-left:-23%; display:none;z-index:9999;">
+                <div style=" width: 0;height: 0;border-left: 1vw solid transparent;border-right: 1vw solid transparent;border-bottom: 1.6vw solid #5aafee;margin-left:75%"></div>
+                <div class="tooptip" style="width:90%;height:87%;border-radius: 4px;background-color:#5aafee;float:right">
+                    <div id="screen" style="margin-top:10%;margin-right:75%;padding-left:10%">
+                        <svg t="1560824244340" class="icon" style="width:120%;height:120%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1127" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><defs><style type="text/css"></style></defs><path d="M158.4 660.8h1.6V800c0 35.2 28.8 64 64 64h576c35.2 0 64-28.8 64-64V660.8h1.6c4.8-11.2 16-20.8 30.4-20.8s25.6 8 30.4 20.8h1.6V800c0 70.4-57.6 128-128 128H224c-70.4 0-128-57.6-128-128V660.8h1.6C102.4 648 115.2 640 128 640s25.6 8 30.4 20.8zM160 352V224c0-35.2 28.8-64 64-64h576c35.2 0 64 28.8 64 64v128c0 17.6 14.4 32 32 32s32-14.4 32-32V224c0-70.4-57.6-128-128-128H224c-70.4 0-128 57.6-128 128v128c0 17.6 14.4 32 32 32s32-14.4 32-32z m-48 128h800c17.6 0 32 14.4 32 32s-14.4 32-32 32H112c-17.6 0-32-14.4-32-32s14.4-32 32-32z" p-id="1128" fill="#ffffff"></path></svg>
+                        <div class="font" style="float:right;margin-top: -140%;margin-right: -340%;"><span style="color:white;font-size:3.4vw">筛选任务</span></div>
+                        <div style="width:420%;height:0.1%;border:0.5px solid white;margin-top:15%;margin-left:150%"></div>
+                    </div>
+                    <div id="check" style="margin-top:10%;margin-right:75%;padding-left:10%">
+                        <svg t="1560824244340" class="icon" style="width:120%;height:120%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1127" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"><defs><style type="text/css"></style></defs><path d="M158.4 660.8h1.6V800c0 35.2 28.8 64 64 64h576c35.2 0 64-28.8 64-64V660.8h1.6c4.8-11.2 16-20.8 30.4-20.8s25.6 8 30.4 20.8h1.6V800c0 70.4-57.6 128-128 128H224c-70.4 0-128-57.6-128-128V660.8h1.6C102.4 648 115.2 640 128 640s25.6 8 30.4 20.8zM160 352V224c0-35.2 28.8-64 64-64h576c35.2 0 64 28.8 64 64v128c0 17.6 14.4 32 32 32s32-14.4 32-32V224c0-70.4-57.6-128-128-128H224c-70.4 0-128 57.6-128 128v128c0 17.6 14.4 32 32 32s32-14.4 32-32z m-48 128h800c17.6 0 32 14.4 32 32s-14.4 32-32 32H112c-17.6 0-32-14.4-32-32s14.4-32 32-32z" p-id="1128" fill="#ffffff"></path></svg>
+                        <div class="font" style="float:right;margin-top: -140%;margin-right: -340%;"><span style="color:white;font-size:3.4vw">主动巡检</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-table">
+        <div class="femi-table-unload">-- 等待数据加载 --</div>
+    </div>
+    <div class="cloth" style="width:100%;height:100%;z-index:-1;opacity:0.5;display:none;"></div>
+	<script type="text/javascript" src="../static/utils/require.js"></script>
+    <script type="text/javascript"
+            src="../static/js/quality_first/list.js"></script>
+</body>
+</html>

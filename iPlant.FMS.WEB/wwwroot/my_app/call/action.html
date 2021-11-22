@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>iPlantApp</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta id="scale" name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link type="text/css" rel="stylesheet" href="../static/css/call/action.css">
+	<link type="text/css" rel="stylesheet" href="../static/utils/css/base.css">
+</head>
+<body>
+	<div class="m-menu m-blue-menu">
+		<div class="m-left-area">
+			<a class="m-btn" href="javascript:;" id="back"><svg width="19px" height="31px" viewBox="0 0 19 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+			        <g transform="translate(-914.000000, -1368.000000)">
+			            <g transform="translate(916.000000, 1370.000000)" stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+			                <path d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+			                <path d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+			            </g>
+			        </g>
+			    </g>
+			</svg>返回</a>
+		</div>
+		<div class="m-title">
+			<span>操作</span>
+		</div>
+		<div class="m-right-area">
+			<a class="m-btn" href="javascript:;" id="commit">确定</a>
+		</div>
+	</div>
+
+	<div class="m-card">
+        <div class="m-c-panel" id="ex_type">
+            <div class="m-c-head">异常类型</div>
+            <div class="m-c-body m-c-input clearfix">
+                <div class="w-option">
+                    <span class="w-option-content">
+                        ExceptionTypeName
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="m-c-panel" id="station_type">
+            <div class="m-c-head">异常地点类型</div>
+            <div class="m-c-body m-c-input clearfix">
+                <div class="w-option">
+                    <span class="w-option-content">
+                        StationTypeName
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="m-c-panel" id="station_act">
+            <div class="m-c-head">异常地点编码</div>
+            <div class="m-c-body m-c-input clearfix">
+                <div class="w-option">
+                    <span class="w-option-content">
+                        StationNo
+                    </span>
+                </div>
+            </div>
+        </div>
+
+		<div class="m-c-panel" id="callOperation" style="display:none">
+			<div class="m-c-head">选择转发对象</div>
+            <div class="m-c-body m-c-input clearfix" value-list="">
+                <div class="w-option">
+                    <input class="w-option-content" data-value="" readonly="readonly" placeholder="请选择" />
+                    <div class="w-option-icon">
+                        <svg width="15px" height="26px" viewBox="0 0 15 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+                                <g transform="translate(-510.000000, -341.000000)" stroke="#BDBDBD" stroke-width="2">
+                                    <g transform="translate(517.500000, 354.000000) rotate(-360.000000) translate(-517.500000, -354.000000) translate(510.000000, 341.000000)">
+                                        <path d="M13.6388889,13.7272727 L1.36111111,24.6363636"></path>
+                                        <path d="M2.80555556,1.54545455 L13.6388889,13.9090909"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<div class="m-c-panel">
+			<div class="m-c-head">内容</div>
+			<div class="m-c-body m-c-input clearfix">
+                <textarea rows="4" placeholder="请填写内容（限制60字）" maxlength="60" id="desc"></textarea> 
+			</div>
+		</div>
+        <div class="m-c-panel" id="imagesUpload">
+            <div class="m-c-head">上传图片</div>
+            <div class="m-c-body m-c-upload clearfix">
+                <ul class="upload-list">
+                    <li class="upload-btn"><input type="file" /></li>
+                </ul>
+            </div>
+        </div>
+	</div>
+
+	 
+    <script type="text/javascript" src="../static/utils/require.js"></script>
+	<script type="text/javascript" src="../static/js/call/action.js"></script>
+</body>
+</html>

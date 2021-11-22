@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>设备管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta id="scale" name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link type="text/css" rel="stylesheet"
+	href="./static/utils/css/bootstrap.css">
+<link type="text/css" rel="stylesheet"
+	href="./static/utils/css/base.css">
+<link type="text/css" rel="stylesheet" href="./static/css/contain.css">
+</head>
+<body class="femi-main">
+
+	<div class="femi-body femi-scroll " >
+		<!-- 	<iframe src="./basic_Set/roleManage.html" id="iframeContain"
+			name="iframeContain" class="femi-ifarme"> </iframe> -->
+		<!-- ./basic_Set/restDaySetting.html -->
+		<img src="./../upload/factory_all.png" id="companyImg" alt="未找到"  style="height: 100%;width: 100%"/>
+	</div>
+
+
+	<div class="femi-header femi-container">
+		<div class="femi-header-lf">
+			<img src="./static/images/shris.jpg" alt="Not File" />
+		</div>
+		<span class="femi-header-font femi-fl-lf">设备管理系统</span>
+		<div></div>
+		<ul class="femi-header-float">
+			<!-- 	<li>
+	  	 		<div class="femi-header-lf" >
+	  	 			<img src="./static/images/bgbody.png" id="companyImg" alt="未找到" />
+	  	 		</div>
+	  	 		
+	  	 		<span>公司：</span>
+	  	 		<a href="javascript:;" id="companyLabel"></a>
+	  	 	</li> -->
+			<li>
+				<div class="femi-header-lf">
+					<img src="./static/images/bgbody.png" id="userImg" alt="未找到" />
+				</div> <span>用户：</span> <a href="javascript:;" id="userLabel"
+				data-toggle="tooltip" data-placement="left" title="未登录">李善槟</a>
+			</li>
+			<!-- <li>
+	  	 		<div class="femi-header-lf" >
+	  	 			<img src="./static/images/bgbody.png" alt="未找到"  />
+	  	 		</div>
+	  	 		
+	  	 		<span>&nbsp;&nbsp;职位：</span>
+	  	 		<a href="javascript:;">1</a>
+	  	 	</li> -->
+
+			<li><a href="javascript:;" id="window_close">注销</a></li>
+		</ul>
+	</div>
+
+	<div class="femi-neck femi-container">
+
+		<ul class="femi-neck-float" id="moduleContain">
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>状态监控<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">全厂视图</div></li>
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+						<li><div data-src="{{url}}">城轨2号车间</div></li>
+						<li><div data-src="{{url}}">喷涂1号车间</div></li>
+						<li><div data-src="{{url}}">喷涂2号车间</div></li> 
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>台账管理<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>维保计划<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>异常预警<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>数据分析<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>报表统计<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>权限管理<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>人员管理<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+			<li class="femi-fl-lf">
+				<div class="femi-menu-bg">
+					<span>系统配置<b class="caret" style="margin-bottom: 5px"></b></span>
+					<ul class="femi-neck-float">
+						<li><div data-src="{{url}}">城轨1号车间</div></li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="femi-container  femi-bottom">
+		<div>
+			<span>Copyright©2018 上海瑞伯德智能系统科技有限公司 地址：上海市嘉定区招贤路655号</span> <span
+				class="femi-fl-rt">联系人：Shris&nbsp;&nbsp;&nbsp;&nbsp;邮箱：zhenghuan.hu@shris.com.cn</span>
+		</div>
+
+	</div>
+
+	<script type="text/javascript" src="./static/utils/require.js"></script>
+
+	<script type="text/javascript" src="./static/js/contain2.js">
+	 
+	</script>
+</body>
+</html>

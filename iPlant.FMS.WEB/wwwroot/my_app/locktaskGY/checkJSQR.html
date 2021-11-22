@@ -1,0 +1,113 @@
+﻿<html>
+<head>
+    <title>点检任务</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta id="scale" name="viewport" content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="../static/css/locktask/check.css">
+    <link type="text/css" rel="stylesheet" href="../static/utils/css/base.css">
+</head>
+<body>
+    <div class="m-menu m-blue-menu">
+        <div class="m-left-area">
+            <a class="m-btn" href="javascript:;" id="back">
+                <svg width="19px" height="31px" viewBox="0 0 19 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-914.000000, -1368.000000)">
+                            <g transform="translate(916.000000, 1370.000000)" stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+                                <path d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+                                <path d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>返回
+            </a>
+        </div>
+        <div class="m-title">
+            <a href="javascript:;" class="m-select">
+                <span>确认解锁</span>
+            </a>
+        </div>
+        <div class="m-right-area"></div>
+    </div>
+
+    <div class="m-card">
+        <div class="m-c-panel" id="item1">
+            <div class="m-table" id="table1"></div>
+            </div>
+        <div class="m-c-panel" id="item2">
+            <div class="m-c-head">
+                锁定工艺列表
+                <div class="tzj-btn" style="width:100%; margin-right:10vw;text-align:right;">
+                    <svg t="1561903942703" class="icon" style="width:6%;height:3%;margin-bottom: -0.5vw;margin-top:-5vw" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8503" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3 0.1-12.7-6.4-12.7z" p-id="8504" fill="#8a8a8a"></path></svg>
+                </div>
+            </div>
+            <div class="m-table" id="point-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:35%;">名称</th>
+                            <th style="width:45%;">解锁时间</th>
+                            <th style="width:20%;">状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table3"></tbody>
+                </table>
+            </div>
+        </div>
+            <div class="m-c-panel">
+                <div class="m-c-head">锁定意见</div>
+                <div class="m-c-body m-c-input clearfix">
+                    <textarea rows="4" placeholder="请填写不合格原因" id="desc" readonly="readonly"></textarea>
+                </div>
+            </div>
+
+            <div class="m-c-panel" id="item2">
+                <div class="m-c-head">
+                    通知对象
+                </div>
+                <div class="m-table" >
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:40%;">名称</th>
+                                <th style="width:44%;">确认时间</th>
+                                <th style="width:16%;">状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table2"></tbody>
+                    </table>
+                </div>
+                <!--<div class="m-c-body m-c-input clearfix" style="padding-bottom:3vw;">
+                    <div class="w-option" style="height:auto">
+                        <input class="w-option-content" id="w-option-content1" readonly="readonly" placeholder="请选择" value="">
+                        <div class="w-option-icon" id="w-option-icon1" style="display:none">
+                            <svg width="15px" height="26px" viewBox="0 0 15 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+                                    <g transform="translate(-510.000000, -341.000000)" stroke="#BDBDBD" stroke-width="2">
+                                        <g transform="translate(517.500000, 354.000000) rotate(-360.000000) translate(-517.500000, -354.000000) translate(510.000000, 341.000000)">
+                                            <path d="M13.6388889,13.7272727 L1.36111111,24.6363636"></path>
+                                            <path d="M2.80555556,1.54545455 L13.6388889,13.9090909"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        <div class="m-c-panel">
+            <div class="m-c-head">解锁意见</div>
+            <div class="m-c-body m-c-input clearfix">
+                <textarea rows="4" placeholder="请填写不合格原因" id="desc1" readonly="readonly"></textarea>
+            </div>
+        </div>
+            <div class="m-c-btn">
+                <a href="javascript:;" class="btn btn-primary" id="confirm">确认</a>
+            </div>
+        </div>
+        <script type="text/javascript" src="../static/utils/require.js"></script>
+        <script type="text/javascript" src="../static/js/locktaskGY/checkJSQR.js"></script>
+</body>
+</html>

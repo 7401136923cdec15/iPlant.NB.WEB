@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>生产自检</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta id="scale" name="viewport"
+	content="width=320, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link type="text/css" rel="stylesheet"
+	href="../static/css/product_self/detail.css">
+<link type="text/css" rel="stylesheet"
+	href="../static/utils/css/base.css">
+</head>
+<body>
+    <div class="m-menu m-blue-menu">
+        <div class="m-left-area">
+            <a class="m-btn" href="report.html">
+                <svg width="19px" height="31px"
+                     viewBox="0 0 19 31" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-914.000000, -1368.000000)">
+                            <g transform="translate(916.000000, 1370.000000)"
+                               stroke="#FFFFFF" stroke-width="3" stroke-linecap="square">
+                                <path d="M14.5833333,0.409090909 L0.416666667,12.6818182"></path>
+                                <path d="M12.9166667,26.5909091 L0.416666667,12.6818182"></path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>返回
+            </a>
+        </div>
+        <div class="m-title">
+            <a href="javascript:;" class="m-select">
+                <span>详情</span>
+            </a>
+        </div>
+        <div class="m-right-area" id="repair"></div>
+    </div>
+    <div class="m-table">
+
+        <div class="femi-table-unload">-- 等待数据加载 --</div>
+    </div>
+    <div class="m-card">
+        <div class="m-c-panel" id="Modeltable">
+            <div class="m-c-head">模组表:</div>
+            <div class="m-c-body clearfix" style="border-bottom:none;">
+                <div class="m-table-mz">
+
+                    <table class="ex-type-table">
+                        <thead>
+                            <tr class="table-tr-m">
+                                <th width="50%">模组编号</th>
+                                <th width="50%">电容包编号</th>
+                                <!--<th width="30%">PCB编号</th>-->
+                                <!--<th width="10%" class="ex_type_add"><i class="icon icon-arrow-right"></i></th>-->
+                            </tr>
+                        </thead>
+
+                        <tbody id="model_tbody"></tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-card Cvalue" style="border:1px solid groove; padding:2vw 0vw">
+        <div class="m-c-panel">
+            <!--<div class="m-c-head" style="width:40%";>电容包编码最大差值:</div>-->
+            <span class="m-c-head femi-text-rt-color">
+                电容包编码最大差值:</sapn>
+                <input type="number" min="0" id="cValue"
+                       class="femi-patrol-input"
+                       style=" width: 50%; line-height: 5.8vw ;border-style: solid;border-width: 1px;border-color:#9b9b9b" />
+        </div>
+    </div>
+    <div class="m-card content">
+        <div class="m-c-panel">
+            <div class="m-c-head">检验项:</div>
+            <div class="m-c-body handle-info clearfix nobd">
+                <ul class="list-group">
+                    <div class="femi-table-unload">-- 等待数据加载 --</div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="m-card">
+        <div class="femi-bottom-card" id="Bog">
+
+            <div class="femi-quarter femi-text-rt-color femi-text-rt">
+                <p>合格数：</p>
+            </div>
+            <div class="femi-quarter">
+                <input type="number" min="0" id="GoodFQTY" value="12"
+                       style="width: 100%;line-height: inherit" readonly="readonly" />
+            </div>
+            <div class="femi-quarter femi-text-rt-color femi-text-rt">
+                <p>次品数：</p>
+            </div>
+            <div class="femi-quarter">
+                <input type="number" min="0" id="BadFQTY" value="12"
+                       style="width: 100%;line-height: inherit" readonly="readonly" />
+            </div>
+        </div>
+        <div class="m-c-panel">
+            <div class="m-c-body m-c-ring clearfix" id="resultSBox"
+                 style="height:9.7vw; margin: 0;padding: 0">
+                <div class="w-option" style="height:9.7vw; margin: 0;padding: 0">
+                    <div style="width: 60%;float: left;line-height: 9.7vw">
+                        <span style="margin-left:5vw">巡检结果</span>
+                    </div>
+                    <div style="width: 40%;float:right;text-align:center; line-height: 9.7vw; "
+                         id="resultS">合格</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+	<script type="text/javascript" src="../static/utils/require.js"></script>
+	<script type="text/javascript"
+		src="../static/js/product_self/detail.js"></script>
+</body>
+</html>
