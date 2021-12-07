@@ -16,7 +16,7 @@ namespace iPlant.FMS.Models.Entity
         /// </summary>
         [Key]
         [Column("DeviceId")]
-        public Guid Id { get; set; }
+        public Guid ID { get; set; }
 
         /// <summary>
         /// 设备编码

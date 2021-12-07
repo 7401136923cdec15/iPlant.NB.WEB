@@ -19,6 +19,7 @@ namespace iPlant.SCADA.Service
         private BMSDepartmentDAO() : base()
         {
 
+           
         }
 
         public static BMSDepartmentDAO getInstance()

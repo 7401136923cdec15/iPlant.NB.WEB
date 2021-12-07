@@ -15,5 +15,8 @@ namespace iPlant.SCADA.Service
         public static FMCService mFMCService = FMCServiceImpl.getInstance();
         public static DMSService mDMSService = DMSServiceImpl.getInstance();
         public static OMSService mOMSService = OMSServiceImpl.getInstance();
+        public static MSSService mMSSService = MSSServiceImpl.getInstance();
+        public static QMSService mQMSService = QMSServiceImpl.getInstance();
+        public static FPCService mFPCService = FPCServiceImpl.getInstance();
     }
 }

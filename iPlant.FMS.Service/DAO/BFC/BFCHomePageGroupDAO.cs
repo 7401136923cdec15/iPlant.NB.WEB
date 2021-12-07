@@ -62,10 +62,14 @@ namespace iPlant.SCADA.Service
                 if (wBFCHomePageGroup.ID <= 0)
                 {
                     wBFCHomePageGroup.CreatorID = wLoginUser.ID;
+                    //wSQL = StringUtils.Format(
+                    //        "INSERT INTO {0}.mbs_menu_group(Name,Icon,IconColor,Icon_S,Type,Active,CreateTime,EditTime,CreatorID,EditorID,OrderNum,Grad,RoleID,GroupID)"
+                    //                + "VALUES(@Name,@Icon,@IconColor,@Icon_S,@Type,@Active,@CreateTime,@EditTime,@CreatorID,@EditorID,@OrderNum,@Grad,@RoleID,@GroupID);",
+                    //                MESDBSource.Basic.getDBName());
                     wSQL = StringUtils.Format(
-                            "INSERT INTO {0}.mbs_menu_group(Name,Icon,IconColor,Icon_S,Type,Active,CreateTime,EditTime,CreatorID,EditorID,OrderNum,Grad,RoleID,GroupID)"
-                                    + "VALUES(@Name,@Icon,@IconColor,@Icon_S,@Type,@Active,@CreateTime,@EditTime,@CreatorID,@EditorID,@OrderNum,@Grad,@RoleID,@GroupID);",
-                                    MESDBSource.Basic.getDBName());
+                         "INSERT INTO {0}.mbs_menu_group(Name,Icon,IconColor,Icon_S,Type,Active,CreateTime,EditTime,CreatorID,EditorID,OrderNum,Grad,RoleID,GroupID)"
+                                 + "VALUES(@Name,@Icon,@IconColor,@Icon_S,@Type,@Active,now(),now(),@CreatorID,@EditorID,@OrderNum,@Grad,@RoleID,@GroupID);",
+                                 MESDBSource.Basic.getDBName());
 
                     wBFCHomePageGroup.ID = (int)base.mDBPool.insert(wSQL, wParams); 
                 }

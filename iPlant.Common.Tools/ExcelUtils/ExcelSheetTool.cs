@@ -102,7 +102,19 @@ namespace iPlant.Common.Tools
 
                 for (int n = 0; n < wOrderPropList.Count(); n++)
                 {
-                    object wValue = wTList[m].ContainsKey(wOrderPropList[n]) ? wTList[m][wOrderPropList[n]] : "";
+                    //object wValue = wTList[m].ContainsKey(wOrderPropList[n]) ? wTList[m][wOrderPropList[n]] : "";
+                    object wValue = "";
+                    if (wTList[m].ContainsKey(wOrderPropList[n]))
+                    {
+                        if (wOrderPropList[n] == "ID")
+                        {
+                            wValue = m + 1;
+                        }
+                        else
+                        {
+                            wValue = wTList[m][wOrderPropList[n]];
+                        }
+                    }
 
                     wDataIRow.CreateCell(n + wColumnStartIndex).SetCellValue(mHelper.ExchangeDataToExcel(wValue));
                     wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Data);

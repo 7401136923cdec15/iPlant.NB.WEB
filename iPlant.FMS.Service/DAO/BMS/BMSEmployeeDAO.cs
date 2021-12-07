@@ -912,8 +912,7 @@ namespace iPlant.SCADA.Service
             wErrorCode.set(0);
             try
             {
-                wEmployeeList = this.mRepository.FindList<BMSEmployee>().Result.ToList();
-
+                
                 if (wLoginID == null)
                     wLoginID = "";
                 if (wLoginName == null)

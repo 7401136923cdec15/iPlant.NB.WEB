@@ -16,7 +16,7 @@ namespace iPlant.Data.EF
     {
         public static void SetPrimaryKey(ModelBuilder modelBuilder, string entityName)
         {
-            modelBuilder.Entity(entityName).HasKey("Id","ID","id");
+            modelBuilder.Entity(entityName).HasKey("ID");
         }
     }
 
