@@ -37,9 +37,9 @@ namespace iPlant.SCADA.Service
             try
             {
 
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
-                if (wErrorCode.Result != 0)
-                    return wResult;
+                wErrorCode.set(0); 
+	                String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                
 
                 if (wID == null)
                     wID = new List<Int32>();
@@ -283,7 +283,8 @@ namespace iPlant.SCADA.Service
                     return wResult;
                 }
 
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                wErrorCode.set(0); 
+	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -340,7 +341,8 @@ namespace iPlant.SCADA.Service
                     return;
                 }
 
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                wErrorCode.set(0); 
+	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
 
                 DMSDeviceLedger wDMSDeviceLedgerDB = this.DMS_CheckDeviceLedger(wLoginUser, wDeviceLedger, wErrorCode);
                 if (wDMSDeviceLedgerDB.ID > 0)
@@ -424,7 +426,8 @@ namespace iPlant.SCADA.Service
                     return;
                 }
 
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                wErrorCode.set(0); 
+	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
                 if (wErrorCode.Result != 0)
                     return;
 
@@ -451,7 +454,8 @@ namespace iPlant.SCADA.Service
         {
             try
             {
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                wErrorCode.set(0); 
+	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
                 if (wErrorCode.Result != 0)
                     return;
 

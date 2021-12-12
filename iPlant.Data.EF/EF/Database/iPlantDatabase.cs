@@ -371,12 +371,12 @@ namespace iPlant.Data.EF
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DatabasePageExtension.SqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DatabasePageExtension.SqlPageSql(strSql, _DbType, sort, isAsc, pageSize, pageIndex));
 
                 DbCommand dbCommand = dbConnection.CreateCommand();
 
 
-                object tempTotal = await ExecuteScalarAsync(dbConnection, dbCommand, CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                object tempTotal = await ExecuteScalarAsync(dbConnection, dbCommand, CommandType.Text, "SELECT COUNT(0) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {
@@ -428,11 +428,11 @@ namespace iPlant.Data.EF
             using (var dbConnection = dbContext.Database.GetDbConnection())
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append(DatabasePageExtension.SqlPageSql(strSql, dbParameter, sort, isAsc, pageSize, pageIndex));
+                sb.Append(DatabasePageExtension.SqlPageSql(strSql, _DbType, sort, isAsc, pageSize, pageIndex));
 
                 DbCommand dbCommand = dbConnection.CreateCommand();
 
-                object tempTotal = await ExecuteScalarAsync(dbConnection, dbCommand, CommandType.Text, "SELECT COUNT(1) FROM (" + strSql + ") T", dbParameter);
+                object tempTotal = await ExecuteScalarAsync(dbConnection, dbCommand, CommandType.Text, "SELECT COUNT(0) FROM (" + strSql + ") T", dbParameter);
                 int total = tempTotal.ParseToInt();
                 if (total > 0)
                 {

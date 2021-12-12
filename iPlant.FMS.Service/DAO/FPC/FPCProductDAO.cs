@@ -1,4 +1,5 @@
 ﻿using iPlant.Common.Tools;
+using iPlant.Data.EF.Repository;
 using iPlant.FMS.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,8 @@ namespace iPlant.SCADA.Service
             return Instance;
         }
 
-        public List<FPCProduct> GetAll(BMSEmployee wLoginUser, int wActive, int wPageSize, int wPageIndex,int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        public List<FPCProduct> FPC_GetProductAll(BMSEmployee wLoginUser,List<Int32> wIDs, String wProductNo, String wProductLike, 
+            int wProductType,int wMaterialID,String wDrawingNo, int wActive, Pagination wPagination, OutResult<Int32> wErrorCode)
         {
             List<FPCProduct> wResult = new List<FPCProduct>();
             try
@@ -33,40 +35,35 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                if (wErrorCode.Result != 0)
-                    return wResult;
 
-                Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
-                string wSqlCondition = @" from " + wInstance + ".fpc_product t  where 1=1 ";
-                if (wActive >= 0)
-                {
-                    wSqlCondition += " and t.Active = @wActive";
-                    wParamMap.Add("wActive", wActive);
-                }
+ 
 
-                if (wPaging == 1)
-                {
-                    wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                    if (wPageCount.Result <= 0)
-                    {
-                        wPageCount.Result = 1;
-
-                        return wResult;
-                    }
-                }
-                else
-                {
-                    wPageCount.Result = 1;
-                }
-
-                String wSQL = "select t.ID,t.ProductNo,t.ProductName " + wSqlCondition + " order by t.ProductNo";
-                if (wPaging==1) 
-                {
-                    wSQL += " limit " + wPageIndex * wPageSize + "," + wPageSize;
-                }
+                String wSQL = StringUtils.Format(
+                        "SELECT t.*,t1.MaterialNo, t2.Name as CreatorName,t3.Name as EditorName  FROM {0}.fpc_product t"
+                                + " left join {0}.mss_material t1 on t.MaterialID=t1.ID " 
+                                + " left join {0}.mbs_user t2 on t.CreatorID=t2.ID "
+                                + " left join {0}.mbs_user t3 on t.EditorID=t3.ID WHERE  1=1  "
+                                + " and ( @wID ='' or t.ID IN( {1} ) )  "
+                        + " and ( @wProductNo ='' or t.Code  = @wProductNo  )  "
+                        + " and ( @wProductLike ='' or t.Code  like @wProductLike or t.ProductName  like @wProductLike "
+                        + "  or t.ProductCode  like @wProductLike or t1.MaterialNo  like @wProductLike or t.DrawingNo  like @wProductLike )  " 
+                        + " and ( @wProductType <= 0 or t.ProductType  = @wProductType)   "
+                        + " and ( @wMaterialID <= 0 or t.MaterialID  = @wMaterialID)   "
+                        + " and ( @wActive < 0 or t.Active  = @wActive)   " 
+                        + " and ( @wDrawingNo ='' or t.DrawingNo  = @wDrawingNo ) "
+                        , wInstance, wIDs.Count > 0 ? StringUtils.Join(",", wIDs) : "0");
                 wSQL = this.DMLChange(wSQL);
+                Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
+                wParamMap.Add("wID", StringUtils.Join(",", wIDs));
+                wParamMap.Add("wProductLike", StringUtils.isEmpty(wProductLike) ? wProductLike : "%" + wProductLike + "%");
+                wParamMap.Add("wProductNo", wProductNo);
+                wParamMap.Add("wProductType", wProductType);
+                wParamMap.Add("wDrawingNo", wDrawingNo);
+                wParamMap.Add("wMaterialID", wMaterialID);
+                wParamMap.Add("wActive", wActive); 
 
-                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap);
+
+                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 if (wQueryResult.Count <= 0)
                 {

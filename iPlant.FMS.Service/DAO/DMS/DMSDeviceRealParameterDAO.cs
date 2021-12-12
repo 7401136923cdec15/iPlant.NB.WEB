@@ -40,7 +40,8 @@ namespace iPlant.SCADA.Service
             try
             {
 
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                wErrorCode.set(0); 
+	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -158,7 +159,8 @@ namespace iPlant.SCADA.Service
 
                 wAssetNoList.RemoveAll(p => String.IsNullOrWhiteSpace(p));
 
-                wErrorCode.set(0); 	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
+                wErrorCode.set(0); 
+	 String wInstance =iPlant.Data.EF.MESDBSource.DMS.getDBName();
                 if (wErrorCode.Result != 0)
                     return wResult;
 

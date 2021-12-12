@@ -4,10 +4,25 @@
     {
         public Pagination()
         {
-            Sort = "Id"; // 默认按Id排序
+            Sort = "ID"; // 默认按Id排序
             SortType = " desc ";
             PageIndex = 1;
             PageSize = 10;
+        }
+
+        public static Pagination Create(int wPageIndex, int wPageSize, params string[] args)
+        {
+            Pagination wResult = new Pagination();
+
+            wResult.PageIndex = wPageIndex;
+            wResult.PageSize = wPageSize;
+            if (args == null)
+                return wResult;
+            if (args.Length > 0)
+                wResult.Sort = args[0];
+            if (args.Length > 1)
+                wResult.SortType = args[1]; 
+            return wResult;
         }
 
         /// <summary>

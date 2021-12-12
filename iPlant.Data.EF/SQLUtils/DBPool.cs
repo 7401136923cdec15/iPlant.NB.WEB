@@ -1,4 +1,6 @@
 ﻿using iPlant.Common.Tools;
+using iPlant.Data.EF.Extension;
+using iPlant.Data.EF.Repository;
 using Microsoft.Data.SqlClient;
 using MySqlConnector;
 using System;
@@ -22,7 +24,7 @@ namespace iPlant.Data.EF
         public DBEnumType SqlType { get; private set; } = DBEnumType.MySQL;
 
 
-        public String  ConnnectString { get; private set; }
+        public String ConnnectString { get; private set; }
 
 
         public DbConnection GetConnection()
@@ -147,6 +149,82 @@ namespace iPlant.Data.EF
             return wResult;
 
         }
+
+
+
+
+        private void PrevQueryForList(String wSQL, Dictionary<String, Object> wParamMap, Pagination pagination)
+        {
+
+            using (DbConnection wConnection = this.GetConnection())
+            {
+
+                CommandTool wCommandTool = new CommandTool("SELECT COUNT(0) as ItemCount FROM (" + wSQL + ") T", wConnection);
+                wCommandTool.SetParams(wParamMap);
+
+
+                using (DbDataReader wSqlDataReader = wCommandTool.ExecuteReader())
+                {
+
+                    while (wSqlDataReader.Read())
+                    {
+
+                        for (int i = 0; i < wSqlDataReader.FieldCount; i++)
+                        {
+                            if (wSqlDataReader.GetName(i).Equals("ItemCount"))
+                                pagination.TotalCount = StringUtils.parseInt(wSqlDataReader.GetValue(i));
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        public List<Dictionary<String, Object>> queryForList(String wSQL, Dictionary<String, Object> wParamMap, Pagination pagination)
+        {
+            List<Dictionary<String, Object>> wResult = new List<Dictionary<string, object>>();
+
+            this.PrevQueryForList(wSQL, wParamMap, pagination);
+
+            using (DbConnection wConnection = this.GetConnection())
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(DatabasePageExtension.SqlPageSql(wSQL, SqlType, pagination.Sort, pagination.SortType, pagination.PageSize, pagination.PageIndex));
+
+                CommandTool wCommandTool = new CommandTool(sb.ToString(), wConnection);
+                wCommandTool.SetParams(wParamMap);
+
+
+                using (DbDataReader wSqlDataReader = wCommandTool.ExecuteReader())
+                {
+                    Dictionary<String, Object> wData = null;
+                    while (wSqlDataReader.Read())
+                    {
+                        wData = new Dictionary<String, Object>();
+
+                        for (int i = 0; i < wSqlDataReader.FieldCount; i++)
+                        {
+                            if (!wData.ContainsKey(wSqlDataReader.GetName(i)))
+                                wData.Add(wSqlDataReader.GetName(i), wSqlDataReader.GetValue(i));
+                        }
+
+
+                        wResult.Add(wData);
+                    }
+                }
+            }
+
+
+
+
+
+            return wResult;
+
+        }
+
+
 
         public Dictionary<String, Object> queryForMap(String wSQL, Dictionary<String, Object> wParamMap)
         {

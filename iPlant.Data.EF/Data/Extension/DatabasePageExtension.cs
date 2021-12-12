@@ -5,15 +5,69 @@ namespace iPlant.Data.EF.Extension
 {
     public static class DatabasePageExtension
     {
-        public static StringBuilder SqlPageSql(string strSql, DbParameter[] dbParameter, string sort, bool isAsc, int pageSize, int pageIndex)
+        public static StringBuilder SqlPageSql(string strSql, DBEnumType wDBType, string sort, bool isAsc, int pageSize, int pageIndex)
+        {
+            StringBuilder sb = null;
+            switch (wDBType)
+            {
+                case DBEnumType.Default:
+                    
+                    break;
+                case DBEnumType.MySQL:
+                    sb = SqlPageMySql(strSql, sort, isAsc, pageSize, pageIndex);
+                    break;
+                case DBEnumType.SQLServer:
+                    sb = SqlPageSqlServer(strSql, sort, isAsc, pageSize, pageIndex);
+                    break;
+                case DBEnumType.Oracle:
+                    break;
+                case DBEnumType.Access:
+                    break;
+                default:
+                    break;
+            }
+            return sb;
+        }
+
+        public static StringBuilder SqlPageSql(string strSql, DBEnumType wDBType, string sort, string sortType, int pageSize, int pageIndex)
+        {
+            StringBuilder sb = null;
+
+            if (string.IsNullOrWhiteSpace(sortType))
+                sortType = "asc";
+
+            bool isAsc = sortType.Equals("ASC",System.StringComparison.CurrentCultureIgnoreCase);
+
+            switch (wDBType)
+            {
+                case DBEnumType.Default:
+
+                    break;
+                case DBEnumType.MySQL:
+                    sb = SqlPageMySql(strSql, sort, isAsc, pageSize, pageIndex);
+                    break;
+                case DBEnumType.SQLServer:
+                    sb = SqlPageSqlServer(strSql, sort, isAsc, pageSize, pageIndex);
+                    break;
+                case DBEnumType.Oracle:
+                    break;
+                case DBEnumType.Access:
+                    break;
+                default:
+                    break;
+            }
+            return sb;
+        }
+
+        private static StringBuilder SqlPageSqlServer(string strSql,   string sort, bool isAsc, int pageSize, int pageIndex)
         {
             StringBuilder sb = new StringBuilder();
             if (pageIndex == 0)
             {
                 pageIndex = 1;
             }
-            int num = (pageIndex - 1) * pageSize;
-            int num1 = (pageIndex) * pageSize;
+            int num = (pageIndex ) * pageSize;
+            int num1 = (pageIndex+1) * pageSize;
             string OrderBy = "";
 
             if (!string.IsNullOrEmpty(sort))
@@ -35,25 +89,33 @@ namespace iPlant.Data.EF.Extension
             sb.Append(" AS ROWNUM, * From (" + strSql + ") t ) AS N WHERE ROWNUM > " + num + " AND ROWNUM <= " + num1 + "");
             return sb;
         }
-       
-        public static string GetCountSql(string strSql)
+
+        private static StringBuilder SqlPageMySql(string strSql,    string sort, bool isAsc, int pageSize, int pageIndex)
         {
-            string countSql = string.Empty;
-            string strSqlCopy = strSql.ToLower();
-            int selectIndex = strSqlCopy.IndexOf("SELECT ");
-            int lastFromIndex = strSqlCopy.LastIndexOf(" FROM ");
-            if (selectIndex >= 0 && lastFromIndex >= 0)
+            StringBuilder sb = new StringBuilder();
+            if (pageIndex < 0)
             {
-                int backFromIndex = strSqlCopy.LastIndexOf(" FROM ", lastFromIndex);
-                int backSelectIndex = strSqlCopy.LastIndexOf("SELECT ", lastFromIndex);
-                if (backSelectIndex == selectIndex)
+                pageIndex = 0;
+            }
+             
+            string OrderBy = "";
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                if (sort.ToUpper().IndexOf("ASC") + sort.ToUpper().IndexOf("DESC") > 0)
                 {
-                    countSql = "SELECT COUNT(*) " + strSql.Substring(lastFromIndex);
-                    return countSql;
+                    OrderBy = " ORDER BY " + sort;
+                }
+                else
+                {
+                    OrderBy = " ORDER BY " + sort + " " + (isAsc ? "ASC" : "DESC");
                 }
             }
-            countSql = "SELECT COUNT(1) FROM (" + strSql + ") t";
-            return countSql;
+             
+            sb.Append(strSql + OrderBy + " limit " + (pageIndex* pageSize) + ","+ pageSize ); 
+            return sb;
         }
+
+        
     }
 }
