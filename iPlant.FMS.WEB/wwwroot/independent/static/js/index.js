@@ -4,7 +4,7 @@ require(['./independent/static/utils/js/jquery-3.1.1', './independent/static/uti
 
 
 	model = $com.Model.create({
-		name: 'iPlantMES登录',
+		name: '中石油天津大港测井射孔枪产线管控系统登录',
 
 		type: $com.Model.MAIN,
 

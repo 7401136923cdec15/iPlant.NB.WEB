@@ -14,5 +14,13 @@ namespace iPlant.SCADA.Service
 
         ServiceResult<List<QMSWorkpieceRepairRecord>> QMS_GetWorkpieceRepairRecordList(BMSEmployee wLoginUser, String wOrderNo,
         List<int> wProductIDList, String wWorkpieceNo, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging);
+
+        ServiceResult<List<QMSWorkpieceCheckResult>> QMS_GetWorkpieceCheckResultList(BMSEmployee wLoginUser, String wOrderNo,
+       List<int> wProductIDList, String wWorkpieceNo, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging);
+
+        ServiceResult<List<QMSWorkpieceQualityInfo>> QMS_GetWorkpieceQualityInfoList(BMSEmployee wLoginUser, String wOrderNo,
+               List<int> wProductIDList, String wWorkpieceNo, String wProcessStatus, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging);
+
+        ServiceResult<List<QMSThreeDimensionalCheckResult>> QMS_GetThreeDimensionalCheckResultList(BMSEmployee wLoginUser, int wWorkpieceID, int wPageSize, int wPageIndex, int wPaging);
     }
 }

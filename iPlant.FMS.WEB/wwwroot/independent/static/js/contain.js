@@ -97,7 +97,7 @@ require([
         };
 
         model = $com.Model.create({
-            name: 'iPlant.MES',
+            name: '中石油天津大港测井射孔枪产线管控系统',
 
             type: $com.Model.MAIN,
 

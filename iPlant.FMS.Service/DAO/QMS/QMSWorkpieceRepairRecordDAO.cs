@@ -34,6 +34,7 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
+                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -43,7 +44,7 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
                                                    left join {0}.fmc_station t4 on t4.ID = t.StationID
-                                                   where 1 = 1 ", wInstance);
+                                                   where t3.LineID={1} ", wInstance, LineID);
                 if (!string.IsNullOrEmpty(wOrderNo))
                 {
                     wSqlCondition += " and t2.OrderNo LIKE @wOrderNo ";
@@ -55,7 +56,7 @@ namespace iPlant.SCADA.Service
                 }
                 if (!string.IsNullOrEmpty(wWorkpieceNo))
                 {
-                    wSqlCondition += " and t1.WorkpieceNo = @wWorkpieceNo ";
+                    wSqlCondition += " and t1.WorkpieceNo LIKE @wWorkpieceNo ";
                     wParamMap.Add("wWorkpieceNo", "%" + wWorkpieceNo + "%");
                 }
                 if (!string.IsNullOrEmpty(wStartTime))

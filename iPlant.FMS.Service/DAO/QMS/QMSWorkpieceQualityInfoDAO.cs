@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 
 namespace iPlant.SCADA.Service
 {
-    public class QMSSpotCheckRecordDAO : BaseDAO
+    public class QMSWorkpieceQualityInfoDAO : BaseDAO
     {
-        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(QMSSpotCheckRecordDAO));
-        private static QMSSpotCheckRecordDAO Instance = null;
+        private static readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(QMSWorkpieceQualityInfoDAO));
+        private static QMSWorkpieceQualityInfoDAO Instance = null;
 
-        private QMSSpotCheckRecordDAO() : base()
+        private QMSWorkpieceQualityInfoDAO() : base()
         {
 
         }
 
-        public static QMSSpotCheckRecordDAO getInstance()
+        public static QMSWorkpieceQualityInfoDAO getInstance()
         {
             if (Instance == null)
-                Instance = new QMSSpotCheckRecordDAO();
+                Instance = new QMSWorkpieceQualityInfoDAO();
             return Instance;
         }
 
-        public List<QMSSpotCheckRecord> GetAll(BMSEmployee wLoginUser, String wOrderNo,
-                List<int> wProductIDList, String wWorkpieceNo, String wSpotCheckResult, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        public List<QMSWorkpieceQualityInfo> GetAll(BMSEmployee wLoginUser, String wOrderNo,
+                List<int> wProductIDList, String wWorkpieceNo, String wProcessStatus, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
         {
-            List<QMSSpotCheckRecord> wResult = new List<QMSSpotCheckRecord>();
+            List<QMSWorkpieceQualityInfo> wResult = new List<QMSWorkpieceQualityInfo>();
             try
             {
 
@@ -39,11 +39,11 @@ namespace iPlant.SCADA.Service
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
-                string wSqlCondition = string.Format(@" FROM {0}.qms_spotcheck_record t 
+                string wSqlCondition = string.Format(@" FROM {0}.qms_workpiece_qualityinfo t 
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   left join {0}.mbs_user t4 on t4.ID = t.CreatorID
+                                                   left join {0}.fmc_station t4 on t4.ID = t.StationID
                                                    where t3.LineID={1} ", wInstance, LineID);
                 if (!string.IsNullOrEmpty(wOrderNo))
                 {
@@ -59,19 +59,19 @@ namespace iPlant.SCADA.Service
                     wSqlCondition += " and t1.WorkpieceNo LIKE @wWorkpieceNo ";
                     wParamMap.Add("wWorkpieceNo", "%" + wWorkpieceNo + "%");
                 }
-                if (wSpotCheckResult != "-1")
+                if (wProcessStatus != "-1")
                 {
-                    wSqlCondition += " and t.SpotCheckResult = @wSpotCheckResult ";
-                    wParamMap.Add("wSpotCheckResult", wSpotCheckResult);
+                    wSqlCondition += " and t1.ProcessStatus = @wProcessStatus ";
+                    wParamMap.Add("wProcessStatus", wProcessStatus);
                 }
                 if (!string.IsNullOrEmpty(wStartTime))
                 {
-                    wSqlCondition += " and t.CreateTime >= @wStartTime ";
+                    wSqlCondition += " and t.FeedingTime >= @wStartTime ";
                     wParamMap.Add("wStartTime", Convert.ToDateTime(wStartTime));
                 }
                 if (!string.IsNullOrEmpty(wEndTime))
                 {
-                    wSqlCondition += " and t.CreateTime <= @wEndTime ";
+                    wSqlCondition += " and t.FeedingTime <= @wEndTime ";
                     wParamMap.Add("wEndTime", Convert.ToDateTime(wEndTime));
                 }
 
@@ -90,8 +90,10 @@ namespace iPlant.SCADA.Service
                     wPageCount.Result = 1;
                 }
 
-                String wSQL = "select t.*,t1.WorkpieceNo,t2.OrderNo,t3.ProductNo,t3.ProductName,t4.Name as Creator " + wSqlCondition + " order by t.CreateTime";
-                if (wPaging==1) 
+                String wSQL = string.Format(@"select t.*,t1.WorkpieceNo,t2.OrderNo,t3.ProductNo,t3.ProductName,t4.Name as StationName,
+                           (select count(1) from {0}.qms_repairtask t5 where t5.WorkpieceID=t.WorkpieceID group by t5.WorkpieceID) as RepairCount,
+                           (case t1.ProcessStatus when 0 then '未加工' when 1 then '加工中' when 2 then '已完成' when 3 then '已报废' else '' end) as ProcessStatusName {1} order by t.FeedingTime", wInstance, wSqlCondition);
+                if (wPaging == 1)
                 {
                     wSQL += " limit " + wPageIndex * wPageSize + "," + wPageSize;
                 }
@@ -105,7 +107,7 @@ namespace iPlant.SCADA.Service
                 }
                 foreach (Dictionary<String, Object> wReader in wQueryResult)
                 {
-                    QMSSpotCheckRecord wSpotCheckRecord = new QMSSpotCheckRecord();
+                    QMSWorkpieceQualityInfo wSpotCheckRecord = new QMSWorkpieceQualityInfo();
 
                     wSpotCheckRecord.ID = StringUtils.parseInt(wReader["ID"]);
                     wSpotCheckRecord.WorkpieceID = StringUtils.parseInt(wReader["WorkpieceID"]);
@@ -117,11 +119,15 @@ namespace iPlant.SCADA.Service
                     wSpotCheckRecord.MiddleDiameter = StringUtils.parseDouble(wReader["MiddleDiameter"]);
                     wSpotCheckRecord.SmallDiameter = StringUtils.parseDouble(wReader["SmallDiameter"]);
                     wSpotCheckRecord.Pitch = StringUtils.parseDouble(wReader["Pitch"]);
-                    wSpotCheckRecord.CreatorID = StringUtils.parseInt(wReader["CreatorID"]);
-                    wSpotCheckRecord.Creator = StringUtils.parseString(wReader["Creator"]);
-                    wSpotCheckRecord.CreateTime = StringUtils.parseDate(wReader["CreateTime"]);
+                    wSpotCheckRecord.StationID = StringUtils.parseInt(wReader["StationID"]);
+                    wSpotCheckRecord.StationName = StringUtils.parseString(wReader["StationName"]);
                     wSpotCheckRecord.SpotCheckResult = StringUtils.parseString(wReader["SpotCheckResult"]);
-                    wSpotCheckRecord.NokReason = StringUtils.parseString(wReader["NokReason"]);
+                    wSpotCheckRecord.PatrolCheckResult = StringUtils.parseString(wReader["PatrolCheckResult"]);
+                    wSpotCheckRecord.RepairCount = StringUtils.parseInt(wReader["RepairCount"]);
+                    wSpotCheckRecord.FeedingTime = StringUtils.parseDate(wReader["FeedingTime"]);
+                    wSpotCheckRecord.BlankingTime = StringUtils.parseDate(wReader["BlankingTime"]);
+                    wSpotCheckRecord.ProcessStatusName = StringUtils.parseString(wReader["ProcessStatusName"]);
+                    wSpotCheckRecord.ThreeDimensionalResult = StringUtils.parseString(wReader["ThreeDimensionalResult"]);
                     wResult.Add(wSpotCheckRecord);
                 }
             }

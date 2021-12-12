@@ -33,12 +33,14 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
+                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
-                string wSqlCondition = @" from " + wInstance + ".mss_material t " +
-                    "left join " + wInstance + ".mbs_user t1 on t1.ID=t.CreatorID left join " + wInstance + ".mbs_user t2 on t2.ID=t.EditorID where 1=1 ";
+                string wSqlCondition = string.Format(@" from {0}.mss_material t " +
+                    "left join {0}.mbs_user t1 on t1.ID=t.CreatorID " +
+                    "left join {0}.mbs_user t2 on t2.ID=t.EditorID where t.LineID={1} ", wInstance, LineID);
                 if (!string.IsNullOrWhiteSpace(wMaterialNo))
                 {
                     wSqlCondition += " and t.MaterialNo like @wMaterialNo";
@@ -133,6 +135,7 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
+                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
 
                 MSSMaterial wMSSMaterialDB = this.MSS_CheckMaterialNo(wLoginUser, wMSSMaterial, wErrorCode);
                 if (wMSSMaterialDB.ID > 0)
@@ -156,6 +159,7 @@ namespace iPlant.SCADA.Service
 
                 if (wMSSMaterial.ID <= 0)
                 {
+                    wParamMap.Add("LineID", LineID);
                     wParamMap.Add("Active", wMSSMaterial.Active);
                     wParamMap.Add("CreatorID", wLoginUser.ID);
                     wParamMap.Add("CreateTime", DateTime.Now);

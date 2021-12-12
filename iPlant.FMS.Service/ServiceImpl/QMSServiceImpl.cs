@@ -57,5 +57,61 @@ namespace iPlant.SCADA.Service
             }
             return wResult;
         }
+
+        public ServiceResult<List<QMSWorkpieceCheckResult>> QMS_GetWorkpieceCheckResultList(BMSEmployee wLoginUser, String wOrderNo,
+               List<int> wProductIDList, String wWorkpieceNo, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
+        {
+            ServiceResult<List<QMSWorkpieceCheckResult>> wResult = new ServiceResult<List<QMSWorkpieceCheckResult>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                wResult.setResult(QMSWorkpieceCheckResultDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.Put("PageCount", wPageCount.Result);
+                wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+            }
+            catch (Exception e)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+        public ServiceResult<List<QMSWorkpieceQualityInfo>> QMS_GetWorkpieceQualityInfoList(BMSEmployee wLoginUser, String wOrderNo,
+                List<int> wProductIDList, String wWorkpieceNo, String wProcessStatus, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
+        {
+            ServiceResult<List<QMSWorkpieceQualityInfo>> wResult = new ServiceResult<List<QMSWorkpieceQualityInfo>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                wResult.setResult(QMSWorkpieceQualityInfoDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wProcessStatus, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.Put("PageCount", wPageCount.Result);
+                wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+            }
+            catch (Exception e)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+        public ServiceResult<List<QMSThreeDimensionalCheckResult>> QMS_GetThreeDimensionalCheckResultList(BMSEmployee wLoginUser, int wWorkpieceID, int wPageSize, int wPageIndex, int wPaging)
+        {
+            ServiceResult<List<QMSThreeDimensionalCheckResult>> wResult = new ServiceResult<List<QMSThreeDimensionalCheckResult>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                wResult.setResult(QMSThreeDimensionalCheckResultDAO.getInstance().GetAll(wLoginUser, wWorkpieceID, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.Put("PageCount", wPageCount.Result);
+                wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+            }
+            catch (Exception e)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
     }
 }

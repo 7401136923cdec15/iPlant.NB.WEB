@@ -34,14 +34,16 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
+                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
-                string wSqlCondition = @" from (select t.MaterialStoragePoint,t.MaterialID,t.MaterialBatch,t1.MaterialNo,t1.MaterialName,t1.Groes,
-                               sum(case when t.OperationType in (2,5) then -1*t.Num else t.Num END) as Num from " + wInstance + ".mss_material_operationrecord t " +
-                    "inner join " + wInstance + ".mss_material t1 on t.MaterialID=t1.ID" +
-                    " left join " + wInstance + ".mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 ";
+                string wSqlCondition =string.Format( @" from (select t.MaterialStoragePoint,t.MaterialID,t.MaterialBatch,t1.MaterialNo,t1.MaterialName,t1.Groes,
+                                          sum(case when t.OperationType in (2,5) then -1*t.Num else t.Num END) as Num 
+                                          from {0}.mss_material_operationrecord t " +
+                                          "inner join {0}.mss_material t1 on t.MaterialID=t1.ID" +
+                                          " left join {0}.mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 and t1.LineID={1} ", wInstance, LineID);
                 if (!string.IsNullOrWhiteSpace(wMaterialStoragePoint))
                 {
                     wSqlCondition += " and t.MaterialStoragePoint like @wMaterialStoragePoint";
@@ -158,13 +160,14 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
+                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
-                string wSqlCondition = @"  from " + wInstance + ".mss_material_operationrecord t " +
-                    " inner join " + wInstance + ".mss_material t1 on t.MaterialID=t1.ID " +
-                    " left join " + wInstance + ".mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 ";
+                string wSqlCondition = string.Format(@" from {0}.mss_material_operationrecord t " +
+                                               " inner join {0}.mss_material t1 on t.MaterialID=t1.ID " +
+                                               " left join {0}.mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 and t1.LineID={1} ", wInstance, LineID);
                 if (!string.IsNullOrWhiteSpace(wMaterialStoragePoint))
                 {
                     wSqlCondition += " and t.MaterialStoragePoint like @wMaterialStoragePoint";

@@ -127,7 +127,7 @@
                 // 获取下拉框数据
                 getSelectOptions: function () {
                     var that = this;
-                    http("getProduct", { Active: 1 }, function (res) {
+                    http("getProduct", { Active: 1, Paging: 0 }, function (res) {
                         that.selectOptions.ProductList = res.list;
                     });
                 },
