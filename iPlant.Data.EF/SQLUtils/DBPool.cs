@@ -184,6 +184,9 @@ namespace iPlant.Data.EF
 
         public List<Dictionary<String, Object>> queryForList(String wSQL, Dictionary<String, Object> wParamMap, Pagination pagination)
         {
+            if (pagination == null)
+                return queryForList(wSQL, wParamMap);
+
             List<Dictionary<String, Object>> wResult = new List<Dictionary<string, object>>();
 
             this.PrevQueryForList(wSQL, wParamMap, pagination);
@@ -222,6 +225,21 @@ namespace iPlant.Data.EF
 
             return wResult;
 
+        }
+
+
+        public List<T> queryForList<T>(String wSQL, Dictionary<String, Object> wParamMap, Pagination pagination)
+        {
+            List<Dictionary<String, Object>> wResult = queryForList(wSQL, wParamMap, pagination);
+              
+            return CloneTool.CloneArray<T>(wResult); 
+        }
+
+        public List<T> queryForList<T>(String wSQL, Dictionary<String, Object> wParamMap)
+        {
+            List<Dictionary<String, Object>> wResult = queryForList(wSQL, wParamMap);
+
+            return CloneTool.CloneArray<T>(wResult);
         }
 
 

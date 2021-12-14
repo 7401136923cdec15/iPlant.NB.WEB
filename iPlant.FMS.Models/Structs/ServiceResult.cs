@@ -29,6 +29,7 @@ namespace iPlant.FMS.Models
         public String FaultCode = "";
 
         public int ErrorCode = 0;
+         
 
         /**
          * ==自定义返回结果 慎用

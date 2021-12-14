@@ -5,15 +5,15 @@ using System.Text;
 
 namespace iPlant.FMS.Models
 {
-    [DataContract]
+    
     public class BMSTeamManage
     { 
         public int ID { get; set; }=0;
 
-        [DataMember]
+        
         public String Code { get; set; } = "";
 
-        [DataMember]
+        
         public String Name { get; set; } = "";
           
         /**
@@ -35,22 +35,22 @@ namespace iPlant.FMS.Models
         public List<Int32> MateID { get; set; } = new List<Int32>();
 
 
-        [DataMember]
+        
         public String MateCode { get; set; } = "";
 
-        [DataMember]
+        
         public String MateName { get; set; } = "";
-        [DataMember]
+        
         public String LeaderName { get; set; } = "";
-        [DataMember]
+        
         public String LeaderCode { get; set; } = "";
 
-        [DataMember]
+        
         public String Remark { get; set; } = "";
-        [DataMember]
+        
         public String DepartmentName { get; set; } = "";
 
-        [DataMember]
+        
         public String DepartmentCode { get; set; } = "";
 
         public List<BMSTeamCharge> TeamChargeList { get; set; } = new List<BMSTeamCharge>();
@@ -62,7 +62,7 @@ namespace iPlant.FMS.Models
         /**
          * 是否激活
          */
-        [DataMember]
+        
         public int Active { get; set; } = 0;
 
         public int CreatorID { get; set; } = 0;

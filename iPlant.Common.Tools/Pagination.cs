@@ -1,4 +1,4 @@
-﻿namespace iPlant.Data.EF.Repository
+﻿namespace iPlant.Common.Tools
 {
     public class Pagination
     {

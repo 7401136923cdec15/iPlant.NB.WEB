@@ -305,10 +305,10 @@ namespace iPlant.FMS.WEB
 
                 List<BMSRole> wBMSRoleItemList = CloneTool.CloneArray<BMSRole>(wParam["data"]);
 
-                int wActive = wParam.ContainsKey("active") ? (int)wParam["active"] : 0;
+                int wActive = wParam.ContainsKey("active") ? StringUtils.parseInt(wParam["active"]) : 0;
                 if (wActive != 1)
                 {
-                    wActive = wParam.ContainsKey("Active") ? (int)wParam["Active"] : 0;
+                    wActive = wParam.ContainsKey("Active") ? StringUtils.parseInt(wParam["Active"]) : 0;
                 }
                 ServiceResult<Int32> wServerRst = new ServiceResult<Int32>(0);
                 foreach (BMSRole wBMSRoleItem in wBMSRoleItemList)

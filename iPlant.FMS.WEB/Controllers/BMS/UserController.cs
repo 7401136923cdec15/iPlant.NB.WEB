@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Microsoft.AspNetCore.Http;using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using iPlant.FMS.Models;
 using iPlant.SCADA.Service;
 
@@ -184,7 +185,7 @@ namespace iPlant.FMS.WEB
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             try
             {
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
                 int wLoginID = wBMSEmployee.ID;
 
@@ -218,7 +219,7 @@ namespace iPlant.FMS.WEB
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             try
             {
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
                 if (!wParam.ContainsKey("data"))
@@ -391,7 +392,7 @@ namespace iPlant.FMS.WEB
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             try
             {
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
 
                 int wActive = StringUtils.parseInt(Request.QueryParamString("active"));
@@ -448,7 +449,7 @@ namespace iPlant.FMS.WEB
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             try
             {
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
 
                 List<Int32> wInteger = StringUtils
@@ -488,7 +489,7 @@ namespace iPlant.FMS.WEB
             try
             {
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
 
                 if (!wParam.ContainsKey("data"))
@@ -603,7 +604,7 @@ namespace iPlant.FMS.WEB
             try
             {
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
-                
+
 
                 BMSEmployee wBMSEmployee = GetSession();
                 if (!wParam.ContainsKey("data"))
@@ -614,11 +615,11 @@ namespace iPlant.FMS.WEB
 
                 List<BMSEmployee> wBMSEmployeeList = CloneTool.CloneArray<BMSEmployee>(wParam["data"]);
 
-                int wActive = wParam.ContainsKey("active") ? (int)wParam["active"] : 0;
+                int wActive = wParam.ContainsKey("active") ? StringUtils.parseInt(wParam["active"]) : 0;
 
                 if (wActive != 1)
                 {
-                    wActive = wParam.ContainsKey("Active") ? (int)wParam["Active"] : 0;
+                    wActive = wParam.ContainsKey("Active") ? StringUtils.parseInt(wParam["Active"]) : 0;
                 }
                 if (wBMSEmployeeList == null || wBMSEmployeeList.Count < 1)
                 {
@@ -667,7 +668,7 @@ namespace iPlant.FMS.WEB
             try
             {
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
-                
+
 
                 BMSEmployee wBMSEmployee = GetSession();
                 if (!wParam.ContainsKey("data") || !wParam.ContainsKey("DutyOrders"))
@@ -713,7 +714,7 @@ namespace iPlant.FMS.WEB
             try
             {
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
-                
+
 
                 BMSEmployee wBMSEmployee = GetSession();
                 if (!wParam.ContainsKey("data") || !wParam.ContainsKey("DutyOrders"))
@@ -759,7 +760,7 @@ namespace iPlant.FMS.WEB
             try
             {
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
-                
+
 
                 BMSEmployee wBMSEmployee = GetSession();
                 if (!wParam.ContainsKey("data"))
@@ -813,7 +814,7 @@ namespace iPlant.FMS.WEB
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             try
             {
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
 
                 int wModuleID = StringUtils.parseInt(Request.QueryParamString("ModuleID"));
@@ -863,7 +864,7 @@ namespace iPlant.FMS.WEB
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             try
             {
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
 
                 Boolean wCheckPower = ServiceInstance.mBMSService
@@ -899,20 +900,20 @@ namespace iPlant.FMS.WEB
             try
             {
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
-                
+
                 BMSEmployee wBMSEmployee = GetSession();
                 if (!wParam.ContainsKey("data"))
                 {
                     wResult = GetResult(RetCode.SERVER_CODE_ERR, RetCode.SERVER_RST_ERROR_OUT);
                     return Json(wResult);
                 }
-                 
+
                 List<BMSEmployee> wBMSDepartmentList = CloneTool.CloneArray<BMSEmployee>(wParam["data"]);
                 ServiceResult<List<String>> wServerRst = ServiceInstance.mBMSService.BMS_SyncEmployeeList(wBMSEmployee, wBMSDepartmentList);
 
 
                 if (StringUtils.isEmpty(wServerRst.getFaultCode()))
-                { 
+                {
                     wResult = GetResult(RetCode.SERVER_CODE_SUC, "", wServerRst.getResult(), null);
                 }
                 else

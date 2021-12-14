@@ -154,7 +154,7 @@ namespace iPlant.FMS.WEB
                 List<FMCShift> wFMCShift = CloneTool.CloneArray<FMCShift>(wParam["data"]);
 
 
-                int wWorkDayID = wParam.ContainsKey("WorkDayID") ? (int)wParam["WorkDayID"] : 0;
+                int wWorkDayID = wParam.ContainsKey("WorkDayID") ? StringUtils.parseInt(wParam["WorkDayID"]) : 0;
 
                 ServiceResult<Int32> wServiceResult = ServiceInstance.mFMCService.FMC_SaveShiftList(wBMSEmployee, wFMCShift);
 

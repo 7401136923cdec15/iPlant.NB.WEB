@@ -9,7 +9,7 @@ namespace iPlant.FMS.Models
     /// <summary>
     /// 设备实时参数型号
     /// </summary> 
-    [DataContract]
+    
     public class DMSDeviceRealParameter
     {
 
@@ -19,13 +19,13 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 参数代码
         /// </summary>
-        [DataMember]
+        
         public String ParameterCode { get; set; } = "";
 
         /// <summary>
         ///  参数名称   同设备 同数据分类下Name唯一  汉字
         /// </summary>
-        [DataMember]
+        
         public String ParameterName { get; set; } = "";
 
         /// <summary>
@@ -40,18 +40,18 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 设备编码
         /// </summary>
-        [DataMember]
+        
         public String DeviceNo { get; set; } = "";
 
         /// <summary>
         ///  设备名称
         /// </summary>
-        [DataMember]
+        
         public String DeviceName { get; set; } = "";
         /// <summary> 
         /// 固定资产编码  采集编码
         /// </summary>
-        [DataMember]
+        
         public String AssetNo { get; set; } = "";
 
 
@@ -89,12 +89,12 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 参数值
         /// </summary>
-        [DataMember]
+        
         public String ParameterValue { get; set; } = "";
 
         /// 编辑时刻
         /// </summary>
-        [DataMember]
+        
         public DateTime UpdateTime { get; set; } = DateTime.Now;
          
 

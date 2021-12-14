@@ -12,7 +12,7 @@ namespace iPlant.FMS.Models
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="T1"></typeparam>
-    [DataContract]
+    
     public class APIXmlResult<T, T1> 
     {
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(APIXmlResult<T, T1>));
@@ -114,7 +114,7 @@ namespace iPlant.FMS.Models
             ReturnObject.Info = wInfo;
         } 
 
-        [DataMember]
+        
         public int ResultCode { get; set; }
         public APIXmlReturnObject<T, T1> ReturnObject { get; set; }
 
@@ -223,15 +223,15 @@ namespace iPlant.FMS.Models
 
     }
 
-    [DataContract]
+    
     public class APIXmlReturnObject<T,T1>
     {
 
-        [DataMember]
+        
         public String Msg { get; set; }
-        [DataMember]
+        
         public List<T> List { get; set; }
-        [DataMember]
+        
         public T1 Info { get; set; }
 
         public APIXmlReturnObject(Dictionary<String, Object> wDictionary)

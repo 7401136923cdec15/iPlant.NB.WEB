@@ -9,20 +9,20 @@ namespace iPlant.FMS.Models
     /// <summary>
     /// 设备台账
     /// </summary> 
-    [DataContract]
+    
     public class DMSDeviceLedger
     {
         public int ID { get; set; } = 0;
         /// <summary>
         /// 设备编码
         /// </summary>
-        [DataMember]
+        
         public String Code { get; set; } = "";
 
         /// <summary>
         ///  设备名称
         /// </summary>
-        [DataMember]
+        
         public String Name { get; set; } = "";
 
 
@@ -37,12 +37,12 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 设备型号名称
         /// </summary>
-        [DataMember]
+        
         public String ModelName { get; set; } = "";
         /// <summary>
         /// 设备型号ID
         /// </summary>
-        [DataMember]
+        
         public String ModelNo { get; set; } = "";
 
         /// <summary>
@@ -53,22 +53,22 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 设备类型名称
         /// </summary>
-        [DataMember]
+        
         public String DeviceTypeName { get; set; } = "";
         /// <summary>
         /// 设备类型编码
         /// </summary>
-        [DataMember]
+        
         public String DeviceTypeCode { get; set; } = "";
         /// <summary>
         /// 厂家名称
         /// </summary> 
-        [DataMember]
+        
         public String ManufactorName { get; set; } = "";
         /// <summary>
         /// 厂家编号
         /// </summary> 
-        [DataMember]
+        
         public String ManufactorCode { get; set; } = "";
         /// <summary>
         /// 厂家联系方式
@@ -79,25 +79,25 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 供应商名称
         /// </summary>
-        [DataMember]
+        
         public String SupplierName { get; set; } = "";
         /// <summary>
         /// 供应商编号
         /// </summary>
-        [DataMember]
+        
         public String SupplierCode { get; set; } = "";
         /// <summary>
         /// 供应商联系方式
         /// </summary>
-        [DataMember]
+        
         public String SupplierContactInfo { get; set; } = "";
-        [DataMember]
+        
         public DateTime AcceptanceDate { get; set; } = DateTime.Now;
         
         /// <summary>
         /// 保质期
         /// </summary>
-        [DataMember] 
+         
         public int WarrantyPeriod { get; set; } = 0;
 
         public int FactoryID { get; set; } = 0;
@@ -121,7 +121,7 @@ namespace iPlant.FMS.Models
         public String LineCode { get; set; } = "";
         
         public int AreaID { get; set; } = 0;
-        [DataMember]
+        
         public String AreaNo { get; set; } = "";
         /// <summary>
         /// 位置信息
@@ -131,7 +131,7 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 备注
         /// </summary>
-        [DataMember]
+        
         public String Remark { get; set; } = "";
 
         /// <summary>
@@ -141,9 +141,9 @@ namespace iPlant.FMS.Models
 
 
         public int TeamID { get; set; } = 0;
-        [DataMember]
+        
         public String TeamNo { get; set; } = "";
-        [DataMember]
+        
         public String TeamName { get; set; } = "";
 
 
@@ -159,20 +159,20 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 维护人员名称
         /// </summary>
-        [DataMember]
+        
         public String MaintainerName { get; set; } = "";
-        [DataMember]
+        
         public String MaintainerCode { get; set; } = "";
         /// <summary>
         /// 维护日期
         /// </summary>
-        [DataMember]
+        
         public DateTime MaintainDate { get; set; } = DateTime.Now.Date;
 
         /// <summary>
         /// 预计下次维护日期
         /// </summary>
-        [DataMember]
+        
         public DateTime NextMaintainDate { get; set; } = DateTime.Now.Date;
         /// <summary>
         /// 录入人
@@ -201,7 +201,7 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 是否激活： 1为激活 2为禁用
         /// </summary>
-        [DataMember]
+        
         public int Active { get; set; } = 0;
     }
 }

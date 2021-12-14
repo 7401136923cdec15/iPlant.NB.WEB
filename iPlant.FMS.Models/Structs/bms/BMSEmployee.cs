@@ -6,24 +6,24 @@ using System.Text;
 namespace iPlant.FMS.Models
 {
     
-    [DataContract]
+   
     public class BMSEmployee
     {
 
         public int ID { get; set; } = 0;
-        [DataMember]
+       
         public String Name { get; set; } = "";
 
         public String LoginName { get; set; } = "";
-        [DataMember]
+       
         public String Password { get; set; } = "";
-
+        
         public int DepartmentID { get; set; } = 0;
-        [DataMember]
+       
         public String DepartmentCode { get; set; } = "";
-        [DataMember]
+        
         public String Department { get; set; } = "";
-        [DataMember]
+        
         public int Active { get; set; } = 1;
 
         // 0普通用户 1 管理员账户 9开发者账户
@@ -33,11 +33,11 @@ namespace iPlant.FMS.Models
 
         public String Operator { get; set; } = "";
         public int OperatorID { get; set; } = 0;
-        [DataMember]
+        
         public String Phone { get; set; } = "";
-        [DataMember]
+       
         public String Email { get; set; } = "";
-        [DataMember]
+       
         public String FaceIcon { get; set; } = "/independent/static/images/userface.png";
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
@@ -68,15 +68,15 @@ namespace iPlant.FMS.Models
         public DateTime LastOnLineTime { get; set; } = DateTime.Now;
 
         public int CompanyID { get; set; } = 0;
-        [DataMember]
+        
         public String LoginID { get; set; } = "";
 
         public int DutyID { get; set; } = 0;
 
         public List<int> RoleIDList { get; set; } = new List<int>();
-        [DataMember]
+       
         public String RoleCode { get; set; } = "";
-        [DataMember]
+        
         public String RoleName{ get; set; } = "";
 
 

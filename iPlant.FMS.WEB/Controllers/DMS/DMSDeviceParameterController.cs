@@ -195,7 +195,7 @@ namespace iPlant.FMS.WEB
                     wResult = GetResult(RetCode.SERVER_CODE_ERR, RetCode.SERVER_RST_ERROR_OUT);
                     return Json(wResult);
                 }
-                int wActive = wParam.ContainsKey("Active") ? (int)wParam["Active"] : 0;
+                int wActive = wParam.ContainsKey("Active") ? StringUtils.parseInt(wParam["Active"]) : 0;
 
                 List<Int32> wIDList = new List<Int32>();
                 foreach (DMSDeviceParameter wItem in wDMSDeviceParameterList)

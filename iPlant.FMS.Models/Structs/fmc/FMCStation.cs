@@ -6,7 +6,7 @@ using System.Text;
 
 namespace iPlant.FMS.Models
 {
-    [DataContract]
+    
     public class FMCStation
     {
         public FMCStation()
@@ -17,9 +17,9 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 名称
         /// </summary>
-        [DataMember]
+        
         public String Name { get; set; } = "";
-        [DataMember]
+        
         public String Code { get; set; } = "";
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace iPlant.FMS.Models
         /// </summary>
         
         public int AreaID { get; set; } = 0;
-        [DataMember]
+        
         public String AreaCode { get; set; } = "";
-        [DataMember]
+        
         public String AreaName { get; set; } = "";
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 工位资源组   不管
         /// </summary>
-        [DataMember]
+        
         public List<FMCResource> ResourceList { get; set; } = new List<FMCResource>();
 
         /**
@@ -89,11 +89,11 @@ namespace iPlant.FMS.Models
         public String Creator { get; set; } = "";
 
         public String Editor { get; set; } = "";
-        [DataMember]
+        
         public int Active { get; set; } = 0; // 状态
-        [DataMember]
+        
         public String Remark { get; set; } = "";
-        [DataMember]
+        
         public String WorkName { get; set; } = "";
         /**
          * 遏制工位1 正常工位0

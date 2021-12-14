@@ -161,7 +161,7 @@ namespace iPlant.FMS.WEB
                     return Json(wResult);
                 }
 
-                int wActive = wParam.ContainsKey("Active") ? (int)wParam["Active"] : 0;
+                int wActive = wParam.ContainsKey("Active") ? StringUtils.parseInt(wParam["Active"]) : 0;
 
                 List<FMCStation> wFMCStationList = CloneTool.CloneArray<FMCStation>(wParam["data"]);
 

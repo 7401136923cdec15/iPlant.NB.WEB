@@ -9,14 +9,14 @@ namespace iPlant.FMS.Models
     /// <summary>
     /// 设备型号
     /// </summary> 
-    [DataContract]
+    
     public class DMSDeviceStatus
     {
         public int ID { get; set; } = 0;
         /// <summary>
         /// 设备编码
         /// </summary>
-        [DataMember]
+        
         public String DeviceNo { get; set; } = "";
 
 
@@ -25,13 +25,13 @@ namespace iPlant.FMS.Models
         /// <summary>
         ///  设备名称
         /// </summary>
-        [DataMember]
+        
         public String DeviceName { get; set; } = "";
 
         /// <summary> 
         /// 固定资产编码  采集编码
         /// </summary>
-        [DataMember]
+        
         public String AssetNo { get; set; } = "";
         /// <summary>
         /// 设备型号ID
@@ -102,31 +102,31 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// 当前状态
         /// </summary>
-        [DataMember]
+        
         public int Status { get; set; } = 0;
 
         /// <summary>
         /// 历史状态
         /// </summary>
-        [DataMember]
+        
         public int StatusHistory { get; set; } = 0;
 
         /// <summary>
         /// 状态改变时刻
         /// </summary>
-        [DataMember]
+        
         public DateTime StatusTime { get; set; } = new DateTime(2000, 1, 1);
 
         /// <summary>
         /// 状态持续时长
         /// </summary>
-        [DataMember]
+        
         public int Duration { get; set; } = 0;
 
         /// <summary>
         /// 状态结束时刻
         /// </summary>
-        [DataMember]
+        
         public DateTime StatusTimeEnd { get; set; } = new DateTime(2000, 1, 1);
 
         public int AlarmCount { get; set; } = 0;

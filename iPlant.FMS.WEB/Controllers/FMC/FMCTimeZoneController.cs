@@ -66,7 +66,7 @@ namespace iPlant.FMS.WEB
                 }
                 List<FMCTimeZone> wFMCTimeZoneList = CloneTool.CloneArray<FMCTimeZone>(wParam["data"]);
 
-                int wShiftID = wParam.ContainsKey("ShiftID") ? (int)wParam["ShiftID"] : 0;
+                int wShiftID = wParam.ContainsKey("ShiftID") ? StringUtils.parseInt(wParam["ShiftID"]) : 0;
                 if (wFMCTimeZoneList == null)
                     wFMCTimeZoneList = new List<FMCTimeZone>();
 
