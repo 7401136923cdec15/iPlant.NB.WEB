@@ -198,5 +198,76 @@ namespace iPlant.FMS.WEB
             }
             return Json(wResult);
         }
+
+        [HttpGet]
+        public ActionResult GetOneTimePassRate()
+        {
+            Dictionary<String, Object> wResult = new Dictionary<String, Object>();
+            try
+            {
+
+                BMSEmployee wBMSEmployee = GetSession();
+
+                List<int> wProductIDList = StringUtils.parseIntList(Request.QueryParamString("ProductID"), ",");
+                int wStatType = StringUtils.parseInt(Request.QueryParamString("StatType"));
+                DateTime wStartTime = StringUtils.parseDate(Request.QueryParamString("StartTime"));
+                DateTime wEndTime = StringUtils.parseDate(Request.QueryParamString("EndTime"));
+                int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
+                int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
+
+                ServiceResult<List<QMSOneTimePassRate>> wServiceResult = ServiceInstance.mQMSService.QMS_GetOneTimePassRateList(wBMSEmployee,
+                 wProductIDList, wStatType, wStartTime, wEndTime, wPageSize, wPageIndex);
+
+                if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
+                {
+                    wResult = GetResult(RetCode.SERVER_CODE_SUC, "", wServiceResult.Result, wServiceResult.Get("PageCount"));
+                }
+                else
+                {
+                    wResult = GetResult(RetCode.SERVER_CODE_ERR, wServiceResult.getFaultCode());
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+                wResult = GetResult(RetCode.SERVER_CODE_ERR, ex.ToString(), null, null);
+            }
+            return Json(wResult);
+        }
+
+
+        [HttpGet]
+        public ActionResult GetOneTimePassRateForChart()
+        {
+            Dictionary<String, Object> wResult = new Dictionary<String, Object>();
+            try
+            {
+
+                BMSEmployee wBMSEmployee = GetSession();
+
+                List<int> wProductIDList = StringUtils.parseIntList(Request.QueryParamString("ProductID"), ",");
+                int wStatType = StringUtils.parseInt(Request.QueryParamString("StatType"));
+                DateTime wStartTime = StringUtils.parseDate(Request.QueryParamString("StartTime"));
+                DateTime wEndTime = StringUtils.parseDate(Request.QueryParamString("EndTime"));
+
+                ServiceResult<List<QMSOneTimePassRate>> wServiceResult = ServiceInstance.mQMSService.QMS_GetOneTimePassRateForChartList(wBMSEmployee,
+                 wProductIDList, wStatType, wStartTime, wEndTime);
+
+                if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
+                {
+                    wResult = GetResult(RetCode.SERVER_CODE_SUC, "", wServiceResult.Result, null);
+                }
+                else
+                {
+                    wResult = GetResult(RetCode.SERVER_CODE_ERR, wServiceResult.getFaultCode());
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, ex);
+                wResult = GetResult(RetCode.SERVER_CODE_ERR, ex.ToString(), null, null);
+            }
+            return Json(wResult);
+        }
     }
 }

@@ -22,5 +22,10 @@ namespace iPlant.SCADA.Service
                List<int> wProductIDList, String wWorkpieceNo, String wProcessStatus, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging);
 
         ServiceResult<List<QMSThreeDimensionalCheckResult>> QMS_GetThreeDimensionalCheckResultList(BMSEmployee wLoginUser, int wWorkpieceID, int wPageSize, int wPageIndex, int wPaging);
+
+        ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateList(BMSEmployee wLoginUser, List<int> wProductIDList,int wStatType, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex);
+
+        ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateForChartList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime);
+
     }
 }

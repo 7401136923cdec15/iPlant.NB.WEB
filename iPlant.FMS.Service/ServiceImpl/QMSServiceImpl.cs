@@ -113,5 +113,40 @@ namespace iPlant.SCADA.Service
             }
             return wResult;
         }
+
+        public ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex)
+        {
+            ServiceResult<List<QMSOneTimePassRate>> wResult = new ServiceResult<List<QMSOneTimePassRate>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                wResult.setResult(QMSOneTimePassRateDAO.getInstance().GetAll(wLoginUser, wProductIDList, wStatType, wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount, wErrorCode));
+                wResult.Put("PageCount", wPageCount.Result);
+                wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+            }
+            catch (Exception e)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+        public ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateForChartList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime)
+        {
+            ServiceResult<List<QMSOneTimePassRate>> wResult = new ServiceResult<List<QMSOneTimePassRate>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                wResult.setResult(QMSOneTimePassRateDAO.getInstance().GetAllForChart(wLoginUser, wProductIDList, wStatType, wStartTime, wEndTime, wErrorCode));
+                wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+            }
+            catch (Exception e)
+            {
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
     }
 }

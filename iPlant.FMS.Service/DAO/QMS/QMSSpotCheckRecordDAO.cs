@@ -44,7 +44,7 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
                                                    left join {0}.mbs_user t4 on t4.ID = t.CreatorID
-                                                   where t3.LineID={1} ", wInstance, LineID);
+                                                   where t2.LineID={1} ", wInstance, LineID);
                 if (!string.IsNullOrEmpty(wOrderNo))
                 {
                     wSqlCondition += " and t2.OrderNo LIKE @wOrderNo ";
