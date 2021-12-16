@@ -2,6 +2,7 @@
 using iPlant.FMS.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -2142,7 +2143,7 @@ namespace iPlant.SCADA.Service
 
                 List<DMSDeviceAlarm> wDMSDeviceAlarmList = new List<DMSDeviceAlarm>();
                 DMSDeviceAlarm wDMSDeviceAlarm = null;
-               
+
                 foreach (string wAssetNo in wAssetNoList)
                 {
                     if (!wDMSDeviceRealParameterSourceListDic.ContainsKey(wAssetNo))
@@ -2161,7 +2162,7 @@ namespace iPlant.SCADA.Service
 
 
 
-                        if ( wDMSDeviceRealParameter.UpdateTime.Year <= 2010)
+                        if (wDMSDeviceRealParameter.UpdateTime.Year <= 2010)
                             wDMSDeviceRealParameter.UpdateTime = DateTime.Now;
 
                         if ((wDMSDeviceRealParameterSourceListDic[wAssetNo][wDMSDeviceRealParameter.ParameterCode].DataClass == (int)DMSDataClass.Alarm)
@@ -2463,6 +2464,120 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
+
+
+
+
+        public ServiceResult<List<DMSProgramNC>> DMS_GetProgramNCList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
+                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID,
+                int wWorkShopID, int wLineID, int wAreaID, int wProductID, String wProductNo, Pagination wPagination)
+        {
+            ServiceResult<List<DMSProgramNC>> wResult = new ServiceResult<List<DMSProgramNC>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+
+                wResult.Result = DMSProgramNCDAO.getInstance().DMS_SelectProgramNCList(wLoginUser, wDeviceID, wDeviceNo,
+                 wAssetNo, wDeviceType, wModelID, wFactoryID,
+                 wWorkShopID, wLineID, wAreaID, wProductID, wProductNo, wPagination, wErrorCode);
+
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                }
+                wResult.Put("PageCount", wPagination.TotalPage);
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+        public ServiceResult<List<DMSProgramNCRecord>> DMS_GetProgramNCRecordList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
+                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID, int wAreaID, int wProductID, String wProductNo,
+                int wEditorID, int wRecordType, DateTime wStarTime, DateTime wEndTime, Pagination wPagination)
+        {
+            ServiceResult<List<DMSProgramNCRecord>> wResult = new ServiceResult<List<DMSProgramNCRecord>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+
+                wResult.Result = DMSProgramNCRecordDAO.getInstance().DMS_SelectProgramNCRecordList(wLoginUser, wDeviceID, wDeviceNo,
+                 wAssetNo, wDeviceType, wModelID, wFactoryID, wWorkShopID, wLineID, wAreaID, wProductID, wProductNo,
+                 wEditorID, wRecordType, wStarTime, wEndTime, wPagination, wErrorCode);
+
+                 
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                }
+                wResult.Put("PageCount", wPagination.TotalPage);
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+        public ServiceResult<Int32> DMS_UpdateProgramNCRecordList(BMSEmployee wLoginUser, DMSProgramNCRecord wProgramNCRecord)
+        {
+            //判断上ProgramID<=0时 新增一条
+
+            ServiceResult<Int32> wResult = new ServiceResult<Int32>(0);
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+
+                DMSProgramNC wDMSProgramNC = null;
+                if (wProgramNCRecord.ProgramID <= 0)
+                {
+                    wProgramNCRecord.RecordType = (int)DMSProgramRecordTypes.Upload;
+                }
+
+                if (wProgramNCRecord.RecordType == (int)DMSProgramRecordTypes.Upload
+                    || wProgramNCRecord.RecordType == (int)DMSProgramRecordTypes.VersionChange)
+                {
+                    wDMSProgramNC = wProgramNCRecord.CreateSourceProgram();
+
+
+
+                    DMSProgramNCDAO.getInstance().DMS_UpdateProgramNC(wLoginUser, wDMSProgramNC, wErrorCode);
+
+                    if (wErrorCode.Result != 0)
+                    {
+                        wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                        return wResult;
+                    }
+
+                    wProgramNCRecord.ProgramID = wDMSProgramNC.ID;
+                }
+
+
+                DMSProgramNCRecordDAO.getInstance().DMS_UpdateProgramNCRecord(wLoginUser, wProgramNCRecord, wErrorCode);
+
+
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                }
+
+                if (wDMSProgramNC != null && StringUtils.isNotEmpty(wProgramNCRecord.FileSourcePath)
+                   && StringUtils.isNotEmpty(wDMSProgramNC.FileSourcePath))
+                    //文件写入指定路径
+                    File.Copy(wProgramNCRecord.FileSourcePath, wDMSProgramNC.FileSourcePath);
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+ 
         public void Dispose()
         {
             mTimer.Dispose();

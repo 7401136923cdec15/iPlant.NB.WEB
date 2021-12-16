@@ -98,6 +98,7 @@ namespace iPlant.FMS.WEB
                     Dictionary<String, Object> wResultObject = new Dictionary<String, Object>();
                     wResultObject.Add("file_id", wPathList[0]);
                     wResultObject.Add("file_url", wPathList[0]);
+                    wResultObject.Add("diskUrl", wPath);
                     wResultObject.Add("list", wPathList);
                     wResult = GetResult(RetCode.SERVER_CODE_SUC, wResultObject);
                 }
