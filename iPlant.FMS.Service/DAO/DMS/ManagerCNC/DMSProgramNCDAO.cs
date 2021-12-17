@@ -31,7 +31,9 @@ namespace iPlant.SCADA.Service
         }
 
         public List<DMSProgramNC> DMS_SelectProgramNCList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
-                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID, int wAreaID, int wProductID, String wProductNo, Pagination wPagination,
+                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID, 
+                int wAreaID, int wProductID,String wProductNo,
+                 Pagination wPagination,
                 OutResult<Int32> wErrorCode)
         {
             List<DMSProgramNC> wResult = new List<DMSProgramNC>();
@@ -46,7 +48,7 @@ namespace iPlant.SCADA.Service
                 if (wAssetNo == null)
                     wAssetNo = "";
                 if (wProductNo == null)
-                    wAssetNo = "";
+                    wProductNo = "";
 
                 String wSQL = StringUtils.Format(
                         "SELECT p.*,t.Name as DeviceName,t.Code as DeviceNo,t.ModelID,t.WorkShopID,t.FactoryID,t.LineID," +

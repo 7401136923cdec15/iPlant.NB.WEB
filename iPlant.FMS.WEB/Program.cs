@@ -17,6 +17,7 @@ namespace iPlant.FMS.WEB
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
                 }).UseLog4Net(GlobalConstant.LogRepositoryName);
     }
 }

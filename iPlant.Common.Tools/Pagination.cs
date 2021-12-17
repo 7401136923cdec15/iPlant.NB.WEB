@@ -10,8 +10,21 @@
             PageSize = 10;
         }
 
+        static Pagination()
+        {
+            
+            MaxPageSize = StringUtils.parseInt(GlobalConstant.GlobalConfiguration.GetValue("MaxPageSize"));
+
+            if (MaxPageSize < 100)
+                MaxPageSize = 500;
+        }
+
+        private static int MaxPageSize =100;
+
         public static Pagination Create(int wPageIndex, int wPageSize, params string[] args)
         {
+            if (wPageSize <= 0)
+                wPageSize = MaxPageSize;
             Pagination wResult = new Pagination();
 
             wResult.PageIndex = wPageIndex;
@@ -21,7 +34,7 @@
             if (args.Length > 0)
                 wResult.Sort = args[0];
             if (args.Length > 1)
-                wResult.SortType = args[1]; 
+                wResult.SortType = args[1];
             return wResult;
         }
 

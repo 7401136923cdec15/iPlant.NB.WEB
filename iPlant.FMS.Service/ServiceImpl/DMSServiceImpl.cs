@@ -2484,8 +2484,7 @@ namespace iPlant.SCADA.Service
                 if (wErrorCode.Result != 0)
                 {
                     wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
-                }
-                wResult.Put("PageCount", wPagination.TotalPage);
+                } 
             }
             catch (Exception e)
             {
@@ -2523,7 +2522,7 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<Int32> DMS_UpdateProgramNCRecordList(BMSEmployee wLoginUser, DMSProgramNCRecord wProgramNCRecord)
+        public ServiceResult<Int32> DMS_UpdateProgramNCRecord(BMSEmployee wLoginUser, DMSProgramNCRecord wProgramNCRecord)
         {
             //判断上ProgramID<=0时 新增一条
 
@@ -2578,6 +2577,126 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
  
+
+        public ServiceResult<List<DMSToolInfo>> DMS_GetToolInfoList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
+                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID,
+                int wAreaID, int wToolHouseIndex, int wToolIndex, Pagination wPagination)
+        {
+            ServiceResult<List<DMSToolInfo>> wResult = new ServiceResult<List<DMSToolInfo>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                //调用底层获取刀具数据
+
+
+                wResult.Result = DMSToolInfoDAO.getInstance().DMS_SelectToolInfoList(wLoginUser,  wDeviceID,  wDeviceNo,
+                 wAssetNo,  wDeviceType,  wModelID,  wFactoryID,  wWorkShopID,  wLineID,
+                 wAreaID,  wToolHouseIndex,  wToolIndex,  wPagination, wErrorCode);
+
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                }
+                wResult.Put("PageCount", wPagination.TotalPage);
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+
+        public ServiceResult<List<DMSToolOffset>> DMS_GetToolOffsetList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
+                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID, int wAreaID,
+                int wToolID, int wToolHouseIndex, int wToolIndex, 
+                int wEditorID, DateTime wStarTime, DateTime wEndTime, Pagination wPagination)
+        {
+            ServiceResult<List<DMSToolOffset>> wResult = new ServiceResult<List<DMSToolOffset>>();
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+
+                wResult.Result = DMSToolOffsetDAO.getInstance().DMS_SelectToolOffsetList(wLoginUser,  wDeviceID,  wDeviceNo,
+                 wAssetNo,  wDeviceType,  wModelID,  wFactoryID,  wWorkShopID,  wLineID,  wAreaID,
+                 wToolID, wToolHouseIndex, wToolIndex,  
+                 wEditorID,  wStarTime,  wEndTime,  wPagination, wErrorCode);
+
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                }
+                wResult.Put("PageCount", wPagination.TotalPage);
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+
+        public ServiceResult<Int32> DMS_UpdateToolInfo(BMSEmployee wLoginUser, DMSToolInfo wDMSToolInfo)
+        {
+            //判断上ProgramID<=0时 新增一条
+
+            ServiceResult<Int32> wResult = new ServiceResult<Int32>(0);
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+
+
+                DMSToolInfoDAO.getInstance().DMS_UpdateToolInfo(wLoginUser, wDMSToolInfo, wErrorCode);
+
+
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                }
+
+              
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+
+        public ServiceResult<Int32> DMS_UpdateToolOffset(BMSEmployee wLoginUser, DMSToolOffset wDMSToolOffset)
+        {
+            //判断上ProgramID<=0时 新增一条
+
+            ServiceResult<Int32> wResult = new ServiceResult<Int32>(0);
+            try
+            {
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
+                //调用底层设置刀补
+                 
+                DMSToolOffsetDAO.getInstance().DMS_UpdateToolOffset(wLoginUser, wDMSToolOffset, wErrorCode);
+                 
+                if (wErrorCode.Result != 0)
+                {
+                    wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
+                } 
+               
+            }
+            catch (Exception e)
+            {
+                wResult.FaultCode += e.ToString();
+                logger.Error(System.Reflection.MethodBase.GetCurrentMethod().Name, e);
+            }
+            return wResult;
+        }
+
+
+
+
+
         public void Dispose()
         {
             mTimer.Dispose();

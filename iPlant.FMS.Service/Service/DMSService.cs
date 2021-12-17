@@ -241,6 +241,20 @@ namespace iPlant.SCADA.Service
                 String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID, int wAreaID, int wProductID, String wProductNo,
                 int wEditorID, int wRecordType, DateTime wStarTime, DateTime wEndTime, Pagination wPagination);
 
-        ServiceResult<Int32> DMS_UpdateProgramNCRecordList(BMSEmployee wLoginUser, DMSProgramNCRecord wProgramNCRecord);
+        ServiceResult<Int32> DMS_UpdateProgramNCRecord(BMSEmployee wLoginUser, DMSProgramNCRecord wProgramNCRecord);
+
+
+        ServiceResult<List<DMSToolInfo>> DMS_GetToolInfoList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
+                String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID,
+                int wAreaID, int wToolHouseIndex, int wToolIndex, Pagination wPagination);
+
+        ServiceResult<List<DMSToolOffset>> DMS_GetToolOffsetList(BMSEmployee wLoginUser, int wDeviceID, String wDeviceNo,
+               String wAssetNo, int wDeviceType, int wModelID, int wFactoryID, int wWorkShopID, int wLineID, int wAreaID,
+               int wToolID, int wToolHouseIndex, int wToolIndex, 
+               int wEditorID, DateTime wStarTime, DateTime wEndTime, Pagination wPagination);
+
+        ServiceResult<Int32> DMS_UpdateToolInfo(BMSEmployee wLoginUser, DMSToolInfo wDMSToolInfo);
+
+        ServiceResult<Int32> DMS_UpdateToolOffset(BMSEmployee wLoginUser, DMSToolOffset wDMSToolOffset);
     }
 }

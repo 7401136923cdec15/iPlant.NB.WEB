@@ -16,14 +16,15 @@ namespace iPlant.FMS.WEB
     {
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(UploadController));
         [HttpPost]
-        public IActionResult Submit()
+        public IActionResult Submit(IFormFileCollection files)
         {
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();
             string wMsg = "";
 
             try
             {
-                IFormFileCollection files = Request.Form.Files;
+                if (files == null || files.Count <= 0)
+                    files = Request.Form.Files;
                 if (files.Count == 0)
                 {
                     wMsg = "提示：没有要上传的文件！";
@@ -211,7 +212,7 @@ namespace iPlant.FMS.WEB
             string wMsg = "";
             try
             {
-                
+
                 Dictionary<string, object> wParam = GetInputDictionaryObject(Request);
 
                 if (!wParam.ContainsKey("data") || !wParam.ContainsKey("head") || !wParam.ContainsKey("fileName"))
@@ -250,11 +251,6 @@ namespace iPlant.FMS.WEB
             }
             return Json(wResult);
         }
-
-
-
-
-
-
+ 
     }
 }

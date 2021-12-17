@@ -46,7 +46,7 @@ namespace iPlant.SCADA.Service
                 if (wAssetNo == null)
                     wAssetNo = "";
                 if (wProductNo == null)
-                    wAssetNo = "";
+                    wProductNo = "";
 
                 String wSQL = StringUtils.Format(
                         "SELECT q.*,p.DeviceID,p.ProductID,p.ProgramName,t.Name as DeviceName,t.Code as DeviceNo,t.WorkShopID,t.FactoryID,t.LineID," +
