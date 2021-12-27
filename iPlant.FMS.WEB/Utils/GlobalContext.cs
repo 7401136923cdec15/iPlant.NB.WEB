@@ -18,6 +18,8 @@ namespace iPlant.FMS.WEB
 
         public static String ContentRootPath = "";
 
+        public static String WebRootPath = "";
+
         /// <summary>
         /// All registered service and class instance container. Which are used for dependency injection.
         /// </summary>

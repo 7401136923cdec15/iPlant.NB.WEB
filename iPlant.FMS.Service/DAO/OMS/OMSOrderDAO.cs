@@ -66,13 +66,19 @@ namespace iPlant.SCADA.Service
             }
             return wOrderDB;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="wLoginUser"></param>
+        /// <param name="wOMSOrder"></param>
+        /// <param name="wErrorCode"></param>
         public void OMS_UpdateOrder(BMSEmployee wLoginUser, OMSOrder wOMSOrder, OutResult<Int32> wErrorCode)
         {
 
             try
             {
-                if (wOMSOrder == null || StringUtils.isEmpty(wOMSOrder.PartNo) || StringUtils.isEmpty(wOMSOrder.WBSNo)
-                    || wOMSOrder.StationID <= 0)
+                if (wOMSOrder == null || StringUtils.isEmpty(wOMSOrder.PartNo) || wOMSOrder.PlanFQTY <= 0 || StringUtils.isEmpty(wOMSOrder.WBSNo))
                 {
                     wErrorCode.Result = MESException.Parameter.getValue();
                     return;
@@ -159,6 +165,7 @@ namespace iPlant.SCADA.Service
                     wParamMap.Add("OrderNo", wOMSOrder.OrderNo);
                 wParamMap.Add("LineID", wOMSOrder.LineID);
                 wParamMap.Add("Status", wOMSOrder.Status);
+                wParamMap.Add("ProductID", wOMSOrder.ProductID);
                 wParamMap.Add("PlanReceiveDate", wOMSOrder.PlanReceiveDate);
                 wParamMap.Add("PlanFinishDate", wOMSOrder.PlanFinishDate);
                 wParamMap.Add("RealStartDate", wOMSOrder.RealStartDate);
@@ -170,10 +177,20 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("WorkerIDList", StringUtils.Join(",", wOMSOrder.WorkerIDList));
                 wParamMap.Add("EditorID", wOMSOrder.EditorID);
                 wParamMap.Add("EditTime", DateTime.Now);
+                wParamMap.Add("PlanFQTY", wOMSOrder.PlanFQTY);
+                wParamMap.Add("DoneFQTY", wOMSOrder.DoneFQTY);
+                wParamMap.Add("BadFQTY", wOMSOrder.BadFQTY);
+                wParamMap.Add("Description", wOMSOrder.Description);
+                wParamMap.Add("EnergyUnitPrice", wOMSOrder.EnergyUnitPrice);
+                wParamMap.Add("DeviceUnitPrice", wOMSOrder.DeviceUnitPrice);
+                wParamMap.Add("LaborUnitPrice", wOMSOrder.LaborUnitPrice);
+                wParamMap.Add("MaterialUnitPrice", wOMSOrder.MaterialUnitPrice);
 
                 if (wOMSOrder.ID > 0)
                 {
                     wParamMap.Add("ID", wOMSOrder.ID);
+
+                    //状态变更为非执行订单时 优先级变更为0
 
                     this.Update(StringUtils.Format("{0}.oms_order", wInstance), "ID", wParamMap);
 
@@ -181,8 +198,35 @@ namespace iPlant.SCADA.Service
                 }
                 else
                 {
+                    FPCProduct wFPCProduct = FPCProductDAO.getInstance().FPC_GetProduct(wLoginUser, wOMSOrder.ProductID, "", wErrorCode);
+
+
                     wParamMap.Add("CreatorID", wOMSOrder.CreatorID);
                     wParamMap.Add("CreateTime", DateTime.Now);
+
+                    if (wFPCProduct != null && wFPCProduct.ID > 0)
+                    {
+                        if (wOMSOrder.EnergyUnitPrice <= 0)
+                        {
+                            wOMSOrder.EnergyUnitPrice = wFPCProduct.EnergyUnitPrice;
+                            wParamMap["EnergyUnitPrice"] = wOMSOrder.EnergyUnitPrice;
+                        }
+                        if (wOMSOrder.DeviceUnitPrice <= 0)
+                        {
+                            wOMSOrder.DeviceUnitPrice = wFPCProduct.DeviceUnitPrice;
+                            wParamMap["DeviceUnitPrice"] = wOMSOrder.DeviceUnitPrice;
+                        }
+                        if (wOMSOrder.LaborUnitPrice <= 0)
+                        {
+                            wOMSOrder.LaborUnitPrice = wFPCProduct.LaborUnitPrice;
+                            wParamMap["LaborUnitPrice"] = wOMSOrder.LaborUnitPrice;
+                        }
+                        if (wOMSOrder.MaterialUnitPrice <= 0)
+                        {
+                            wOMSOrder.MaterialUnitPrice = wFPCProduct.MaterialUnitPrice;
+                            wParamMap["MaterialUnitPrice"] = wOMSOrder.MaterialUnitPrice;
+                        }
+                    }
 
                     wOMSOrder.ID = this.Insert(StringUtils.Format("{0}.oms_order", wInstance), wParamMap);
                 }
@@ -241,7 +285,7 @@ namespace iPlant.SCADA.Service
                 DateTime wBaseTime = new DateTime(2000, 1, 1);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
                 List<OMSOrder> wList = OMS_SelectList(wLoginUser, wID, -1, "", -1, -1, -1, -1, -1, -1, -1, "", null, "",
-                        wBaseTime, wBaseTime, wBaseTime, wBaseTime, 10, 0, wPageCount, wErrorCode);
+                        wBaseTime, wBaseTime, wBaseTime, wBaseTime, Pagination.Default, wErrorCode);
 
                 if (wList == null || wList.Count != 1)
                     return wResult;
@@ -258,7 +302,7 @@ namespace iPlant.SCADA.Service
         public List<OMSOrder> OMS_SelectList(BMSEmployee wLoginUser, int wID, int wCommandID, String wOrderNo, int wFactoryID, int wWorkShopID,
                 int wLineID, int wStationID, int wProductID, int wCustomerID, int wTeamID, String wPartNo,
                 List<Int32> wStateIDList, String wOrderNoLike, DateTime wPreStartTime, DateTime wPreEndTime, DateTime wRelStartTime,
-                DateTime wRelEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+                DateTime wRelEndTime, Pagination wPagination, OutResult<Int32> wErrorCode)
         {
             List<OMSOrder> wResultList = new List<OMSOrder>();
             try
@@ -299,11 +343,15 @@ namespace iPlant.SCADA.Service
                 if (wOrderNo == null)
                     wOrderNo = "";
 
-                String wSqlCondition = StringUtils.Format(" FROM {0}.oms_order t1"
+                String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
+                        + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
+                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName , "
+                        + " t9.ProductNo,t9.ProductName, t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                        + " t6.Code as TeamNo,t5.WorkName   FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -318,7 +366,7 @@ namespace iPlant.SCADA.Service
                         + " and ( @wLineID <= 0 or @wLineID = t1.LineID ) "
                         + " and ( @wStationID <= 0 or @wStationID = t1.StationID ) "
                         + " and ( @wTeamID <= 0 or @wTeamID = t1.TeamID ) "
-                        + " and ( @wProductID <= 0 or @wProductID = t2.ProductID ) "
+                        + " and ( @wProductID <= 0 or @wProductID = t1.ProductID ) "
                         + " and ( @wPartNo = '' or t2.PartNo like @wPartNo ) "
                         + " and ( @wStatus = '' or t1.Status in ({1})) "
                         + " and ( @wPreStartTime <= str_to_date('2010-01-01', '%Y-%m-%d') or t1.PlanFinishDate <= str_to_date('2010-01-01', '%Y-%m-%d') or @wPreStartTime <= t1.PlanFinishDate) "
@@ -348,25 +396,11 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("wRelEndTime", wRelEndTime);
                 wParamMap.Add("wStatus", StringUtils.Join(",", wStateIDList));
 
-                wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                if (wPageCount.Result <= 0)
-                {
-                    wPageCount.Result = 1;
 
-                    return wResultList;
-                }
-
-
-                String wSQL = "SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
-                        + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                        + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
-                        + " t6.Code as TeamNo,t5.WorkName  "
-                        + wSqlCondition + StringUtils.Format("order by CreateTime desc limit {0},{1};", wPageIndex * wPageSize, wPageSize);
                 wSQL = this.DMLChange(wSQL);
 
 
-                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 SetValue(wLoginUser, wResultList, wQueryResult, wErrorCode);
             }
@@ -430,7 +464,7 @@ namespace iPlant.SCADA.Service
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -444,7 +478,7 @@ namespace iPlant.SCADA.Service
                         + " and ( @wLineID <= 0 or @wLineID = t1.LineID ) "
                         + " and ( @wStationID <= 0 or @wStationID = t1.StationID ) "
                         + " and ( @wTeamID <= 0 or @wTeamID = t1.TeamID ) "
-                        + " and ( @wProductID <= 0 or @wProductID = t2.ProductID ) "
+                        + " and ( @wProductID <= 0 or @wProductID = t1.ProductID ) "
                         + " and ( @wPartNo = '' or t2.PartNo like @wPartNo ) "
                         + " and ( @wStatus = '' or t1.Status in ({1})) "
                         + " and ( @wPreStartTime <= str_to_date('2010-01-01', '%Y-%m-%d') or t1.PlanFinishDate <= str_to_date('2010-01-01', '%Y-%m-%d') or @wPreStartTime <= t1.PlanFinishDate) "
@@ -500,7 +534,7 @@ namespace iPlant.SCADA.Service
             return wResultList;
         }
 
-        public List<OMSOrder> OMS_QueryOrderByStatus(BMSEmployee wLoginUser, int wWorkShopID, int wLineID, List<Int32> wStateIDList, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount,
+        public List<OMSOrder> OMS_QueryOrderByStatus(BMSEmployee wLoginUser, int wWorkShopID, int wLineID, List<Int32> wStateIDList, Pagination wPagination,
                 OutResult<Int32> wErrorCode)
         {
             List<OMSOrder> wResult = new List<OMSOrder>();
@@ -511,7 +545,7 @@ namespace iPlant.SCADA.Service
 
 
                 wResult = OMS_SelectList(wLoginUser, -1, -1, "", -1, wWorkShopID, wLineID, -1, -1, -1, -1, "", wStateIDList, "",
-                        wBaseTime, wBaseTime, wBaseTime, wBaseTime, wPageSize, wPageIndex, wPageCount, wErrorCode);
+                        wBaseTime, wBaseTime, wBaseTime, wBaseTime, wPagination, wErrorCode);
 
             }
             catch (Exception e)
@@ -532,7 +566,7 @@ namespace iPlant.SCADA.Service
 
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
                 List<OMSOrder> wList = OMS_SelectList(wLoginUser, -1, -1, wOrderNo, -1, -1, -1, -1, -1, -1, -1, "", null, "",
-                       wBaseTime, wBaseTime, wBaseTime, wBaseTime, 10, 0, wPageCount, wErrorCode);
+                       wBaseTime, wBaseTime, wBaseTime, wBaseTime, Pagination.Default, wErrorCode);
                 if (wList == null || wList.Count != 1)
                     return wResult;
                 wResult = wList[0];
@@ -573,13 +607,13 @@ namespace iPlant.SCADA.Service
 
                 String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
                         + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                        + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName "
+                        + " t9.ProductNo,t9.ProductName,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
                         + " t6.Code as TeamNo,t5.WorkName   FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -697,13 +731,13 @@ namespace iPlant.SCADA.Service
 
                 String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
                         + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                        + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,"
+                        + " t9.ProductNo,t9.ProductName,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
                         + " t6.Code as TeamNo,t5.WorkName   FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -755,13 +789,13 @@ namespace iPlant.SCADA.Service
                 }
                 String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
                         + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                        + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                        + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName , "
+                        + " t9.ProductNo,t9.ProductName,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
                         + " t6.Code as TeamNo,t5.WorkName   FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -843,7 +877,7 @@ namespace iPlant.SCADA.Service
         }
 
 
-        public List<OMSOrder> OMS_SelectFinishListByTime(BMSEmployee wLoginUser, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount,
+        public List<OMSOrder> OMS_SelectFinishListByTime(BMSEmployee wLoginUser, DateTime wStartTime, DateTime wEndTime, Pagination wPagination,
                 OutResult<Int32> wErrorCode)
         {
             List<OMSOrder> wResultList = new List<OMSOrder>();
@@ -868,11 +902,15 @@ namespace iPlant.SCADA.Service
                     wEndTime = wBaseTime;
                 }
 
-                String wSqlCondition = StringUtils.Format("FROM {0}.oms_order t1"
+                String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
+                      + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
+                      + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,"
+                      + " t9.ProductNo,t9.ProductName,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                      + " t6.Code as TeamNo,t5.WorkName   FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -890,21 +928,10 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("wStartTime", wStartTime);
                 wParamMap.Add("wEndTime", wEndTime);
 
-                wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                if (wPageCount.Result <= 0)
-                {
-                    wPageCount.Result = 1;
 
-                    return wResultList;
-                }
-                String wSQL = "SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
-                      + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                      + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                      + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
-                      + " t6.Code as TeamNo,t5.WorkName   " + wSqlCondition + StringUtils.Format(" limit {0},{1};", wPageIndex * wPageSize, wPageSize);
                 wSQL = this.DMLChange(wSQL);
 
-                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 SetValue(wLoginUser, wResultList, wQueryResult, wErrorCode);
             }
@@ -917,7 +944,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<OMSOrder> OMS_SelectList_RF(BMSEmployee wLoginUser, int wCustomerID, int wWorkShopID, int wLineID,
-                int wProductID, String wPartNo, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount,
+                int wProductID, String wPartNo, DateTime wStartTime, DateTime wEndTime, Pagination wPagination,
                 OutResult<Int32> wErrorCode)
         {
             List<OMSOrder> wResultList = new List<OMSOrder>();
@@ -942,11 +969,15 @@ namespace iPlant.SCADA.Service
                     return wResultList;
                 }
 
-                String wSqlCondition = StringUtils.Format(" FROM {0}.oms_order t1"
+                String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
+                       + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
+                       + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,"
+                       + " t9.ProductNo,t9.ProductNane,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                       + " t6.Code as TeamNo,t5.WorkName  FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -954,7 +985,7 @@ namespace iPlant.SCADA.Service
                                 + " WHERE 1=1 and ( @wCustomerID <= 0 or @wCustomerID = t2.CustomerID ) "
                                 + " and ( @wWorkShopID <= 0 or @wWorkShopID = t2.WorkShopID ) "
                                 + " and ( @wLineID <= 0 or @wLineID = t1.LineID ) "
-                                + " and ( @wProductID <= 0 or @wProductID = t2.ProductID ) "
+                                + " and ( @wProductID <= 0 or @wProductID = t1.ProductID ) "
                                 + " and ( @wPartNo = '' or @wPartNo = t2.PartNo ) "
                                 + " and ( @wStartTime <= str_to_date('2010-01-01', '%Y-%m-%d') "
                                 + " or @wEndTime <= str_to_date('2010-01-01', '%Y-%m-%d') "
@@ -977,23 +1008,10 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("wStartTime", wStartTime);
                 wParamMap.Add("wEndTime", wEndTime);
 
-                wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                if (wPageCount.Result <= 0)
-                {
-                    wPageCount.Result = 1;
 
-                    return wResultList;
-                }
-
-                String wSQL = "SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
-                       + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                       + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                       + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
-                       + " t6.Code as TeamNo,t5.WorkName  "
-                        + wSqlCondition + StringUtils.Format(" limit {0},{1};", wPageIndex * wPageSize, wPageSize);
                 wSQL = this.DMLChange(wSQL);
 
-                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 SetValue(wLoginUser, wResultList, wQueryResult, wErrorCode);
             }
@@ -1006,7 +1024,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<OMSOrder> OMS_ConditionAll(BMSEmployee wLoginUser, int wProductID, int wWorkShopID, int wLine,
-                int wCustomerID, String wWBSNo, DateTime wStartTime, DateTime wEndTime, int wStatus, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount,
+                int wCustomerID, String wWBSNo, DateTime wStartTime, DateTime wEndTime, int wStatus, Pagination wPagination,
                 OutResult<Int32> wErrorCode)
         {
             List<OMSOrder> wResult = new List<OMSOrder>();
@@ -1035,11 +1053,15 @@ namespace iPlant.SCADA.Service
                 {
                     wWBSNo = "";
                 }
-                String wSqlCondition = StringUtils.Format(" FROM {0}.oms_order t1"
+                String wSQL = StringUtils.Format("SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
+                      + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
+                      + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,"
+                      + " t9.ProductNo,t9.ProductName,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
+                      + " t6.Code as TeamNo,t5.WorkName    FROM {0}.oms_order t1"
                         + " left join {0}.oms_command t2 on t1.CommandID=t2.ID "
                         + " left join {0}.fmc_factory t7 on t2.FactoryID=t7.ID "
                         + " left join {0}.crm_customer t8 on t2.CustomerID=t8.ID "
-                        + " left join {0}.fpc_product t9 on t2.ProductID=t9.ID "
+                        + " left join {0}.fpc_product t9 on t1.ProductID=t9.ID "
                         + " left join {0}.fmc_workshop t3 on t2.WorkShopID=t3.ID "
                         + " left join {0}.fmc_line t4 on t1.LineID=t4.ID "
                         + " left join {0}.fmc_station t5 on t1.StationID=t5.ID "
@@ -1048,7 +1070,7 @@ namespace iPlant.SCADA.Service
                                 + " and ( @wWorkShopID <= 0 or @wWorkShopID = t2.WorkShopID ) "
                                 + " and ( @wLineID <= 0 or @wLineID = t1.LineID ) "
                                 + " and ( @wStatus <= 0 or @wStatus = t1.Status ) "
-                                + " and ( @wProductID <= 0 or @wProductID = t2.ProductID ) "
+                                + " and ( @wProductID <= 0 or @wProductID = t1.ProductID ) "
                                 + " and ( @wWBSNo = '' or t2.WBSNo like '%{1}%') "
                                 + " and ( @wStartTime <= str_to_date('2010-01-01', '%Y-%m-%d') "
                                 + " or @wEndTime <= str_to_date('2010-01-01', '%Y-%m-%d') "
@@ -1071,25 +1093,12 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("wEndTime", wEndTime);
                 wParamMap.Add("wStatus", wStatus);
 
-                wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                if (wPageCount.Result <= 0)
-                {
-                    wPageCount.Result = 1;
-
-                    return wResult;
-                }
 
 
-
-                String wSQL = "SELECT t1.*,t2.WBSNo,t2.CustomerID,t2.ContactCode,t2.PartNo,"
-                      + " t2.LinkManID,t2.FactoryID,t2.BusinessUnitID,t2.WorkShopID,t3.Name as  WorkShopName,"
-                      + " t7.Name as Factory,t8.CustomerName as Customer,t4.Name as LineName ,t2.ProductID,"
-                      + " t9.ProductNo,t5.Name as StationName,t5.Code as StationNo,t6.Name as TeamName,"
-                      + " t6.Code as TeamNo,t5.WorkName   " + wSqlCondition + StringUtils.Format(" limit {0},{1};", wPageIndex * wPageSize, wPageSize);
 
                 wSQL = DMLChange(wSQL);
 
-                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = this.mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 SetValue(wLoginUser, wResult, wQueryResult, wErrorCode);
             }
@@ -1266,6 +1275,20 @@ namespace iPlant.SCADA.Service
                     wItem.LinkManID = StringUtils.parseInt(wReader["LinkManID"]);
                     wItem.BusinessUnitID = StringUtils.parseInt(wReader["BusinessUnitID"]);
                     wItem.WBSNo = StringUtils.parseString(wReader["WBSNo"]);
+                    wItem.ProductNo = StringUtils.parseString(wReader["ProductNo"]);
+                    wItem.ProductName = StringUtils.parseString(wReader["ProductName"]);
+                    wItem.Description = StringUtils.parseString(wReader["Description"]);
+                    wItem.OrderPriority = StringUtils.parseInt(wReader["OrderPriority"]);
+                    wItem.PlanFQTY = StringUtils.parseDouble(wReader["PlanFQTY"]);
+                    wItem.BadFQTY = StringUtils.parseDouble(wReader["BadFQTY"]);
+                    wItem.DoneFQTY = StringUtils.parseDouble(wReader["DoneFQTY"]);
+
+
+                    wItem.DeviceUnitPrice = StringUtils.parseDouble(wReader["DeviceUnitPrice"]);
+                    wItem.EnergyUnitPrice = StringUtils.parseDouble(wReader["EnergyUnitPrice"]);
+                    wItem.LaborUnitPrice = StringUtils.parseDouble(wReader["LaborUnitPrice"]);
+                    wItem.MaterialUnitPrice = StringUtils.parseDouble(wReader["MaterialUnitPrice"]);
+
 
                     wItem.WorkerIDList = StringUtils
                             .parseIntList(StringUtils.split(StringUtils.parseString(wReader["WorkerIDList"]), ","));

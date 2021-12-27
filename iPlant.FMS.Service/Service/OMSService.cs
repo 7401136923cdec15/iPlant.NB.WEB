@@ -1,4 +1,5 @@
-﻿using iPlant.FMS.Models;
+﻿using iPlant.Common.Tools;
+using iPlant.FMS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace iPlant.SCADA.Service
         ServiceResult<List<OMSOrder>> OMS_SelectList(BMSEmployee wLoginUser, int wCommandID, int wFactoryID, int wWorkShopID,
                 int wLineID, int wStationID, int wProductID, int wCustomerID, int wTeamID, String wPartNo,
                 List<Int32> wStateIDList, String wOrderNoLike, DateTime wPreStartTime, DateTime wPreEndTime, DateTime wRelStartTime,
-                DateTime wRelEndTime, int wPageSize, int wPageIndex);
+                DateTime wRelEndTime, Pagination wPagination);
 
         ServiceResult<Dictionary<String, int>> OMS_SelectStatusCount(BMSEmployee wLoginUser, int wCommandID, int wFactoryID, int wWorkShopID,
               int wLineID, int wStationID, int wProductID, int wCustomerID, int wTeamID, String wPartNo,
@@ -38,7 +39,7 @@ namespace iPlant.SCADA.Service
               DateTime wRelEndTime);
 
 
-        ServiceResult<List<OMSOrder>> OMS_QueryOrderByStatus(BMSEmployee wLoginUser, int wWorkShopID, int wLineID, List<Int32> wStateIDList, int wPageSize, int wPageIndex);
+        ServiceResult<List<OMSOrder>> OMS_QueryOrderByStatus(BMSEmployee wLoginUser, int wWorkShopID, int wLineID, List<Int32> wStateIDList, Pagination wPagination);
 
 
         ServiceResult<List<OMSOrder>> OMS_JudgeOrderImport(BMSEmployee wLoginUser, List<OMSOrder> wOMSOrderList,out List<OMSOrder> wBadOrderList);
@@ -48,14 +49,14 @@ namespace iPlant.SCADA.Service
         ServiceResult<List<OMSOrder>> OMS_SelectListByIDList(BMSEmployee wLoginUser, List<Int32> wIDList);
 
 
-        ServiceResult<List<OMSOrder>> OMS_SelectFinishListByTime(BMSEmployee wLoginUser, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex);
+        ServiceResult<List<OMSOrder>> OMS_SelectFinishListByTime(BMSEmployee wLoginUser, DateTime wStartTime, DateTime wEndTime, Pagination wPagination);
          
         ServiceResult<List<OMSOrder>> OMS_SelectList_RF(BMSEmployee wLoginUser, int wCustomerID, int wWorkShopID, int wLineID,
-                int wProductID, String wPartNo,  DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex);
+                int wProductID, String wPartNo,  DateTime wStartTime, DateTime wEndTime, Pagination wPagination);
 
 
         ServiceResult<List<OMSOrder>> OMS_ConditionAll(BMSEmployee wLoginUser, int wProductID, int wWorkShopID, int wLine,
-               int wCustomerID, String wWBSNo, DateTime wStartTime, DateTime wEndTime, int wStatus, int wPageSize, int wPageIndex);
+               int wCustomerID, String wWBSNo, DateTime wStartTime, DateTime wEndTime, int wStatus, Pagination wPagination);
 
 
         ServiceResult<Int32> OMS_AuditOrder(BMSEmployee wLoginUser, List<OMSOrder> wResultList);

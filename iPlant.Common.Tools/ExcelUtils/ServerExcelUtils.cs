@@ -213,7 +213,7 @@ namespace iPlant.Common.Tools
         }
  
 
-        public String Export(String wPath, List<Dictionary<String, Object>> wInputList, Dictionary<String, String> wHeadTitle, string wTitle,
+        public String Export(String wRootPath,String wPath, List<Dictionary<String, Object>> wInputList, Dictionary<String, String> wHeadTitle, string wTitle,
             String wFileName, out String errorMsg, List<String> wOrderList = null)
         {
             errorMsg = "";
@@ -236,7 +236,7 @@ namespace iPlant.Common.Tools
             {
 
                 case ExcelExtType.xls:
-                    wIWorkbook = ExcelSheetTool.Instance.CreatExcel2003();
+                    wIWorkbook = ExcelSheetTool.Instance.CreatExcel2003( );
                     break;
                 case ExcelExtType.xlsx:
                     wIWorkbook = ExcelSheetTool.Instance.CreatExcel2007();
@@ -244,17 +244,18 @@ namespace iPlant.Common.Tools
                 default:
                     break;
             }
+            Dictionary<ExcelStyle, ICellStyle> wICellStyleDic = ExcelSheetTool.Instance.CreateAllCellstyle(wIWorkbook);
             Dictionary<String, ISheet> wISheetList = ExcelSheetTool.Instance.CreatSheetList(wIWorkbook, new List<String>() { wTitle });
 
             List<String> wOrderColumnList = wOrderList.Select(p => wHeadTitle[p]).ToList();
 
-            ExcelSheetTool.Instance.SetHeadToSheet(wISheetList[wTitle], wTitle, wOrderColumnList, 0);
+            ExcelSheetTool.Instance.SetHeadToSheet(wICellStyleDic,wISheetList[wTitle], wTitle, wOrderColumnList, 0);
 
-            ExcelSheetTool.Instance.SetListToSheet(wInputList, wISheetList[wTitle], wOrderList, 2, 0);
+            ExcelSheetTool.Instance.SetListToSheet(wICellStyleDic,wInputList, wISheetList[wTitle], wOrderList, 2, 0);
 
-            String wFileFullName = StringUtils.CombinePath(AppDomain.CurrentDomain.BaseDirectory, wPath);
+            String wFileFullName = StringUtils.CombinePath(wRootPath, wPath);
             if (wPath.IndexOf('/') == 0)
-                wFileFullName = StringUtils.CombinePath(AppDomain.CurrentDomain.BaseDirectory, wPath.Remove(0, 1));
+                wFileFullName = StringUtils.CombinePath(wRootPath, wPath.Remove(0, 1));
 
             if (!Directory.Exists(wFileFullName))
                 Directory.CreateDirectory(wFileFullName);

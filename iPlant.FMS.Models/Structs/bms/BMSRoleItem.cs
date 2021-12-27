@@ -19,6 +19,8 @@ namespace iPlant.FMS.Models
 
         public int TypeID { get; set; } = 0;
 
+        public String Remark { get; set; } = "";
+
 
     }
 }

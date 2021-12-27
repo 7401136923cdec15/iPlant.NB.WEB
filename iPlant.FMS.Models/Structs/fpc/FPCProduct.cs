@@ -55,7 +55,12 @@ namespace iPlant.FMS.Models
 		/// <summary>
 		/// 能源单价
 		/// </summary>
-		public double EnergylUnitPrice { get; set; } = 0.0;
+		public double EnergyUnitPrice { get; set; } = 0.0;
+
+		/// <summary>
+		/// 设备单价
+		/// </summary>
+		public double DeviceUnitPrice { get; set; } = 0.0;
 
 		/// <summary>
 		/// 描述

@@ -21,14 +21,14 @@ namespace iPlant.SCADA.Service
         }
 
         public ServiceResult<List<QMSSpotCheckRecord>> QMS_GetSpotCheckRecordList(BMSEmployee wLoginUser, String wOrderNo,
-                List<int> wProductIDList, String wWorkpieceNo, String wSpotCheckResult, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
+                List<int> wProductIDList, String wWorkpieceNo, String wSpotCheckResult,int wLineID, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
         {
             ServiceResult<List<QMSSpotCheckRecord>> wResult = new ServiceResult<List<QMSSpotCheckRecord>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(QMSSpotCheckRecordDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wSpotCheckResult, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.setResult(QMSSpotCheckRecordDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wSpotCheckResult,  wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
                 wResult.Put("PageCount", wPageCount.Result);
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
@@ -40,14 +40,14 @@ namespace iPlant.SCADA.Service
         }
 
         public ServiceResult<List<QMSWorkpieceRepairRecord>> QMS_GetWorkpieceRepairRecordList(BMSEmployee wLoginUser, String wOrderNo,
-                List<int> wProductIDList, String wWorkpieceNo, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
+                List<int> wProductIDList, String wWorkpieceNo, int wLineID, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
         {
             ServiceResult<List<QMSWorkpieceRepairRecord>> wResult = new ServiceResult<List<QMSWorkpieceRepairRecord>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(QMSWorkpieceRepairRecordDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.setResult(QMSWorkpieceRepairRecordDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
                 wResult.Put("PageCount", wPageCount.Result);
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
@@ -59,14 +59,14 @@ namespace iPlant.SCADA.Service
         }
 
         public ServiceResult<List<QMSWorkpieceCheckResult>> QMS_GetWorkpieceCheckResultList(BMSEmployee wLoginUser, String wOrderNo,
-               List<int> wProductIDList, String wWorkpieceNo, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
+               List<int> wProductIDList, String wWorkpieceNo, int wLineID, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
         {
             ServiceResult<List<QMSWorkpieceCheckResult>> wResult = new ServiceResult<List<QMSWorkpieceCheckResult>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(QMSWorkpieceCheckResultDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.setResult(QMSWorkpieceCheckResultDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
                 wResult.Put("PageCount", wPageCount.Result);
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
@@ -78,14 +78,14 @@ namespace iPlant.SCADA.Service
         }
 
         public ServiceResult<List<QMSWorkpieceQualityInfo>> QMS_GetWorkpieceQualityInfoList(BMSEmployee wLoginUser, String wOrderNo,
-                List<int> wProductIDList, String wWorkpieceNo, String wProcessStatus, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
+                List<int> wProductIDList, String wWorkpieceNo, String wProcessStatus, int wLineID, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging)
         {
             ServiceResult<List<QMSWorkpieceQualityInfo>> wResult = new ServiceResult<List<QMSWorkpieceQualityInfo>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(QMSWorkpieceQualityInfoDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wProcessStatus, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
+                wResult.setResult(QMSWorkpieceQualityInfoDAO.getInstance().GetAll(wLoginUser, wOrderNo, wProductIDList, wWorkpieceNo, wProcessStatus, wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
                 wResult.Put("PageCount", wPageCount.Result);
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
@@ -114,14 +114,14 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex)
+        public ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, int wLineID, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex)
         {
             ServiceResult<List<QMSOneTimePassRate>> wResult = new ServiceResult<List<QMSOneTimePassRate>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(QMSOneTimePassRateDAO.getInstance().GetAll(wLoginUser, wProductIDList, wStatType, wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount, wErrorCode));
+                wResult.setResult(QMSOneTimePassRateDAO.getInstance().GetAll(wLoginUser, wProductIDList, wStatType,  wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount, wErrorCode));
                 wResult.Put("PageCount", wPageCount.Result);
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
@@ -132,14 +132,14 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateForChartList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime)
+        public ServiceResult<List<QMSOneTimePassRate>> QMS_GetOneTimePassRateForChartList(BMSEmployee wLoginUser, List<int> wProductIDList, int wStatType, int wLineID, DateTime wStartTime, DateTime wEndTime)
         {
             ServiceResult<List<QMSOneTimePassRate>> wResult = new ServiceResult<List<QMSOneTimePassRate>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
                 OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(QMSOneTimePassRateDAO.getInstance().GetAllForChart(wLoginUser, wProductIDList, wStatType, wStartTime, wEndTime, wErrorCode));
+                wResult.setResult(QMSOneTimePassRateDAO.getInstance().GetAllForChart(wLoginUser, wProductIDList, wStatType, wLineID,wStartTime, wEndTime, wErrorCode));
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
             catch (Exception e)

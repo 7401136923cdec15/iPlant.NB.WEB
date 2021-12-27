@@ -26,15 +26,14 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSWorkpieceCheckResult> GetAll(BMSEmployee wLoginUser, String wOrderNo,
-                List<int> wProductIDList, String wWorkpieceNo, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+                List<int> wProductIDList, String wWorkpieceNo, int wLineID, String wStartTime, String wEndTime, int wPageSize, int wPageIndex, int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
         {
             List<QMSWorkpieceCheckResult> wResult = new List<QMSWorkpieceCheckResult>();
             try
             {
 
                 wErrorCode.set(0);
-                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
+                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName(); 
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -43,7 +42,8 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                   where  (@wLineID<=0 or t2.LineID=@wLineID) ", wInstance);
+                wParamMap.Add("wLineID", wLineID);
                 if (!string.IsNullOrEmpty(wOrderNo))
                 {
                     wSqlCondition += " and t2.OrderNo LIKE @wOrderNo ";

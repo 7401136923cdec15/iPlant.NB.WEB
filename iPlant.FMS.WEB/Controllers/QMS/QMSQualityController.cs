@@ -31,8 +31,10 @@ namespace iPlant.FMS.WEB
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
                 int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
 
+                int wLineID = StringUtils.parseInt(Request.QueryParamString("LineID"));
+
                 ServiceResult<List<QMSSpotCheckRecord>> wServiceResult = ServiceInstance.mQMSService.QMS_GetSpotCheckRecordList(wBMSEmployee, wOrderNo,
-                 wProductIDList, wWorkpieceNo, wSpotCheckResult, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
+                 wProductIDList, wWorkpieceNo, wSpotCheckResult, wLineID,wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -68,9 +70,10 @@ namespace iPlant.FMS.WEB
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
                 int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
+                int wLineID = StringUtils.parseInt(Request.QueryParamString("LineID"));
 
                 ServiceResult<List<QMSWorkpieceRepairRecord>> wServiceResult = ServiceInstance.mQMSService.QMS_GetWorkpieceRepairRecordList(wBMSEmployee, wOrderNo,
-                 wProductIDList, wWorkpieceNo, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
+                 wProductIDList, wWorkpieceNo, wLineID,wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -107,8 +110,10 @@ namespace iPlant.FMS.WEB
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
                 int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
 
+                int wLineID = StringUtils.parseInt(Request.QueryParamString("LineID"));
+
                 ServiceResult<List<QMSWorkpieceCheckResult>> wServiceResult = ServiceInstance.mQMSService.QMS_GetWorkpieceCheckResultList(wBMSEmployee, wOrderNo,
-                 wProductIDList, wWorkpieceNo, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
+                 wProductIDList, wWorkpieceNo, wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -146,8 +151,10 @@ namespace iPlant.FMS.WEB
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
                 int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
 
+                int wLineID = StringUtils.parseInt(Request.QueryParamString("LineID"));
+
                 ServiceResult<List<QMSWorkpieceQualityInfo>> wServiceResult = ServiceInstance.mQMSService.QMS_GetWorkpieceQualityInfoList(wBMSEmployee, wOrderNo,
-                 wProductIDList, wWorkpieceNo, wProcessStatus, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
+                 wProductIDList, wWorkpieceNo, wProcessStatus, wLineID, wStartTime, wEndTime, wPageSize, wPageIndex, wPaging);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -211,12 +218,15 @@ namespace iPlant.FMS.WEB
                 List<int> wProductIDList = StringUtils.parseIntList(Request.QueryParamString("ProductID"), ",");
                 int wStatType = StringUtils.parseInt(Request.QueryParamString("StatType"));
                 DateTime wStartTime = StringUtils.parseDate(Request.QueryParamString("StartTime"));
+
+                int wLineID = StringUtils.parseInt(Request.QueryParamString("LineID"));
                 DateTime wEndTime = StringUtils.parseDate(Request.QueryParamString("EndTime"));
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
+                 
 
                 ServiceResult<List<QMSOneTimePassRate>> wServiceResult = ServiceInstance.mQMSService.QMS_GetOneTimePassRateList(wBMSEmployee,
-                 wProductIDList, wStatType, wStartTime, wEndTime, wPageSize, wPageIndex);
+                 wProductIDList, wStatType, wLineID, wStartTime, wEndTime, wPageSize, wPageIndex);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -245,13 +255,14 @@ namespace iPlant.FMS.WEB
 
                 BMSEmployee wBMSEmployee = GetSession();
 
+                int wLineID = StringUtils.parseInt(Request.QueryParamString("LineID"));
                 List<int> wProductIDList = StringUtils.parseIntList(Request.QueryParamString("ProductID"), ",");
                 int wStatType = StringUtils.parseInt(Request.QueryParamString("StatType"));
                 DateTime wStartTime = StringUtils.parseDate(Request.QueryParamString("StartTime"));
                 DateTime wEndTime = StringUtils.parseDate(Request.QueryParamString("EndTime"));
 
                 ServiceResult<List<QMSOneTimePassRate>> wServiceResult = ServiceInstance.mQMSService.QMS_GetOneTimePassRateForChartList(wBMSEmployee,
-                 wProductIDList, wStatType, wStartTime, wEndTime);
+                 wProductIDList, wStatType, wLineID, wStartTime, wEndTime);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
@@ -40,7 +41,7 @@ namespace iPlant.Common.Tools
         /// <param name="wOrderColumnList"></param>
         /// <param name="wColumnStartIndex"></param>
         /// <param name="wHelper"></param>
-        public void SetHeadToSheet(ISheet wISheet, String wTableTitle, List<String> wOrderColumnList, int wColumnStartIndex)
+        public void SetHeadToSheet(Dictionary<ExcelStyle, ICellStyle> wICellStyleDic, ISheet wISheet, String wTableTitle, List<String> wOrderColumnList, int wColumnStartIndex)
         {
 
             IRow wHead = wISheet.CreateRow(0);
@@ -55,7 +56,7 @@ namespace iPlant.Common.Tools
             {
                 wISheet.SetColumnWidth(n + wColumnStartIndex, 30 * 256);
                 wIRowCloumn.CreateCell(n + wColumnStartIndex).SetCellValue(wOrderColumnList[n]);
-                wIRowCloumn.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Column);
+                wIRowCloumn.GetCell(n + wColumnStartIndex).CellStyle = wICellStyleDic[ExcelStyle.Column];
             }
 
             int wHeadCloumnSpan = wOrderColumnList.Count;
@@ -65,7 +66,7 @@ namespace iPlant.Common.Tools
 
             for (int n = 0; n < wHeadCloumnSpan; n++)
             {
-                wHead.CreateCell(n).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Head);
+                wHead.CreateCell(n).CellStyle = wICellStyleDic[ExcelStyle.Head];
             }
             wHead.GetCell(0).SetCellValue(wTableTitle);//写表头                                                                                            
 
@@ -82,7 +83,7 @@ namespace iPlant.Common.Tools
         /// <param name="wRowStartIndex">数据行的起始下标 不算表头</param>
         /// <param name="wColumnStartIndex">数据列的起始下标 不算表头</param>
         /// <param name="wHelper"></param>
-        public void SetListToSheet(List<Dictionary<String, Object>> wTList, ISheet wISheet, List<String> wOrderPropList, int wRowStartIndex, int wColumnStartIndex)
+        public void SetListToSheet(Dictionary<ExcelStyle, ICellStyle> wICellStyleDic, List<Dictionary<String, Object>> wTList, ISheet wISheet, List<String> wOrderPropList, int wRowStartIndex, int wColumnStartIndex)
         {
 
             for (int m = 0; m < wTList.Count(); m++)//写数据
@@ -95,7 +96,7 @@ namespace iPlant.Common.Tools
                     if (wColumnStartIndex == 0)
                         wISheet.RemoveRow(wDataIRow);
                 }
-                
+
 
                 wDataIRow = wISheet.CreateRow(m + wRowStartIndex);
                 wDataIRow.Height = 20 * 20;
@@ -117,7 +118,7 @@ namespace iPlant.Common.Tools
                     }
 
                     wDataIRow.CreateCell(n + wColumnStartIndex).SetCellValue(mHelper.ExchangeDataToExcel(wValue));
-                    wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Data);
+                    wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = wICellStyleDic[ExcelStyle.Data];
 
                 }
 
@@ -135,7 +136,7 @@ namespace iPlant.Common.Tools
         /// <param name="wRowStartIndex">数据行的起始下标 不算表头</param>
         /// <param name="wColumnStartIndex">数据列的起始下标 不算表头</param>
         /// <param name="wHelper"></param>
-        public void SetListToSheet<T>(List<T> wTList, ISheet wISheet, List<String> wOrderPropList, int wRowStartIndex, int wColumnStartIndex)
+        public void SetListToSheet<T>(Dictionary<ExcelStyle, ICellStyle> wICellStyleDic, List<T> wTList, ISheet wISheet, List<String> wOrderPropList, int wRowStartIndex, int wColumnStartIndex)
         {
 
             for (int m = 0; m < wTList.Count(); m++)//写数据
@@ -163,13 +164,13 @@ namespace iPlant.Common.Tools
                     if (wPropertyInfo != null)
                     {
                         wDataIRow.CreateCell(n + wColumnStartIndex).SetCellValue(mHelper.ExchangeDataToExcel(wPropertyInfo.GetValue(wTList[m])));
-                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Data);
+                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = wICellStyleDic[ExcelStyle.Data];
                     }
                     else if (wFieldInfo != null)
                     {
 
                         wDataIRow.CreateCell(n + wColumnStartIndex).SetCellValue(mHelper.ExchangeDataToExcel(wFieldInfo.GetValue(wTList[m])));
-                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Data);
+                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = wICellStyleDic[ExcelStyle.Data];
                     }
 
                 }
@@ -188,7 +189,7 @@ namespace iPlant.Common.Tools
         /// <param name="wRowStartIndex">数据行的起始下标 不算表头</param>
         /// <param name="wColumnStartIndex">数据列的起始下标 不算表头</param>
         /// <param name="wHelper"></param>
-        public void SetListToSheet(Type wType, System.Collections.IEnumerable wDataSource, ISheet wISheet, List<String> wOrderPropList, int wRowStartIndex, int wColumnStartIndex)
+        public void SetListToSheet(Dictionary<ExcelStyle, ICellStyle> wICellStyleDic, Type wType, System.Collections.IEnumerable wDataSource, ISheet wISheet, List<String> wOrderPropList, int wRowStartIndex, int wColumnStartIndex)
         {
             int m = 0;
             foreach (Object wDataItem in wDataSource)
@@ -216,13 +217,13 @@ namespace iPlant.Common.Tools
                     if (wPropertyInfo != null)
                     {
                         wDataIRow.CreateCell(n + wColumnStartIndex).SetCellValue(mHelper.ExchangeDataToExcel(wPropertyInfo.GetValue(wDataItem)));
-                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Data);
+                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = wICellStyleDic[ExcelStyle.Data];
                     }
                     else if (wFieldInfo != null)
                     {
 
                         wDataIRow.CreateCell(n + wColumnStartIndex).SetCellValue(mHelper.ExchangeDataToExcel(wFieldInfo.GetValue(wDataItem)));
-                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = mHelper.Getcellstyle(wISheet.Workbook, ExcelStyle.Data);
+                        wDataIRow.GetCell(n + wColumnStartIndex).CellStyle = wICellStyleDic[ExcelStyle.Data];
                     }
 
                 }
@@ -353,23 +354,117 @@ namespace iPlant.Common.Tools
             }
         }
 
+        public ICellStyle GetCellstyle(IWorkbook wIWorkbook, ExcelStyle wExcelStyle)
+        {
+
+            ICellStyle wICellStyle = wIWorkbook.CreateCellStyle();
+            wICellStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            wICellStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
+            wICellStyle.WrapText = true;
+            IFont wIFont = wIWorkbook.CreateFont();
+            #region 样式区别
+            switch (wExcelStyle)
+            {
+                case ExcelStyle.Head:
+                    wIFont.FontName = "宋体";  //字体
+                    wIFont.Color = HSSFColor.Black.Index;
+                    wIFont.IsItalic = true;
+                    wIFont.IsBold = true;
+                    wIFont.FontHeight = 16;
+                    wIFont.FontHeightInPoints = 16;
+
+
+
+                    wICellStyle.LeftBorderColor = HSSFColor.Grey80Percent.Index;
+                    wICellStyle.RightBorderColor = HSSFColor.Grey80Percent.Index;//边框颜色
+                    wICellStyle.BottomBorderColor = HSSFColor.Grey80Percent.Index;
+                    wICellStyle.TopBorderColor = HSSFColor.Grey80Percent.Index;//边框颜色
+
+                    wICellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thick;
+                    wICellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thick;
+                    wICellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thick;
+                    wICellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thick;//边框
+
+                    // wICellStyle.FillBackgroundColor = HSSFColor.Black.Index;//背景色
+                    wICellStyle.FillForegroundColor = HSSFColor.Black.Index;//前景色
+                    break;
+                case ExcelStyle.Column:
+                    wIFont.FontName = "宋体";  //字体
+                    wIFont.Color = HSSFColor.Black.Index;
+                    //    wIFont.IsItalic = true;//下划线  
+                    wIFont.IsBold = true;
+                    wIFont.FontHeight = 14;
+                    wIFont.FontHeightInPoints = 14;
+
+                    wICellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                    wICellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    wICellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+
+                    wICellStyle.LeftBorderColor = HSSFColor.Grey80Percent.Index;
+                    wICellStyle.RightBorderColor = HSSFColor.Grey80Percent.Index;//边框颜色
+                    wICellStyle.BottomBorderColor = HSSFColor.Grey80Percent.Index;
+
+
+                    // wICellStyle.FillBackgroundColor = HSSFColor.Black.Index;//背景色
+                    wICellStyle.FillForegroundColor = HSSFColor.Black.Index;//前景色
+                    break;
+                case ExcelStyle.Data:
+                    wIFont.FontName = "宋体";  //字体
+                    wIFont.Color = HSSFColor.Black.Index;
+                    //   wIFont.IsItalic = true;//下划线  
+                    wIFont.IsBold = false;
+                    wIFont.FontHeight = 12;
+                    wIFont.FontHeightInPoints = 12;
+
+                    wICellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                    wICellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    wICellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+
+                    wICellStyle.LeftBorderColor = HSSFColor.Grey80Percent.Index;
+                    wICellStyle.RightBorderColor = HSSFColor.Grey80Percent.Index;//边框颜色
+                    wICellStyle.BottomBorderColor = HSSFColor.Grey80Percent.Index;
+
+                    // wICellStyle.FillBackgroundColor = HSSFColor.Black.Index;//背景色
+                    wICellStyle.FillForegroundColor = HSSFColor.Black.Index;//前景色
+                    break;
+                default:
+                    break;
+            }
+            #endregion
+            wICellStyle.SetFont(wIFont);
+
+            return wICellStyle;
+        }
+
+        public Dictionary<ExcelStyle, ICellStyle> CreateAllCellstyle(IWorkbook wIWorkbook)
+        {
+            Dictionary<ExcelStyle, ICellStyle> wResult = new Dictionary<ExcelStyle, ICellStyle>();
+            foreach (ExcelStyle wExcelStyle in Enum.GetValues<ExcelStyle>())
+            {
+                wResult.Add(wExcelStyle, this.GetCellstyle(wIWorkbook, wExcelStyle));
+            }
+            return wResult;
+        }
+
+
         public IWorkbook CreatExcel2003()
         {
-            IWorkbook wIWorkbook = new HSSFWorkbook(); 
+            IWorkbook wIWorkbook = new HSSFWorkbook();
             return wIWorkbook;
         }
         public IWorkbook CreatExcel2007()
         {
-            IWorkbook wIWorkbook = new XSSFWorkbook(); 
+            IWorkbook wIWorkbook = new XSSFWorkbook();
             return wIWorkbook;
         }
 
     }
 
-    public enum ExcelStyle
+    public enum ExcelStyle : short
     {
-        Head,
-        Column,
-        Data,
+        Head = 0,
+        Column = 1,
+        Data = 2,
     }
 }

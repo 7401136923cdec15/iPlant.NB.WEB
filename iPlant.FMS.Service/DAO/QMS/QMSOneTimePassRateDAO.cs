@@ -25,8 +25,8 @@ namespace iPlant.SCADA.Service
             return Instance;
         }
 
-        public List<QMSOneTimePassRate> GetAll(BMSEmployee wLoginUser, 
-                List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        public List<QMSOneTimePassRate> GetAll(BMSEmployee wLoginUser,
+                List<int> wProductIDList, int wStatType, int wLineID, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -34,17 +34,17 @@ namespace iPlant.SCADA.Service
                 switch (wStatType)
                 {
                     case ((int)DMSStatTypes.Week):
-                        wResult = this.GetOneTimePassRateWeekList(wLoginUser, wProductIDList,
+                        wResult = this.GetOneTimePassRateWeekList(wLoginUser, wProductIDList, wLineID,
                              wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount,
                              wErrorCode);
                         break;
                     case ((int)DMSStatTypes.Month):
-                        wResult = this.GetOneTimePassRateMonthList(wLoginUser, wProductIDList,
+                        wResult = this.GetOneTimePassRateMonthList(wLoginUser, wProductIDList, wLineID,
                              wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount,
                              wErrorCode);
                         break;
                     default:
-                        wResult = this.GetOneTimePassRateList(wLoginUser, wProductIDList,
+                        wResult = this.GetOneTimePassRateList(wLoginUser, wProductIDList, wLineID,
                              wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount,
                              wErrorCode);
                         break;
@@ -59,7 +59,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetOneTimePassRateList(BMSEmployee wLoginUser,
-                List<int> wProductIDList, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+                List<int> wProductIDList, int wLineID, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -67,7 +67,6 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -76,16 +75,18 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                   where (@wLineID<=0 or t2.LineID=@wLineID) ", wInstance);
                 if (wProductIDList.Count > 0)
                 {
                     wSqlCondition += " and t3.ID IN (" + StringUtils.Join(",", wProductIDList) + ")";
                 }
                 wSqlCondition += " and t.FeedingTime >= @wStartTime ";
-                wParamMap.Add("wStartTime", Convert.ToDateTime(wStartTime));
+                wParamMap.Add("wStartTime", wStartTime);
+
+                wParamMap.Add("wLineID", wLineID);
 
                 wSqlCondition += " and t.FeedingTime < @wEndTime ";
-                wParamMap.Add("wEndTime", Convert.ToDateTime(wEndTime));
+                wParamMap.Add("wEndTime", wEndTime);
 
                 wSqlCondition += "  group by t3.ProductNo,t3.ProductName,DATE_FORMAT(t.FeedingTime,'%Y-%m-%d')";
                 if (wPageSize > 0)
@@ -104,9 +105,9 @@ namespace iPlant.SCADA.Service
                 }
 
                 String wSQL = @"select t3.ProductNo,t3.ProductName,DATE_FORMAT(t.FeedingTime,'%Y-%m-%d') as StrDate,
-                      COUNT((t1.ProcessStatus = 2 and IFNULL((select count(1) from "+ wInstance+".qms_repairtask t5 where t5.WorkpieceID = t.WorkpieceID " +
+                      COUNT((t1.ProcessStatus = 2 and IFNULL((select count(1) from " + wInstance + ".qms_repairtask t5 where t5.WorkpieceID = t.WorkpieceID " +
                       "group by t5.WorkpieceID), 0) = 0) or null) as OneTimePassNum,COUNT(1) as FeedingNum,COUNT(t1.ProcessStatus = 2 or null) as Num," +
-                      "COUNT(((t.SpotCheckResult = 'NG' or t.PatrolCheckResult = 'NG' or t.ThreeDimensionalResult = 'NG') and t1.ProcessStatus = 2 ) or null) as NGNum " 
+                      "COUNT(((t.SpotCheckResult = 'NG' or t.PatrolCheckResult = 'NG' or t.ThreeDimensionalResult = 'NG') and t1.ProcessStatus = 2 ) or null) as NGNum "
                       + wSqlCondition + " order by DATE_FORMAT(t.FeedingTime,'%Y-%m-%d')";
                 if (wPageSize > 0)
                 {
@@ -132,7 +133,7 @@ namespace iPlant.SCADA.Service
                     wSpotCheckRecord.Num = StringUtils.parseInt(wReader["Num"]);
                     wSpotCheckRecord.NGNum = StringUtils.parseInt(wReader["NGNum"]);
                     wSpotCheckRecord.OKNum = wSpotCheckRecord.Num - wSpotCheckRecord.NGNum;
-                    wSpotCheckRecord.OneTimePassRate = Math.Round(Convert.ToDouble(wSpotCheckRecord.OneTimePassNum) / Convert.ToDouble(wSpotCheckRecord.Num) * 100, 2) ;
+                    wSpotCheckRecord.OneTimePassRate = Math.Round(Convert.ToDouble(wSpotCheckRecord.OneTimePassNum) / Convert.ToDouble(wSpotCheckRecord.Num) * 100, 2);
                     wSpotCheckRecord.PassRate = Math.Round(Convert.ToDouble(wSpotCheckRecord.OKNum) / Convert.ToDouble(wSpotCheckRecord.Num) * 100, 2); ;
                     wResult.Add(wSpotCheckRecord);
                 }
@@ -146,7 +147,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetOneTimePassRateWeekList(BMSEmployee wLoginUser,
-        List<int> wProductIDList, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        List<int> wProductIDList, int wLineID, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -154,7 +155,6 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -163,7 +163,11 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                   where (@wLineID<=0 or t2.LineID=@wLineID) ", wInstance);
+
+
+                wParamMap.Add("wLineID", wLineID);
+
                 if (wProductIDList.Count > 0)
                 {
                     wSqlCondition += " and t3.ID IN (" + StringUtils.Join(",", wProductIDList) + ")";
@@ -233,7 +237,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetOneTimePassRateMonthList(BMSEmployee wLoginUser,
-        List<int> wProductIDList, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        List<int> wProductIDList, int wLineID, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -241,7 +245,6 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -250,7 +253,9 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                    where (@wLineID<=0 or t2.LineID=@wLineID) ", wInstance);
+
+                wParamMap.Add("wLineID", wLineID);
                 if (wProductIDList.Count > 0)
                 {
                     wSqlCondition += " and t3.ID IN (" + StringUtils.Join(",", wProductIDList) + ")";
@@ -320,7 +325,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetAllForChart(BMSEmployee wLoginUser,
-        List<int> wProductIDList, int wStatType, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
+        List<int> wProductIDList, int wStatType, int wLineID, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -328,15 +333,15 @@ namespace iPlant.SCADA.Service
                 switch (wStatType)
                 {
                     case ((int)DMSStatTypes.Week):
-                        wResult = this.GetOneTimePassRateForChartWeekList(wLoginUser, wProductIDList,
+                        wResult = this.GetOneTimePassRateForChartWeekList(wLoginUser, wProductIDList, wLineID,
                              wStartTime, wEndTime, wErrorCode);
                         break;
                     case ((int)DMSStatTypes.Month):
-                        wResult = this.GetOneTimePassRateForChartMonthList(wLoginUser, wProductIDList,
+                        wResult = this.GetOneTimePassRateForChartMonthList(wLoginUser, wProductIDList, wLineID,
                              wStartTime, wEndTime, wErrorCode);
                         break;
                     default:
-                        wResult = this.GetOneTimePassRateForChartList(wLoginUser, wProductIDList,
+                        wResult = this.GetOneTimePassRateForChartList(wLoginUser, wProductIDList, wLineID,
                             wStartTime, wEndTime, wErrorCode);
                         break;
                 }
@@ -350,7 +355,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetOneTimePassRateForChartList(BMSEmployee wLoginUser,
-                List<int> wProductIDList, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
+                List<int> wProductIDList, int wLineID, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -358,7 +363,6 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -367,7 +371,9 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                  where (@wLineID<=0 or t2.LineID=@wLineID) ", wInstance);
+
+                wParamMap.Add("wLineID", wLineID);
                 if (wProductIDList.Count > 0)
                 {
                     wSqlCondition += " and t3.ID IN (" + StringUtils.Join(",", wProductIDList) + ")";
@@ -418,7 +424,7 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetOneTimePassRateForChartWeekList(BMSEmployee wLoginUser,
-        List<int> wProductIDList, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
+        List<int> wProductIDList, int wLineID, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
@@ -426,7 +432,6 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -435,7 +440,8 @@ namespace iPlant.SCADA.Service
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
                                                    left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                  where (@wLineID<=0 or t2.LineID=@wLineID) ", wInstance);
+                wParamMap.Add("wLineID", wLineID);
                 if (wProductIDList.Count > 0)
                 {
                     wSqlCondition += " and t3.ID IN (" + StringUtils.Join(",", wProductIDList) + ")";
@@ -486,14 +492,13 @@ namespace iPlant.SCADA.Service
         }
 
         public List<QMSOneTimePassRate> GetOneTimePassRateForChartMonthList(BMSEmployee wLoginUser,
-        List<int> wProductIDList, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
+        List<int> wProductIDList, int wLineID, DateTime wStartTime, DateTime wEndTime, OutResult<Int32> wErrorCode)
         {
             List<QMSOneTimePassRate> wResult = new List<QMSOneTimePassRate>();
             try
             {
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
@@ -501,8 +506,9 @@ namespace iPlant.SCADA.Service
                 string wSqlCondition = string.Format(@" FROM {0}.qms_workpiece_qualityinfo t 
                                                    left join {0}.oms_workpiece t1 on t1.ID = t.WorkpieceID
                                                    left join {0}.oms_order t2 on t2.ID = t1.OrderID
-                                                   left join {0}.fpc_product t3 on t3.ID = t2.ProductID
-                                                   where t2.LineID={1} ", wInstance, LineID);
+                                                   left join {0}.fpc_product t3 on t3.ID = t2.ProductID 
+                                                    where(@wLineID <= 0 or t2.LineID = @wLineID) ", wInstance);
+                wParamMap.Add("wLineID", wLineID);
                 if (wProductIDList.Count > 0)
                 {
                     wSqlCondition += " and t3.ID IN (" + StringUtils.Join(",", wProductIDList) + ")";

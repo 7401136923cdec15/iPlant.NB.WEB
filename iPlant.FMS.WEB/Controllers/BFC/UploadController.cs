@@ -44,7 +44,7 @@ namespace iPlant.FMS.WEB
                     //获取保存路径
 
 
-                    string wFilesUrl = StringUtils.CombinePath(GlobalContext.ContentRootPath, Constants.UPLOAD_SAVE_PATH);//全局配置读取
+                    string wFilesUrl = StringUtils.CombinePath(GlobalContext.WebRootPath, Constants.UPLOAD_SAVE_PATH);//全局配置读取
 
                     DateTime wDateTime = DateTime.Now;
 
@@ -230,7 +230,7 @@ namespace iPlant.FMS.WEB
 
                 List<String> wOrderList = wParam.ContainsKey("order") ? CloneTool.Clone<Object, List<String>>(wParam["order"]) : new List<string>();
 
-                String wPath = ServerExcelUtils.Instance.Export(StringUtils.CombinePath(Constants.UPLOAD_EXCEL_URL, DateTime.Now.ToString("yyyy/MM/dd")), wList, wHeadList, wTitle, wFileName, out wMsg, wOrderList);
+                String wPath = ServerExcelUtils.Instance.Export( GlobalContext.WebRootPath,StringUtils.CombinePath(Constants.UPLOAD_EXCEL_URL, DateTime.Now.ToString("yyyy/MM/dd")), wList, wHeadList, wTitle, wFileName, out wMsg, wOrderList);
                 Dictionary<String, Object> wInfo = new Dictionary<string, object>();
 
 

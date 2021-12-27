@@ -29,8 +29,10 @@ namespace iPlant.FMS.WEB
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
                 int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
 
+                Pagination wPagination = Pagination.Create(wPageIndex, wPageSize);
+
                 ServiceResult<List<MSSMaterial>> wServiceResult = ServiceInstance.mMSSService.MSS_GetMaterialList(wBMSEmployee, wMaterialNo,
-                 wMaterialName, wGroes, wActive, wPageSize, wPageIndex, wPaging);
+                 wMaterialName, wGroes, wActive, wPagination);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -196,15 +198,18 @@ namespace iPlant.FMS.WEB
                 BMSEmployee wBMSEmployee = GetSession();
 
                 String wMaterialStoragePoint = StringUtils.parseString(Request.QueryParamString("MaterialStoragePoint"));
+                int wLocationID = StringUtils.parseInt(Request.QueryParamString("LocationID"));
                 String wMaterialNo = StringUtils.parseString(Request.QueryParamString("MaterialNo"));
                 String wMaterialName = StringUtils.parseString(Request.QueryParamString("MaterialName"));
                 String wMaterialBatch = StringUtils.parseString(Request.QueryParamString("MaterialBatch"));
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
-                int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
 
-                ServiceResult<List<MSSMaterialOperationRecord>> wServiceResult = ServiceInstance.mMSSService.MSS_GetMaterialStock(wBMSEmployee, wMaterialStoragePoint, wMaterialNo,
-                 wMaterialName, wMaterialBatch, wPageSize, wPageIndex, wPaging);
+                Pagination wPagination = Pagination.Create(wPageIndex, wPageSize);
+
+
+                ServiceResult<List<MSSMaterialOperationRecord>> wServiceResult = ServiceInstance.mMSSService.MSS_GetMaterialStock(wBMSEmployee, wLocationID, wMaterialStoragePoint, wMaterialNo,
+                  wMaterialBatch, wPagination);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -270,21 +275,22 @@ namespace iPlant.FMS.WEB
 
                 BMSEmployee wBMSEmployee = GetSession();
 
+
+                int wLocationID = StringUtils.parseInt(Request.QueryParamString("LocationID"));
                 String wMaterialStoragePoint = StringUtils.parseString(Request.QueryParamString("MaterialStoragePoint"));
                 String wMaterialNo = StringUtils.parseString(Request.QueryParamString("MaterialNo"));
-                String wMaterialName = StringUtils.parseString(Request.QueryParamString("MaterialName"));
                 String wMaterialBatch = StringUtils.parseString(Request.QueryParamString("MaterialBatch"));
                 int wOperationType = StringUtils.parseInt(Request.QueryParamString("OperationType"));
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
-                int wPaging = StringUtils.parseInt(Request.QueryParamString("Paging"));
 
-                ServiceResult<List<MSSMaterialOperationRecord>> wServiceResult = ServiceInstance.mMSSService.MSS_GetMaterialOperationRecord(wBMSEmployee, wMaterialStoragePoint, wMaterialNo,
-                 wMaterialName, wMaterialBatch, wOperationType, wPageSize, wPageIndex, wPaging);
+                Pagination wPagination = Pagination.Create(wPageIndex, wPageSize);
+                ServiceResult<List<MSSMaterialOperationRecord>> wServiceResult = ServiceInstance.mMSSService.MSS_GetMaterialOperationRecord(wBMSEmployee, wLocationID,
+                    wMaterialStoragePoint, wMaterialNo, wMaterialBatch, wOperationType, wPagination);
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
-                    wResult = GetResult(RetCode.SERVER_CODE_SUC, "", wServiceResult.Result, wServiceResult.Get("PageCount"));
+                    wResult = GetResult(RetCode.SERVER_CODE_SUC, "", wServiceResult.Result, wPagination.TotalPage);
                 }
                 else
                 {
@@ -298,5 +304,7 @@ namespace iPlant.FMS.WEB
             }
             return Json(wResult);
         }
+   
+    
     }
 }

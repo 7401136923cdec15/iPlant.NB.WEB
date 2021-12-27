@@ -19,10 +19,21 @@ namespace iPlant.FMS.Models
         /// </summary>
         public int MaterialID { get; set; } = 0;
 
+
+
+        /// <summary>
+        /// 物料ID
+        /// </summary>
+        public int LocationID { get; set; } = 0;
         /// <summary>
         /// 存放点
         /// </summary>
-        public string MaterialStoragePoint { get; set; } = "";
+        public string LocationName { get; set; } = "";
+
+        /// <summary>
+        /// 存放点
+        /// </summary>
+        public string LocationCode { get; set; } = "";
 
         /// <summary>
         /// 物料编号

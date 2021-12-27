@@ -30,20 +30,7 @@ namespace iPlant.FMS.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllers(
-            //    opt =>
-            //{
-            //    // 统一设置路由前缀
-            //    opt.UseCentralRoutePrefix(new RouteAttribute("api/"));
 
-            //}
-            //).AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            //    options.JsonSerializerOptions.Converters.Add(new DateTimeConverterUsingDateTimeParse());
-            //    options.JsonSerializerOptions.Converters.Add(new DateTimeConverterUsingDateTimeOffsetParse());
-
-            //});
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
@@ -103,12 +90,14 @@ namespace iPlant.FMS.WEB
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseFileServer();
+
             app.UseRouting();
 
 
             app.UseSession();
 
-
+            GlobalContext.WebRootPath = env.WebRootPath;
             GlobalContext.ContentRootPath = env.ContentRootPath;
 
             string resource = Path.Combine(env.ContentRootPath, "Resource");

@@ -23,7 +23,7 @@ namespace iPlant.FMS.Models
         /// <summary>
         /// ERP订单号或手动单命令票号 
         /// </summary>
-       
+
         public String OrderNo { get; set; } = "";
 
 
@@ -138,9 +138,9 @@ namespace iPlant.FMS.Models
                             return (int)(DateTime.Now - PlanReceiveDate).TotalMinutes;
                         }
 
-                        break; 
+                        break;
                     case OMSOrderStatus.ProductOrder:
-                        if (DateTime.Now  > PlanFinishDate&& PlanFinishDate> new DateTime(2020,1,1))
+                        if (DateTime.Now > PlanFinishDate && PlanFinishDate > new DateTime(2020, 1, 1))
                         {
                             return (int)(DateTime.Now - PlanFinishDate).TotalMinutes;
                         }
@@ -150,7 +150,7 @@ namespace iPlant.FMS.Models
                     case OMSOrderStatus.StopOrder:
                     case OMSOrderStatus.StockOrder:
                     case OMSOrderStatus.SendOrder:
-                        if (RealFinishDate  > PlanFinishDate)
+                        if (RealFinishDate > PlanFinishDate)
                         {
                             return (int)(RealFinishDate - PlanFinishDate).TotalMinutes;
                         }
@@ -185,10 +185,10 @@ namespace iPlant.FMS.Models
                 }
 
                 int wHours = wOverTime / 60;
-                if (wDays>0||wHours > 0)
+                if (wDays > 0 || wHours > 0)
                 {
                     wOverTime -= (wHours * 60);
-                    wResult += (wHours + "小时"); 
+                    wResult += (wHours + "小时");
                 }
                 wResult += (wOverTime + "分钟");
 
@@ -196,6 +196,71 @@ namespace iPlant.FMS.Models
             }
             set { }
         }
+
+
+        /// <summary> 
+        /// 产品规格ID  车型
+        /// </summary>
+        public int ProductID { get; set; } = 0;
+
+
+
+
+        public double PlanFQTY { get; set; } = 0;
+        public double DoneFQTY { get; set; } = 0;
+        public double BadFQTY { get; set; } = 0;
+
+        public double GoodFQTY
+        {
+            get
+            {
+                return DoneFQTY - BadFQTY;
+            }
+            private set { }
+        }
+
+        public double RateFQTY
+        {
+            get
+            {
+                return (PlanFQTY > 0 && DoneFQTY > 0) ? DoneFQTY / PlanFQTY : 0;
+            }
+            private set { }
+        }
+
+        public double GoodRateFQTY
+        {
+            get
+            {
+                return (DoneFQTY > 0 && GoodFQTY > 0) ? GoodFQTY / DoneFQTY : 0;
+            }
+            private set { }
+        }
+
+
+        public int OrderPriority { get; set; } = 0;
+
+        public String Description { get; set; } = "";
+
+        /// <summary>
+        /// 人工单价
+        /// </summary>
+        public double LaborUnitPrice { get; set; } = 0.0;
+
+        /// <summary>
+        /// 物料单价
+        /// </summary>
+        public double MaterialUnitPrice { get; set; } = 0.0;
+        /// <summary>
+        /// 能源单价
+        /// </summary>
+        public double EnergyUnitPrice { get; set; } = 0.0;
+
+        /// <summary>
+        /// 设备单价
+        /// </summary>
+        public double DeviceUnitPrice { get; set; } = 0.0;
+
 
         #region OMSCommand属性
         /// <summary>
@@ -206,14 +271,8 @@ namespace iPlant.FMS.Models
 
         public String WBSNo { get; set; } = "";
 
-        /// <summary> 
-        /// 产品规格ID  车型
-        /// </summary>
-        public int ProductID { get; set; } = 0;
-        /**
-         * 产品规格
-         */
-        public String ProductNo { get; set; } = "";
+
+
         public int CustomerID { get; set; } = 0;
         public String Customer { get; set; } = "";
         public String ContactCode { get; set; } = "";
@@ -229,5 +288,19 @@ namespace iPlant.FMS.Models
         public String WorkShopName { get; set; } = "";
         #endregion
 
+
+        #region  产品属性
+
+        public double Length { get; set; } = 0.0;
+
+
+        /// <summary> 
+        /// 产品规格
+        /// </summary>
+        public String ProductNo { get; set; } = "";
+
+        public String ProductName { get; set; } = "";
+       
+        #endregion
     }
 }

@@ -12,6 +12,11 @@ namespace iPlant.FMS.WEB
     {
 
         private static log4net.ILog logger = log4net.LogManager.GetLogger(typeof(DMSManagerCNCController));
+      
+        /// <summary>
+        /// NC程序列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ProgramAll()
         {
@@ -60,6 +65,10 @@ namespace iPlant.FMS.WEB
         }
 
 
+        /// <summary>
+        /// NC程序操作记录
+        /// </summary>
+        /// <returns></returns>
 
         [HttpGet]
         public ActionResult ProgramRecordAll()
@@ -112,7 +121,10 @@ namespace iPlant.FMS.WEB
             return Json(wResult);
         }
 
-
+        /// <summary>
+        /// NC程序操作
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
 
         public ActionResult ProgramUpdate()
@@ -154,7 +166,10 @@ namespace iPlant.FMS.WEB
 
 
 
-
+        /// <summary>
+        /// 刀具列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ToolInfoAll()
         {
@@ -202,6 +217,10 @@ namespace iPlant.FMS.WEB
             return Json(wResult);
         }
 
+        /// <summary>
+        /// 刀具补偿记录
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ToolOffsetAll()
         {
@@ -254,7 +273,10 @@ namespace iPlant.FMS.WEB
         }
 
 
-
+        /// <summary>
+        /// 刀具修改
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
 
         public ActionResult ToolInfoUpdate()
@@ -297,8 +319,12 @@ namespace iPlant.FMS.WEB
 
 
 
+        /// <summary>
+        /// 刀具补偿
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
-
+        
         public ActionResult ToolOffsetUpdate()
         {
             Dictionary<String, Object> wResult = new Dictionary<String, Object>();

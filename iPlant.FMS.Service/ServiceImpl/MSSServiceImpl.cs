@@ -1,4 +1,5 @@
-﻿using iPlant.FMS.Models;
+﻿using iPlant.Common.Tools;
+using iPlant.FMS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,15 +21,13 @@ namespace iPlant.SCADA.Service
             return _instance;
         }
 
-        public ServiceResult<List<MSSMaterial>> MSS_GetMaterialList(BMSEmployee wLoginUser, string wMaterialNo, string wMaterialName, string wGroes, int wActive, int wPageSize, int wPageIndex,int wPaging)
+        public ServiceResult<List<MSSMaterial>> MSS_GetMaterialList(BMSEmployee wLoginUser, string wMaterialNo, string wMaterialName, string wGroes, int wActive, Pagination wPagination)
         {
             ServiceResult<List<MSSMaterial>> wResult = new ServiceResult<List<MSSMaterial>>();
             try
             {
                 OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(MSSMaterialDAO.getInstance().GetAll(wLoginUser, wMaterialNo, wMaterialName, wGroes, wActive, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
-                wResult.Put("PageCount", wPageCount.Result);
+                wResult.setResult(MSSMaterialDAO.getInstance().GetAll(wLoginUser, wMaterialNo, wMaterialName, wGroes, wActive, wPagination, wErrorCode)); 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
             catch (Exception e)
@@ -90,17 +89,15 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<List<MSSMaterialOperationRecord>> MSS_GetMaterialStock(BMSEmployee wLoginUser, String wMaterialStoragePoint, String wMaterialNo,
-                String wMaterialName, String wMaterialBatch, int wPageSize, int wPageIndex, int wPaging)
+        public ServiceResult<List<MSSMaterialOperationRecord>> MSS_GetMaterialStock(BMSEmployee wLoginUser, int wLocationID, String wLocationLike, String wMaterialLike,
+                String wMaterialBatch, Pagination wPagination)
         {
             ServiceResult<List<MSSMaterialOperationRecord>> wResult = new ServiceResult<List<MSSMaterialOperationRecord>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(MSSMaterialOperationRecordDAO.getInstance().GetMaterialStock(wLoginUser, wMaterialStoragePoint, wMaterialNo, wMaterialName,
-                    wMaterialBatch, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
-                wResult.Put("PageCount", wPageCount.Result);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
+                wResult.setResult(MSSMaterialOperationRecordDAO.getInstance().GetMaterialStock(wLoginUser,  wLocationID,  wLocationLike,  wMaterialLike,
+                 wMaterialBatch, wPagination, wErrorCode)); 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
             catch (Exception e)
@@ -128,17 +125,15 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<List<MSSMaterialOperationRecord>> MSS_GetMaterialOperationRecord(BMSEmployee wLoginUser, String wMaterialStoragePoint, String wMaterialNo,
-                String wMaterialName, String wMaterialBatch,int wOperationType, int wPageSize, int wPageIndex, int wPaging)
+        public ServiceResult<List<MSSMaterialOperationRecord>> MSS_GetMaterialOperationRecord(BMSEmployee wLoginUser, int wLocationID, String wLocationLike, String wMaterialLike,
+            String wMaterialBatch, int wOperationType, Pagination wPagination)
         {
             ServiceResult<List<MSSMaterialOperationRecord>> wResult = new ServiceResult<List<MSSMaterialOperationRecord>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.setResult(MSSMaterialOperationRecordDAO.getInstance().GetMaterialOperationRecord(wLoginUser, wMaterialStoragePoint, wMaterialNo, wMaterialName,
-                    wMaterialBatch, wOperationType, wPageSize, wPageIndex, wPaging, wPageCount, wErrorCode));
-                wResult.Put("PageCount", wPageCount.Result);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
+                wResult.setResult(MSSMaterialOperationRecordDAO.getInstance().GetMaterialOperationRecord(wLoginUser, wLocationID, wLocationLike, wMaterialLike,
+             wMaterialBatch, wOperationType, wPagination, wErrorCode)); 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
             }
             catch (Exception e)

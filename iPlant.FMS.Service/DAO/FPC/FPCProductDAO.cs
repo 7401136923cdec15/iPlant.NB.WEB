@@ -168,7 +168,7 @@ namespace iPlant.SCADA.Service
                     return wResult;
                 }
 
-                if (wFPCProductList.Count > 0)
+                if (wFPCProductList.Count <= 0)
                     return wResult;
 
                 wResult = wFPCProductList[0];
@@ -219,7 +219,8 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("Length", wFPCProduct.Length);
                 wParamMap.Add("LaborUnitPrice", wFPCProduct.LaborUnitPrice);
                 wParamMap.Add("MaterialUnitPrice", wFPCProduct.MaterialUnitPrice);
-                wParamMap.Add("EnergylUnitPrice", wFPCProduct.EnergylUnitPrice);
+                wParamMap.Add("EnergyUnitPrice", wFPCProduct.EnergyUnitPrice);
+                wParamMap.Add("DeviceUnitPrice", wFPCProduct.DeviceUnitPrice);
                 wParamMap.Add("Description", wFPCProduct.Description); 
                 wParamMap.Add("EditorID", wLoginUser.ID);
                 wParamMap.Add("EditTime", DateTime.Now);

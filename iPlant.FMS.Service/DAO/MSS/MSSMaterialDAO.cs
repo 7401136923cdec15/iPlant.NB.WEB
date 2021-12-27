@@ -25,22 +25,21 @@ namespace iPlant.SCADA.Service
             return Instance;
         }
 
-        public List<MSSMaterial> GetAll(BMSEmployee wLoginUser, string wMaterialNo, string wMaterialName, string wGroes, int wActive, int wPageSize, int wPageIndex,int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        public List<MSSMaterial> GetAll(BMSEmployee wLoginUser, string wMaterialNo, string wMaterialName, string wGroes, int wActive, Pagination wPagination, OutResult<Int32> wErrorCode)
         {
             List<MSSMaterial> wResult = new List<MSSMaterial>();
             try
             {
 
                 wErrorCode.set(0);
-                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
+                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName(); 
                 if (wErrorCode.Result != 0)
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
                 string wSqlCondition = string.Format(@" from {0}.mss_material t " +
                     "left join {0}.mbs_user t1 on t1.ID=t.CreatorID " +
-                    "left join {0}.mbs_user t2 on t2.ID=t.EditorID where t.LineID={1} ", wInstance, LineID);
+                    "left join {0}.mbs_user t2 on t2.ID=t.EditorID where 1=1  ", wInstance);
                 if (!string.IsNullOrWhiteSpace(wMaterialNo))
                 {
                     wSqlCondition += " and t.MaterialNo like @wMaterialNo";
@@ -61,30 +60,12 @@ namespace iPlant.SCADA.Service
                     wSqlCondition += " and t.Active = @wActive";
                     wParamMap.Add("wActive", wActive);
                 }
-
-                if (wPaging == 1)
-                {
-                    wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                    if (wPageCount.Result <= 0)
-                    {
-                        wPageCount.Result = 1;
-
-                        return wResult;
-                    }
-                }
-                else
-                {
-                    wPageCount.Result = 1;
-                }
-
-                String wSQL = "select t.ID,t.MaterialNo,t.MaterialName,t.Groes,t.Remark,t.CreateTime,t.EditTime,t.Active,t.CreatorID,t.EditorID,t1.Name as Creator,t2.Name as Editor " + wSqlCondition + " order by t.CreateTime";
-                if (wPaging==1) 
-                {
-                    wSQL += " limit " + wPageIndex * wPageSize + "," + wPageSize;
-                }
+                 
+                String wSQL = "select t.ID,t.MaterialNo,t.MaterialName,t.Groes,t.Remark,t.CreateTime,t.EditTime,t.Active,t.CreatorID,t.EditorID,t1.Name as Creator,t2.Name as Editor " + wSqlCondition ;
+                
                 wSQL = this.DMLChange(wSQL);
 
-                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 if (wQueryResult.Count <= 0)
                 {
@@ -134,8 +115,7 @@ namespace iPlant.SCADA.Service
                 }
 
                 wErrorCode.set(0);
-                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
+                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName(); 
 
                 MSSMaterial wMSSMaterialDB = this.MSS_CheckMaterialNo(wLoginUser, wMSSMaterial, wErrorCode);
                 if (wMSSMaterialDB.ID > 0)
@@ -158,8 +138,7 @@ namespace iPlant.SCADA.Service
                 wParamMap.Add("EditTime", DateTime.Now);
 
                 if (wMSSMaterial.ID <= 0)
-                {
-                    wParamMap.Add("LineID", LineID);
+                { 
                     wParamMap.Add("Active", wMSSMaterial.Active);
                     wParamMap.Add("CreatorID", wLoginUser.ID);
                     wParamMap.Add("CreateTime", DateTime.Now);
@@ -181,7 +160,7 @@ namespace iPlant.SCADA.Service
         }
 
         public MSSMaterial MSS_CheckMaterialNo(BMSEmployee wLoginUser, MSSMaterial wMSSMaterial,
-     OutResult<Int32> wErrorCode)
+                  OutResult<Int32> wErrorCode)
         {
             MSSMaterial wResult = new MSSMaterial();
             try

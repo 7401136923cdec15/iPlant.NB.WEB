@@ -158,13 +158,7 @@ namespace iPlant.Data.EF
         private static readonly String ERPDBName =  GlobalConstant.GlobalConfiguration.GetValue("DataBase.Name.ERP");
         private static readonly String MDSDBName =  GlobalConstant.GlobalConfiguration.GetValue("DataBase.Name.MDS");
         private static readonly String PLMDBName =  GlobalConstant.GlobalConfiguration.GetValue("DataBase.Name.PLM");
-
-        private static readonly String LineID = GlobalConstant.GlobalConfiguration.GetValue("Line.LineID");
-
-        public static String getLineID()
-        {
-            return LineID;
-        }
+ 
     }
 
 }

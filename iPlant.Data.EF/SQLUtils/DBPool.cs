@@ -190,6 +190,8 @@ namespace iPlant.Data.EF
             List<Dictionary<String, Object>> wResult = new List<Dictionary<string, object>>();
 
             this.PrevQueryForList(wSQL, wParamMap, pagination);
+            if (pagination.TotalCount <= 0)
+                return new List<Dictionary<string, object>>();
 
             using (DbConnection wConnection = this.GetConnection())
             {

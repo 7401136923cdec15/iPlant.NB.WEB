@@ -44,18 +44,16 @@ namespace iPlant.SCADA.Service
 
         public ServiceResult<List<OMSOrder>> OMS_ConditionAll(BMSEmployee wLoginUser, int wProductID,
             int wWorkShopID, int wLine, int wCustomerID, string wWBSNo, DateTime wStartTime, DateTime wEndTime,
-            int wStatus, int wPageSize, int wPageIndex)
+            int wStatus, Pagination wPagination)
         {
             ServiceResult<List<OMSOrder>> wResult = new ServiceResult<List<OMSOrder>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
 
                 wResult.Result = OMSOrderDAO.getInstance().OMS_ConditionAll(wLoginUser, wProductID, wWorkShopID, wLine,
-                    wCustomerID, wWBSNo, wStartTime, wEndTime, wStatus, wPageSize, wPageIndex, wPageCount, wErrorCode);
-
-                wResult.Put("PageCount", wPageCount.Result);
+                    wCustomerID, wWBSNo, wStartTime, wEndTime, wStatus,  wPagination, wErrorCode);
+                 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
 
             }
@@ -120,15 +118,13 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<List<OMSOrder>> OMS_QueryOrderByStatus(BMSEmployee wLoginUser, int wWorkShopID, int wLineID, List<int> wStateIDList, int wPageSize, int wPageIndex)
+        public ServiceResult<List<OMSOrder>> OMS_QueryOrderByStatus(BMSEmployee wLoginUser, int wWorkShopID, int wLineID, List<int> wStateIDList, Pagination wPagination)
         {
             ServiceResult<List<OMSOrder>> wResult = new ServiceResult<List<OMSOrder>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.Result = OMSOrderDAO.getInstance().OMS_QueryOrderByStatus(wLoginUser, wWorkShopID, wLineID, wStateIDList, wPageSize, wPageIndex, wPageCount, wErrorCode);
-                wResult.Put("PageCount", wPageCount.Result);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
+                wResult.Result = OMSOrderDAO.getInstance().OMS_QueryOrderByStatus(wLoginUser, wWorkShopID, wLineID, wStateIDList, wPagination, wErrorCode); 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
 
             }
@@ -258,15 +254,13 @@ namespace iPlant.SCADA.Service
             return wResult;
         }
 
-        public ServiceResult<List<OMSOrder>> OMS_SelectFinishListByTime(BMSEmployee wLoginUser, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex)
+        public ServiceResult<List<OMSOrder>> OMS_SelectFinishListByTime(BMSEmployee wLoginUser, DateTime wStartTime, DateTime wEndTime, Pagination wPagination)
         {
             ServiceResult<List<OMSOrder>> wResult = new ServiceResult<List<OMSOrder>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
-                wResult.Result = OMSOrderDAO.getInstance().OMS_SelectFinishListByTime(wLoginUser, wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount, wErrorCode);
-                wResult.Put("PageCount", wPageCount.Result);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
+                wResult.Result = OMSOrderDAO.getInstance().OMS_SelectFinishListByTime(wLoginUser, wStartTime, wEndTime, wPagination, wErrorCode); 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
 
             }
@@ -280,18 +274,16 @@ namespace iPlant.SCADA.Service
         public ServiceResult<List<OMSOrder>> OMS_SelectList(BMSEmployee wLoginUser, int wCommandID, int wFactoryID,
             int wWorkShopID, int wLineID, int wStationID, int wProductID, int wCustomerID, int wTeamID,
             string wPartNo, List<int> wStateIDList, String wOrderNoLike, DateTime wPreStartTime, DateTime wPreEndTime,
-            DateTime wRelStartTime, DateTime wRelEndTime, int wPageSize, int wPageIndex)
+            DateTime wRelStartTime, DateTime wRelEndTime, Pagination wPagination)
         {
             ServiceResult<List<OMSOrder>> wResult = new ServiceResult<List<OMSOrder>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
                 wResult.Result = OMSOrderDAO.getInstance().OMS_SelectList(wLoginUser, -1, wCommandID, "", wFactoryID, wWorkShopID, wLineID,
                     wStationID, wProductID, wCustomerID, wTeamID, wPartNo, wStateIDList, wOrderNoLike, wPreStartTime,
-                    wPreEndTime, wRelStartTime, wRelEndTime, wPageSize, wPageIndex, wPageCount, wErrorCode);
-
-                wResult.Put("PageCount", wPageCount.Result);
+                    wPreEndTime, wRelStartTime, wRelEndTime, wPagination, wErrorCode);
+                 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
 
             }
@@ -345,17 +337,14 @@ namespace iPlant.SCADA.Service
         }
 
         public ServiceResult<List<OMSOrder>> OMS_SelectList_RF(BMSEmployee wLoginUser, int wCustomerID, int wWorkShopID,
-            int wLineID, int wProductID, string wPartNo, DateTime wStartTime, DateTime wEndTime, int wPageSize, int wPageIndex)
+            int wLineID, int wProductID, string wPartNo, DateTime wStartTime, DateTime wEndTime, Pagination wPagination)
         {
             ServiceResult<List<OMSOrder>> wResult = new ServiceResult<List<OMSOrder>>();
             try
             {
-                OutResult<Int32> wErrorCode = new OutResult<Int32>(0);
-                OutResult<Int32> wPageCount = new OutResult<Int32>(1);
+                OutResult<Int32> wErrorCode = new OutResult<Int32>(0); 
                 wResult.Result = OMSOrderDAO.getInstance().OMS_SelectList_RF(wLoginUser, wCustomerID,
-                    wWorkShopID, wLineID, wProductID, wPartNo, wStartTime, wEndTime, wPageSize, wPageIndex, wPageCount, wErrorCode);
-
-                wResult.Put("PageCount", wPageCount.Result);
+                    wWorkShopID, wLineID, wProductID, wPartNo, wStartTime, wEndTime, wPagination, wErrorCode); 
                 wResult.FaultCode += MESException.getEnumType(wErrorCode.get()).getLable();
 
             }

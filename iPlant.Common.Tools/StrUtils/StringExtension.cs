@@ -29,5 +29,15 @@ namespace iPlant.Common.Tools
         {
             return StringUtils.parseInt(wObject);
         }
+
+        public static bool IsGuidNullOrEmpty(this Guid value)
+        {
+            if (value == null || value.ToString() == "")
+                return true;
+            if (value == Guid.Empty)
+                return true;
+            return false;
+
+        }
     }
 }

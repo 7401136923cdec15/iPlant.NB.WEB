@@ -2,7 +2,7 @@
 {
     public class Pagination
     {
-        public Pagination()
+        private Pagination()
         {
             Sort = "ID"; // 默认按Id排序
             SortType = " desc ";
@@ -12,14 +12,14 @@
 
         static Pagination()
         {
-            
+
             MaxPageSize = StringUtils.parseInt(GlobalConstant.GlobalConfiguration.GetValue("MaxPageSize"));
 
             if (MaxPageSize < 100)
                 MaxPageSize = 500;
         }
 
-        private static int MaxPageSize =100;
+        private static int MaxPageSize = 100;
 
         public static Pagination Create(int wPageIndex, int wPageSize, params string[] args)
         {
@@ -31,13 +31,21 @@
             wResult.PageSize = wPageSize;
             if (args == null)
                 return wResult;
-            if (args.Length > 0)
+            if (args.Length > 0&&!string.IsNullOrWhiteSpace(args[0]))
                 wResult.Sort = args[0];
-            if (args.Length > 1)
+            if (args.Length > 1 && !string.IsNullOrWhiteSpace(args[1]))
                 wResult.SortType = args[1];
             return wResult;
         }
 
+        private static Pagination mDefault = new Pagination();
+        public static Pagination Default
+        {
+            get
+            {
+                return mDefault;
+            }
+        }
         /// <summary>
         /// 每页行数
         /// </summary>

@@ -44,11 +44,14 @@ namespace iPlant.FMS.WEB
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
 
+                String wSort = StringUtils.parseString(Request.QueryParamString("Sort"));
+                String wSortType = StringUtils.parseString(Request.QueryParamString("SortType"));
+
                 ServiceResult<List<OMSOrder>> wServiceResult = ServiceInstance.mOMSService.OMS_SelectList(wLoginUser,
                           wCommandID, wFactoryID, wWorkShopID,
                  wLineID, wStationID, wProductID, wCustomerID, wTeamID, wPartNo,
                  wStatusList, wOrderNo, wPreStartTime, wPreEndTime, wRelStartTime,
-                 wRelEndTime, wPageSize, wPageIndex);
+                 wRelEndTime, Pagination.Create(wPageIndex, wPageSize, wSort, wSortType));
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -140,9 +143,11 @@ namespace iPlant.FMS.WEB
                 DateTime wEndTime = StringUtils.parseDate(Request.QueryParamString("EndTime"));
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
+                String wSort = StringUtils.parseString(Request.QueryParamString("Sort"));
+                String wSortType = StringUtils.parseString(Request.QueryParamString("SortType"));
 
                 ServiceResult<List<OMSOrder>> wServiceResult = ServiceInstance.mOMSService.OMS_SelectList_RF(wLoginUser, wCustomerID,
-                    wWorkShopID, wLineID, wProductID, wPartNo, wStartTime, wEndTime, wPageSize, wPageIndex);
+                    wWorkShopID, wLineID, wProductID, wPartNo, wStartTime, wEndTime, Pagination.Create(wPageIndex, wPageSize, wSort, wSortType));
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {
@@ -178,8 +183,10 @@ namespace iPlant.FMS.WEB
 
                 int wPageSize = StringUtils.parseInt(Request.QueryParamString("PageSize"));
                 int wPageIndex = StringUtils.parseInt(Request.QueryParamString("PageIndex"));
+                String wSort = StringUtils.parseString(Request.QueryParamString("Sort"));
+                String wSortType = StringUtils.parseString(Request.QueryParamString("SortType"));
                 ServiceResult<List<OMSOrder>> wServiceResult = ServiceInstance.mOMSService.OMS_QueryOrderByStatus(wLoginUser, wWorkShopID, wLineID,
-                        wStatusList, wPageSize, wPageIndex);
+                        wStatusList, Pagination.Create(wPageIndex, wPageSize, wSort, wSortType));
 
                 if (StringUtils.isEmpty(wServiceResult.getFaultCode()))
                 {

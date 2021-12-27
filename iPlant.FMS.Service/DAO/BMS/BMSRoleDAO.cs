@@ -83,7 +83,7 @@ namespace iPlant.SCADA.Service
             {
                 try
                 {
-                    if (wRole == null || StringUtils.isEmpty(wRole.Name) || wRole.DepartmentID <= 0)
+                    if (wRole == null || StringUtils.isEmpty(wRole.Name) )
                     {
                         wErrorCode.set(MESException.Parameter.getValue());
                         return;
@@ -273,7 +273,7 @@ namespace iPlant.SCADA.Service
 
             try
             {
-                if (wRole == null || StringUtils.isEmpty(wRole.Name) || wRole.DepartmentID <= 0)
+                if (wRole == null || StringUtils.isEmpty(wRole.Name) )
                 {
                     wErrorCode.set(MESException.Parameter.getValue());
                     return;
@@ -666,7 +666,7 @@ namespace iPlant.SCADA.Service
 
                 String wSQLText = "";
                 wSQLText = StringUtils.Format(
-                        "SELECT t.*,t1.UserID,t2.Path FROM {0}.mbs_rolefunction t" +
+                        "SELECT t.*,t1.UserID,t2.Path,t2.Remark FROM {0}.mbs_rolefunction t" +
                         " inner join {0}.mbs_roletree t2 on t.FunctionID=t2.FunctionID "
                                 + " left join {0}.mbs_roleuser t1 on t.RoleID=t1.RoleID where t2.Path=@Path",
                         MESDBSource.Basic.getDBName());
@@ -681,6 +681,7 @@ namespace iPlant.SCADA.Service
                     BMSRoleItem wRoleFunction = new BMSRoleItem();
                     wRoleFunction.FunctionID = StringUtils.parseInt(wSqlDataReader["FunctionID"]);
                     wRoleFunction.Path = StringUtils.parseString(wSqlDataReader["Path"]);
+                    wRoleFunction.Remark = StringUtils.parseString(wSqlDataReader["Remark"]);
                     wRoleFunction.RoleID = StringUtils.parseInt(wSqlDataReader["RoleID"]);
                     wRoleFunction.UserID = StringUtils.parseInt(wSqlDataReader["UserID"]);
                     wUserList.Add(wRoleFunction);
@@ -882,6 +883,7 @@ namespace iPlant.SCADA.Service
                     wRoleFunction.UserID = StringUtils.parseInt(wSqlDataReader["OrderID"]);
                     wRoleFunction.Text = StringUtils.parseString(wSqlDataReader["Text"]);
                     wRoleFunction.Path = StringUtils.parseString(wSqlDataReader["Path"]);
+                    wRoleFunction.Remark = StringUtils.parseString(wSqlDataReader["Remark"]);
                     wRoleFunction.TypeID = StringUtils.parseInt(wSqlDataReader["Active"]);
 
                     wFunctionNodeList.Add(wRoleFunction);
@@ -1019,13 +1021,14 @@ namespace iPlant.SCADA.Service
                 if (wBMSRoleItemList == null || wBMSRoleItemList.Count <= 0)
                 {
                     wSQLText = StringUtils.Format(
-                            "Insert into {0}.mbs_roletree (FunctionID,RoleID,Text,Active,OrderID,Path) Values (@FunctionID,@RoleID,@Text,0,@OrderID,@Path);",
+                            "Insert into {0}.mbs_roletree (FunctionID,RoleID,Text,Active,OrderID,Path,Remark)" +
+                            " Values (@FunctionID,@RoleID,@Text,0,@OrderID,@Path,@Remark);",
                             MESDBSource.Basic.getDBName());
                 }
                 else
                 {
                     wSQLText = StringUtils.Format(
-                            "Update {0}.mbs_roletree set RoleID=@RoleID ,Text=@Text,OrderID=@OrderID,Path=@Path Where FunctionID=@FunctionID ;",
+                            "Update {0}.mbs_roletree set RoleID=@RoleID ,Text=@Text,OrderID=@OrderID,Path=@Path,Remark=@Remark Where FunctionID=@FunctionID ;",
                             MESDBSource.Basic.getDBName());
                 }
 
@@ -1035,6 +1038,7 @@ namespace iPlant.SCADA.Service
                 wParms.Add("Text", wBMSRoleItem.Text);
                 wParms.Add("OrderID", wBMSRoleItem.UserID);
                 wParms.Add("Path", wBMSRoleItem.Path);
+                wParms.Add("Remark", wBMSRoleItem.Remark);
 
 
                 base.mDBPool.update(wSQLText, wParms);

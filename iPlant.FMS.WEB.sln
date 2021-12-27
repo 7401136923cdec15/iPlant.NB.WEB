@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShrisCommunicationCore", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{EB752C00-ADEA-4626-91D5-868DEB35C810}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iPlant.FMS.Communication", "iPlant.FMS.Communication\iPlant.FMS.Communication.csproj", "{A7E04C71-1F2A-4B9A-B63D-E0C8582D4C55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{70DA46F8-3CBC-49E8-A7AB-F181C7C7EEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70DA46F8-3CBC-49E8-A7AB-F181C7C7EEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70DA46F8-3CBC-49E8-A7AB-F181C7C7EEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7E04C71-1F2A-4B9A-B63D-E0C8582D4C55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7E04C71-1F2A-4B9A-B63D-E0C8582D4C55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7E04C71-1F2A-4B9A-B63D-E0C8582D4C55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7E04C71-1F2A-4B9A-B63D-E0C8582D4C55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

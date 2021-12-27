@@ -34,7 +34,7 @@ namespace iPlant.Data.EF.Extension
             StringBuilder sb = null;
 
             if (string.IsNullOrWhiteSpace(sortType))
-                sortType = "asc";
+                sortType = "desc";
 
             bool isAsc = sortType.Equals("ASC",System.StringComparison.CurrentCultureIgnoreCase);
 

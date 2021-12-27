@@ -25,71 +25,49 @@ namespace iPlant.SCADA.Service
             return Instance;
         }
 
-        public List<MSSMaterialOperationRecord> GetMaterialStock(BMSEmployee wLoginUser, String wMaterialStoragePoint, String wMaterialNo,
-                String wMaterialName, String wMaterialBatch, int wPageSize, int wPageIndex,int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        public List<MSSMaterialOperationRecord> GetMaterialStock(BMSEmployee wLoginUser, int wLocationID,String wLocationLike, String wMaterialLike,
+                String wMaterialBatch, Pagination wPagination, OutResult<Int32> wErrorCode)
         {
             List<MSSMaterialOperationRecord> wResult = new List<MSSMaterialOperationRecord>();
             try
             {
 
                 wErrorCode.set(0);
-                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
+                String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName(); 
                 if (wErrorCode.Result != 0)
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
-                string wSqlCondition =string.Format( @" from (select t.MaterialStoragePoint,t.MaterialID,t.MaterialBatch,t1.MaterialNo,t1.MaterialName,t1.Groes,
+                string wSqlCondition =string.Format(@" from (select t.ID, t.LocationID ,t5.Code as LocationCode ,t5.Name as LocationName,
+                                            t.MaterialID,t.MaterialBatch,t1.MaterialNo,t1.MaterialName,t1.Groes,
                                           sum(case when t.OperationType in (2,5) then -1*t.Num else t.Num END) as Num 
                                           from {0}.mss_material_operationrecord t " +
-                                          "inner join {0}.mss_material t1 on t.MaterialID=t1.ID" +
-                                          " left join {0}.mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 and t1.LineID={1} ", wInstance, LineID);
-                if (!string.IsNullOrWhiteSpace(wMaterialStoragePoint))
+                                          " inner join {0}.mss_material t1 on t.MaterialID=t1.ID" +
+                                          " inner join {0}.mss_location t5 on t.LocationID=t5.ID where t1.Active=1  ", wInstance);
+                if (!string.IsNullOrWhiteSpace(wLocationLike))
                 {
-                    wSqlCondition += " and t.MaterialStoragePoint like @wMaterialStoragePoint";
-                    wParamMap.Add("wMaterialStoragePoint", "%" + wMaterialStoragePoint + "%");
+                    wSqlCondition += " and ( t5.Name like @wLocationLike or t5.Code like  @wLocationLike )";
+                    wParamMap.Add("wLocationLike", "%" + wLocationLike + "%");
                 }
-                if (!string.IsNullOrWhiteSpace(wMaterialNo))
+                if (!string.IsNullOrWhiteSpace(wMaterialLike))
                 {
-                    wSqlCondition += " and t1.MaterialNo like @wMaterialNo";
-                    wParamMap.Add("wMaterialNo", "%" + wMaterialNo + "%");
+                    wSqlCondition += " and ( t1.MaterialNo like @wMaterialLike  or t1.MaterialNo like @wMaterialLike )";
+                    wParamMap.Add("wMaterialLike", "%" + wMaterialLike + "%");
                 }
-                if (!string.IsNullOrWhiteSpace(wMaterialName))
-                {
-                    wSqlCondition += " and t1.MaterialName like @wMaterialName";
-                    wParamMap.Add("wMaterialName", "%" + wMaterialName + "%");
-                }
+                 
                 if (!string.IsNullOrWhiteSpace(wMaterialBatch))
                 {
                     wSqlCondition += " and t.MaterialBatch like @wMaterialBatch";
                     wParamMap.Add("wMaterialBatch", "%" + wMaterialBatch + "%");
                 }
-                wSqlCondition += " group by t.MaterialStoragePoint,t.MaterialID,t.MaterialBatch,t1.MaterialNo," +
-                    "t1.MaterialName,t1.Groes ) t3";
+                wSqlCondition += " group by t.LocationID,t.MaterialID,t.MaterialBatch ) t3";
 
-                if (wPaging == 1)
-                {
-                    wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                    if (wPageCount.Result <= 0)
-                    {
-                        wPageCount.Result = 1;
-
-                        return wResult;
-                    }
-                }
-                else
-                {
-                    wPageCount.Result = 1;
-                }
-
-                String wSQL = @"select t3.* " + wSqlCondition + " order by t3.MaterialNo ";
-                if (wPaging==1) 
-                {
-                    wSQL += " limit " + wPageIndex * wPageSize + "," + wPageSize;
-                }
+  
+                String wSQL = @"select t3.* " + wSqlCondition ;
+               
                 wSQL = this.DMLChange(wSQL);
 
-                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 if (wQueryResult.Count <= 0)
                 {
@@ -100,12 +78,15 @@ namespace iPlant.SCADA.Service
                     MSSMaterialOperationRecord wMaterialOperationRecord = new MSSMaterialOperationRecord();
 
                     wMaterialOperationRecord.MaterialID = StringUtils.parseInt(wReader["MaterialID"]);
-                    wMaterialOperationRecord.MaterialStoragePoint = StringUtils.parseString(wReader["MaterialStoragePoint"]);
+                    wMaterialOperationRecord.LocationID = StringUtils.parseInt(wReader["LocationID"]);
+                    wMaterialOperationRecord.LocationName = StringUtils.parseString(wReader["LocationName"]);
+
+                    wMaterialOperationRecord.LocationCode = StringUtils.parseString(wReader["LocationCode"]);
                     wMaterialOperationRecord.MaterialNo = StringUtils.parseString(wReader["MaterialNo"]);
                     wMaterialOperationRecord.MaterialName = StringUtils.parseString(wReader["MaterialName"]);
                     wMaterialOperationRecord.Groes = StringUtils.parseString(wReader["Groes"]);
                     wMaterialOperationRecord.MaterialBatch = StringUtils.parseString(wReader["MaterialBatch"]);
-                    wMaterialOperationRecord.Num = StringUtils.parseInt(wReader["Num"]);
+                    wMaterialOperationRecord.Num = StringUtils.parseInt(wReader["Num"]); 
                     wResult.Add(wMaterialOperationRecord);
                 }
 
@@ -122,7 +103,7 @@ namespace iPlant.SCADA.Service
         {
             try
             {
-                if (wMSSMaterialOperationRecord == null || wMSSMaterialOperationRecord.MaterialID<=0 || StringUtils.isEmpty(wMSSMaterialOperationRecord.MaterialStoragePoint)
+                if (wMSSMaterialOperationRecord == null || wMSSMaterialOperationRecord.MaterialID<=0 || wMSSMaterialOperationRecord.LocationID <= 0
                     || StringUtils.isEmpty(wMSSMaterialOperationRecord.MaterialBatch) || wMSSMaterialOperationRecord.OperationType<=0 || wMSSMaterialOperationRecord.Num <= 0)
                 {
                     wErrorCode.set(MESException.Parameter.Value);
@@ -135,7 +116,7 @@ namespace iPlant.SCADA.Service
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
 
                 wParamMap.Add("MaterialID", wMSSMaterialOperationRecord.MaterialID);
-                wParamMap.Add("MaterialStoragePoint", wMSSMaterialOperationRecord.MaterialStoragePoint);
+                wParamMap.Add("LocationID", wMSSMaterialOperationRecord.LocationID);
                 wParamMap.Add("MaterialBatch", wMSSMaterialOperationRecord.MaterialBatch);
                 wParamMap.Add("Num", wMSSMaterialOperationRecord.Num);
                 wParamMap.Add("Remark", wMSSMaterialOperationRecord.Remark);
@@ -151,8 +132,8 @@ namespace iPlant.SCADA.Service
             }
         }
 
-        public List<MSSMaterialOperationRecord> GetMaterialOperationRecord(BMSEmployee wLoginUser, String wMaterialStoragePoint, String wMaterialNo,
-               String wMaterialName, String wMaterialBatch,int wOperationType, int wPageSize, int wPageIndex, int wPaging, OutResult<Int32> wPageCount, OutResult<Int32> wErrorCode)
+        public List<MSSMaterialOperationRecord> GetMaterialOperationRecord(BMSEmployee wLoginUser, int wLocationID, String wLocationLike, String wMaterialLike,
+            String wMaterialBatch,int wOperationType, Pagination wPagination, OutResult<Int32> wErrorCode)
         {
             List<MSSMaterialOperationRecord> wResult = new List<MSSMaterialOperationRecord>();
             try
@@ -160,29 +141,25 @@ namespace iPlant.SCADA.Service
 
                 wErrorCode.set(0);
                 String wInstance = iPlant.Data.EF.MESDBSource.Basic.getDBName();
-                String LineID = iPlant.Data.EF.MESDBSource.getLineID();
                 if (wErrorCode.Result != 0)
                     return wResult;
 
                 Dictionary<String, Object> wParamMap = new Dictionary<String, Object>();
                 string wSqlCondition = string.Format(@" from {0}.mss_material_operationrecord t " +
                                                " inner join {0}.mss_material t1 on t.MaterialID=t1.ID " +
-                                               " left join {0}.mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 and t1.LineID={1} ", wInstance, LineID);
-                if (!string.IsNullOrWhiteSpace(wMaterialStoragePoint))
+                                                  "inner join {0}.mss_location t5 on t.LocationID=t5.ID"  +
+                                               " left join {0}.mbs_user t2 on t.CreatorID=t2.ID where t1.Active=1 ", wInstance);
+                if (!string.IsNullOrWhiteSpace(wLocationLike))
                 {
-                    wSqlCondition += " and t.MaterialStoragePoint like @wMaterialStoragePoint";
-                    wParamMap.Add("wMaterialStoragePoint", "%" + wMaterialStoragePoint + "%");
+                    wSqlCondition += " and ( t5.Name like @wLocationLike or t5.Code like  @wLocationLike )";
+                    wParamMap.Add("wLocationLike", "%" + wLocationLike + "%");
                 }
-                if (!string.IsNullOrWhiteSpace(wMaterialNo))
+                if (!string.IsNullOrWhiteSpace(wMaterialLike))
                 {
-                    wSqlCondition += " and t1.MaterialNo like @wMaterialNo";
-                    wParamMap.Add("wMaterialNo", "%" + wMaterialNo + "%");
+                    wSqlCondition += " and ( t1.MaterialNo like @wMaterialLike  or t1.MaterialNo like @wMaterialLike )";
+                    wParamMap.Add("wMaterialLike", "%" + wMaterialLike + "%");
                 }
-                if (!string.IsNullOrWhiteSpace(wMaterialName))
-                {
-                    wSqlCondition += " and t1.MaterialName like @wMaterialName";
-                    wParamMap.Add("wMaterialName", "%" + wMaterialName + "%");
-                }
+
                 if (!string.IsNullOrWhiteSpace(wMaterialBatch))
                 {
                     wSqlCondition += " and t.MaterialBatch like @wMaterialBatch";
@@ -201,30 +178,14 @@ namespace iPlant.SCADA.Service
                     }
                 }
 
-                if (wPaging == 1)
-                {
-                    wPageCount.Result = this.GetPageCount(wSqlCondition, wPageSize, wParamMap);
-                    if (wPageCount.Result <= 0)
-                    {
-                        wPageCount.Result = 1;
+            
 
-                        return wResult;
-                    }
-                }
-                else
-                {
-                    wPageCount.Result = 1;
-                }
-
-                String wSQL = @"Select t.*,(case t.OperationType when 1 then N'入库' when 2 then N'出库' when 4 then N'盘盈' when 5 then N'盘亏' else '' end) as OperationTypeName,
-                              t1.MaterialNo,t1.MaterialName,t1.Groes,t2.Name as Creator  " + wSqlCondition + " order by t.Createtime ";
-                if (wPaging == 1)
-                {
-                    wSQL += " limit " + wPageIndex * wPageSize + "," + wPageSize;
-                }
+                String wSQL = @"Select t.*, t5.Code as LocationCode ,t5.Name as LocationName,(case t.OperationType when 1 then N'入库' when 2 then N'出库' when 4 then N'盘盈' when 5 then N'盘亏' else '' end) as OperationTypeName,
+                              t1.MaterialNo,t1.MaterialName,t1.Groes,t2.Name as Creator  " + wSqlCondition ;
+               
                 wSQL = this.DMLChange(wSQL);
 
-                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap);
+                List<Dictionary<String, Object>> wQueryResult = mDBPool.queryForList(wSQL, wParamMap, wPagination);
 
                 if (wQueryResult.Count <= 0)
                 {
@@ -235,11 +196,15 @@ namespace iPlant.SCADA.Service
                     MSSMaterialOperationRecord wMaterialOperationRecord = new MSSMaterialOperationRecord();
 
                     wMaterialOperationRecord.MaterialID = StringUtils.parseInt(wReader["MaterialID"]);
-                    wMaterialOperationRecord.MaterialStoragePoint = StringUtils.parseString(wReader["MaterialStoragePoint"]);
+                    wMaterialOperationRecord.LocationID = StringUtils.parseInt(wReader["LocationID"]);
+                    wMaterialOperationRecord.LocationName = StringUtils.parseString(wReader["LocationName"]);
+
+                    wMaterialOperationRecord.LocationCode = StringUtils.parseString(wReader["LocationCode"]);
                     wMaterialOperationRecord.MaterialNo = StringUtils.parseString(wReader["MaterialNo"]);
                     wMaterialOperationRecord.MaterialName = StringUtils.parseString(wReader["MaterialName"]);
                     wMaterialOperationRecord.Groes = StringUtils.parseString(wReader["Groes"]);
                     wMaterialOperationRecord.MaterialBatch = StringUtils.parseString(wReader["MaterialBatch"]);
+                    wMaterialOperationRecord.OperationType = StringUtils.parseInt(wReader["OperationType"]);
                     wMaterialOperationRecord.OperationTypeName = StringUtils.parseString(wReader["OperationTypeName"]);
                     wMaterialOperationRecord.Num = StringUtils.parseInt(wReader["Num"]);
                     wMaterialOperationRecord.Creator = StringUtils.parseString(wReader["Creator"]);
