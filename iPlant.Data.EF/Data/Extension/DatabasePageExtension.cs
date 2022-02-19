@@ -62,12 +62,12 @@ namespace iPlant.Data.EF.Extension
         private static StringBuilder SqlPageSqlServer(string strSql,   string sort, bool isAsc, int pageSize, int pageIndex)
         {
             StringBuilder sb = new StringBuilder();
-            if (pageIndex == 0)
+            if (pageIndex <= 0)
             {
                 pageIndex = 1;
             }
-            int num = (pageIndex ) * pageSize;
-            int num1 = (pageIndex+1) * pageSize;
+            int num = (pageIndex-1 ) * pageSize;
+            int num1 = (pageIndex) * pageSize;
             string OrderBy = "";
 
             if (!string.IsNullOrEmpty(sort))
@@ -93,9 +93,9 @@ namespace iPlant.Data.EF.Extension
         private static StringBuilder SqlPageMySql(string strSql,    string sort, bool isAsc, int pageSize, int pageIndex)
         {
             StringBuilder sb = new StringBuilder();
-            if (pageIndex < 0)
+            if (pageIndex <= 0)
             {
-                pageIndex = 0;
+                pageIndex = 1;
             }
              
             string OrderBy = "";
@@ -112,7 +112,7 @@ namespace iPlant.Data.EF.Extension
                 }
             }
              
-            sb.Append(strSql + OrderBy + " limit " + (pageIndex* pageSize) + ","+ pageSize ); 
+            sb.Append(strSql + OrderBy + " limit " + ((pageIndex-1)* pageSize) + ","+ pageSize ); 
             return sb;
         }
 

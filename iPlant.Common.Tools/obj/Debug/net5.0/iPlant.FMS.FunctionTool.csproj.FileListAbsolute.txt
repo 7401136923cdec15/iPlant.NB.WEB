@@ -1,0 +1,16 @@
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.AssemblyInfoInputs.cache
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.AssemblyInfo.cs
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.csproj.CoreCompileInputs.cache
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\NOTICE.TXT
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\iPlant.FMS.FunctionTool.deps.json
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\iPlant.FMS.FunctionTool.runtimeconfig.json
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\iPlant.FMS.FunctionTool.runtimeconfig.dev.json
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\iPlant.FMS.FunctionTool.dll
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\ref\iPlant.FMS.FunctionTool.dll
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\bin\Debug\net5.0\iPlant.FMS.FunctionTool.pdb
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.dll
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\ref\iPlant.FMS.FunctionTool.dll
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.pdb
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.genruntimeconfig.cache
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.FunctionTool\obj\Debug\net5.0\iPlant.FMS.FunctionTool.csproj.AssemblyReference.cache

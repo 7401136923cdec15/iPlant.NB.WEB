@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "杂项文件",
+      "ColorIndex": -1
+    },
+    "32dbd589-2277-4ae8-8c70-4a931ab6a792": {
+      "ProjectGuid": "32dbd589-2277-4ae8-8c70-4a931ab6a792",
+      "DisplayName": "iPlant.Common.Tools",
+      "ColorIndex": 0
+    },
+    "29b3a834-8a03-417d-8c3a-af2d980491a9": {
+      "ProjectGuid": "29b3a834-8a03-417d-8c3a-af2d980491a9",
+      "DisplayName": "iPlant.NB.WEB",
+      "ColorIndex": 1
+    },
+    "b4be4fe2-2699-4c03-88f6-b1bfbc7b0e21": {
+      "ProjectGuid": "b4be4fe2-2699-4c03-88f6-b1bfbc7b0e21",
+      "DisplayName": "iPlant.Data.EF",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

@@ -11,12 +11,12 @@ namespace iPlant.Common.Tools
 {
     public class JsonTool
     {
- 
+
 
         private static DateTimeOffsetConverter mDateTimeOffsetConverter = new DateTimeOffsetConverter();
         private static DateTimeConverter mDateTimeConverter = new DateTimeConverter();
         static JsonTool()
-        { 
+        {
         }
 
         public static String ObjectToJson<T>(T wJsonObject)
@@ -28,7 +28,7 @@ namespace iPlant.Common.Tools
 
         public static String ObjectToJson(Object wJsonObject, Type type)
         {
-            return  JsonConvert.SerializeObject(wJsonObject, mDateTimeOffsetConverter, mDateTimeConverter);
+            return JsonConvert.SerializeObject(wJsonObject, mDateTimeOffsetConverter, mDateTimeConverter);
         }
 
         public static String ObjectToJson(Object wJsonObject)
@@ -54,13 +54,13 @@ namespace iPlant.Common.Tools
 
     public class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
-       
+
 
         public override DateTimeOffset ReadJson(JsonReader reader, Type objectType, DateTimeOffset existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (hasExistingValue)
             {
-                return existingValue;
+                return StringUtils.parseDate(reader.Value); ;
             }
             else
             {
@@ -68,32 +68,33 @@ namespace iPlant.Common.Tools
             }
         }
 
-        
+
 
         public override void WriteJson(JsonWriter writer, DateTimeOffset value, JsonSerializer serializer)
         {
-            
+
             writer.WriteValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
     public class DateTimeConverter : JsonConverter<DateTime>
     {
-         
+
         public override DateTime ReadJson(JsonReader reader, Type objectType, DateTime existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (hasExistingValue)
             {
-                return existingValue;
+                return StringUtils.parseDate(reader.Value);
             }
-            else {
+            else
+            {
                 return new DateTime(2000, 1, 1);
-            } 
+            }
         }
 
-      
+
         public override void WriteJson(JsonWriter writer, DateTime value, JsonSerializer serializer)
         {
-            
+
             writer.WriteValue(value.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }

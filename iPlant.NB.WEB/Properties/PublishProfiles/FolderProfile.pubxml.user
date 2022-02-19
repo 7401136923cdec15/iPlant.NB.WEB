@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\SHRIS\Desktop\iPlant.NB.WEB1\iPlant.NB.WEB\bin\Release\net5.0\publish\</_PublishTargetUrl>
+    <History>True|2022-02-13T08:09:06.8883457Z;True|2022-01-20T19:57:08.6334606+08:00;True|2022-01-20T16:49:17.2608000+08:00;True|2022-01-19T13:54:55.8268564+08:00;True|2022-01-19T11:11:39.1232769+08:00;True|2022-01-19T10:55:30.2640847+08:00;True|2022-01-19T10:44:19.0214238+08:00;True|2022-01-19T01:28:44.5838835+08:00;True|2022-01-15T21:40:24.3786930+08:00;</History>
+  </PropertyGroup>
+</Project>

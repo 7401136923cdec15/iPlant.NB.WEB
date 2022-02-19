@@ -328,6 +328,27 @@ namespace iPlant.Common.Tools
             return wResult;
         }
 
+        public static Boolean parseBoolean(Object value, out bool wResult)
+        {
+            wResult = false;
+            if (value != null)
+            {
+
+                wResult = "1" == value.ToString();
+
+                if (wResult)
+                    return wResult;
+
+                wResult = "0" == value.ToString();
+                if (wResult)
+                    return !wResult;
+
+                return Boolean.TryParse(value.ToString(), out wResult);
+
+            }
+            return false;
+        }
+
         public static Boolean isNumeric(String wValue)
         {
             if (isEmpty(wValue))

@@ -159,7 +159,7 @@ namespace iPlant.Data.EF
             using (DbConnection wConnection = this.GetConnection())
             {
 
-                CommandTool wCommandTool = new CommandTool("SELECT COUNT(0) as ItemCount FROM (" + wSQL + ") T", wConnection);
+                CommandTool wCommandTool = new CommandTool("SELECT COUNT(0) as ItemCount FROM (" + wSQL + ") CountTable;", wConnection);
                 wCommandTool.SetParams(wParamMap);
 
 
@@ -233,8 +233,8 @@ namespace iPlant.Data.EF
         public List<T> queryForList<T>(String wSQL, Dictionary<String, Object> wParamMap, Pagination pagination)
         {
             List<Dictionary<String, Object>> wResult = queryForList(wSQL, wParamMap, pagination);
-              
-            return CloneTool.CloneArray<T>(wResult); 
+
+            return CloneTool.CloneArray<T>(wResult);
         }
 
         public List<T> queryForList<T>(String wSQL, Dictionary<String, Object> wParamMap)
@@ -334,12 +334,13 @@ namespace iPlant.Data.EF
         }
 
 
-        public void insertDB(String wSQL, Dictionary<String, Object> wParamMap)
+        public int insertDB(String wSQL, Dictionary<String, Object> wParamMap)
         {
+            int wRows = 0;
             wSQL = StringUtils.trim(wSQL);
             if (StringUtils.isEmpty(wSQL))
             {
-                return;
+                return wRows;
             }
             if (!wSQL.EndsWith(";"))
                 wSQL += ";";
@@ -351,19 +352,19 @@ namespace iPlant.Data.EF
                 CommandTool wCommandTool = new CommandTool(wSQL, wConnection);
                 wCommandTool.SetParams(wParamMap);
 
-                wCommandTool.ExecuteNonQuery();
+                wRows = wCommandTool.ExecuteNonQuery();
             }
-
+            return wRows;
         }
 
 
-        public void update(String wSQL, Dictionary<String, Object> wParamMap)
+        public int update(String wSQL, Dictionary<String, Object> wParamMap)
         {
-
+            int wRows = 0;
             wSQL = StringUtils.trim(wSQL);
             if (StringUtils.isEmpty(wSQL))
             {
-                return;
+                return wRows;
             }
             if (!wSQL.EndsWith(";"))
                 wSQL += ";";
@@ -375,9 +376,10 @@ namespace iPlant.Data.EF
                 CommandTool wCommandTool = new CommandTool(wSQL, wConnection);
                 wCommandTool.SetParams(wParamMap);
 
-                wCommandTool.ExecuteNonQuery();
+                wRows = wCommandTool.ExecuteNonQuery();
 
             }
+            return wRows;
         }
 
     }

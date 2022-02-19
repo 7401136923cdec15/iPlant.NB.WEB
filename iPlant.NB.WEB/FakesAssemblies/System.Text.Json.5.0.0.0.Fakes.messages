@@ -1,0 +1,14 @@
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.JsonDocument 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.JsonSerializer 生成存根: 类型没有对程序集可见的构造函数。构造函数本身或参数可能不可见。。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.JsonSerializerOptions 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Utf8JsonWriter 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonConstructorAttribute 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonConverter 生成存根: 类型没有对程序集可见的构造函数。构造函数本身或参数可能不可见。。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonConverter<T> 生成存根: method !0 System.Text.Json.Serialization.JsonConverter`1.Read(System.Text.Json.Serialization.JsonConverter`1 this, System.Text.Json.Utf8JsonReader* reader, System.Type typeToConvert, System.Text.Json.JsonSerializerOptions options) unstubbable: 方法是抽象的，因此无法用作存根，方法 JsonConverter`1.Read 中的参数 System.Text.Json.Utf8JsonReader* 不受支持，因为它是引用结构类型。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonExtensionDataAttribute 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonIgnoreAttribute 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonIncludeAttribute 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonNumberHandlingAttribute 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonPropertyNameAttribute 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.JsonStringEnumConverter 生成存根: 类型已密封。
+C:\Users\Shris\source\repos\iPlant.FMS.WEB\iPlant.FMS.WEB\Fakes\System.Text.Json.fakes : warning : 无法为 System.Text.Json.Serialization.ReferenceHandler<T> 生成存根: 类型已密封。
